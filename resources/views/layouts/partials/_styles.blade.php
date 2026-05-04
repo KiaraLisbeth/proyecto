@@ -1,0 +1,179 @@
+{{--
+    Partial compartido: Tailwind CSS vía CDN + todos los estilos personalizados.
+    Se incluye en layouts/admin.blade.php, layouts/docente.blade.php y auth/login.blade.php.
+    No requiere Node.js ni npm.
+--}}
+
+{{-- Google Fonts --}}
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+{{-- Tailwind CSS Play CDN (no requiere build ni npm) --}}
+<script src="https://cdn.tailwindcss.com"></script>
+<script>
+    tailwind.config = {
+        theme: {
+            extend: {
+                fontFamily: {
+                    sans: ['Inter', 'ui-sans-serif', 'system-ui', 'sans-serif'],
+                },
+            }
+        }
+    }
+</script>
+
+{{-- Componentes personalizados del sistema de diseño --}}
+<style type="text/tailwindcss">
+
+    /* ── Inputs ─────────────────────────────────────────── */
+    .input {
+        @apply w-full bg-slate-700/60 border border-slate-600 rounded-lg px-4 py-2.5
+               text-slate-100 placeholder-slate-500 focus:outline-none focus:border-indigo-500
+               focus:ring-2 focus:ring-indigo-500/20 transition-all duration-200;
+    }
+    .input-error {
+        @apply border-red-500 focus:border-red-500 focus:ring-red-500/20;
+    }
+
+    /* ── Sidebar nav ─────────────────────────────────────── */
+    .nav-link {
+        @apply flex items-center gap-3 px-3 py-2.5 rounded-lg text-slate-400 text-sm font-medium
+               hover:bg-slate-700/60 hover:text-slate-100 transition-all duration-200;
+    }
+    .nav-link.active {
+        @apply bg-indigo-500/10 text-indigo-400 border border-indigo-500/20;
+    }
+
+    /* ── Botones ─────────────────────────────────────────── */
+    .btn {
+        @apply inline-flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-semibold
+               transition-all duration-200 cursor-pointer border-0 no-underline;
+    }
+    .btn-primary {
+        @apply bg-indigo-600 hover:bg-indigo-500 text-white shadow-lg shadow-indigo-500/25
+               hover:-translate-y-px;
+    }
+    .btn-success {
+        @apply bg-emerald-600 hover:bg-emerald-500 text-white shadow-lg shadow-emerald-500/20
+               hover:-translate-y-px;
+    }
+    .btn-danger {
+        @apply bg-red-600 hover:bg-red-500 text-white shadow-lg shadow-red-500/20
+               hover:-translate-y-px;
+    }
+    .btn-warning {
+        @apply bg-amber-500 hover:bg-amber-400 text-white hover:-translate-y-px;
+    }
+    .btn-ghost {
+        @apply bg-slate-700 hover:bg-slate-600 text-slate-200 border border-slate-600;
+    }
+    .btn-sm  { @apply px-3 py-1.5 text-xs rounded-md; }
+    .btn-xs  { @apply px-2 py-1 text-xs rounded; }
+
+    /* ── Cards ───────────────────────────────────────────── */
+    .card {
+        @apply bg-slate-800 border border-slate-700/50 rounded-xl overflow-hidden;
+    }
+    .card-header {
+        @apply px-6 py-4 border-b border-slate-700/50 flex items-center justify-between;
+    }
+    .card-title { @apply text-sm font-semibold text-slate-100; }
+    .card-body  { @apply p-6; }
+
+    /* ── Badges ──────────────────────────────────────────── */
+    .badge {
+        @apply inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-semibold;
+    }
+    .badge-success { @apply bg-emerald-500/10 text-emerald-400 border border-emerald-500/20; }
+    .badge-danger  { @apply bg-red-500/10  text-red-400  border border-red-500/20; }
+    .badge-primary { @apply bg-indigo-500/10 text-indigo-400 border border-indigo-500/20; }
+    .badge-muted   { @apply bg-slate-700 text-slate-400 border border-slate-600; }
+    .badge-warning { @apply bg-amber-500/10 text-amber-400 border border-amber-500/20; }
+
+    /* ── Tabla ───────────────────────────────────────────── */
+    .table-wrap { @apply overflow-x-auto; }
+    .table      { @apply w-full text-sm; }
+    .table thead th {
+        @apply bg-slate-700/50 px-4 py-3 text-left text-xs font-semibold uppercase
+               tracking-wider text-slate-400 border-b border-slate-700/50;
+    }
+    .table tbody tr {
+        @apply border-b border-slate-700/30 transition-colors duration-150;
+    }
+    .table tbody tr:hover  { @apply bg-slate-700/20; }
+    .table tbody tr:last-child { @apply border-b-0; }
+    .table tbody td { @apply px-4 py-3 align-middle; }
+
+    /* ── Formulario ──────────────────────────────────────── */
+    .form-group { @apply mb-5; }
+    .form-label {
+        @apply block text-xs font-semibold text-slate-400 mb-1.5 uppercase tracking-wide;
+    }
+    .error-msg { @apply text-xs text-red-400 mt-1.5 flex items-center gap-1; }
+
+    /* ── Stat card ───────────────────────────────────────── */
+    .stat-card {
+        @apply bg-slate-800 border border-slate-700/50 rounded-xl p-6 relative overflow-hidden
+               transition-transform duration-200 hover:-translate-y-1;
+    }
+
+    /* ── Alertas flash ───────────────────────────────────── */
+    .alert {
+        @apply flex items-start gap-3 p-4 rounded-lg text-sm border mb-4;
+    }
+    .alert-success { @apply bg-emerald-500/10 border-emerald-500/30 text-emerald-400; }
+    .alert-error   { @apply bg-red-500/10  border-red-500/30  text-red-400; }
+    .alert-warning { @apply bg-amber-500/10 border-amber-500/30 text-amber-400; }
+
+    /* ── Colores de íconos por tipo de archivo ───────────── */
+    .file-pdf   { color: #f87171; }   /* red-400   */
+    .file-word  { color: #60a5fa; }   /* blue-400  */
+    .file-excel { color: #34d399; }   /* emerald-400 */
+    .file-ppt   { color: #fb923c; }   /* orange-400 */
+    .file-other { color: #94a3b8; }   /* slate-400 */
+
+    /* ── Modal ───────────────────────────────────────────── */
+    .modal-overlay {
+        @apply fixed inset-0 bg-black/70 backdrop-blur-sm z-50 hidden items-center justify-center;
+    }
+    .modal-overlay.show { @apply flex; }
+    .modal-box {
+        @apply bg-slate-800 border border-slate-700 rounded-2xl p-7 max-w-md w-11/12 shadow-2xl;
+        animation: modalIn .2s cubic-bezier(0.34,1.56,0.64,1);
+    }
+
+    /* ── Paginación de Laravel ───────────────────────────── */
+    nav[aria-label="pagination"] {
+        @apply flex justify-center gap-1 p-4;
+    }
+    nav[aria-label="pagination"] span,
+    nav[aria-label="pagination"] a {
+        @apply inline-flex items-center justify-center min-w-9 h-9 px-3 rounded-lg text-xs
+               font-medium border border-slate-700 text-slate-400 bg-slate-800 no-underline
+               transition-all duration-150;
+    }
+    nav[aria-label="pagination"] a:hover {
+        @apply bg-indigo-600 text-white border-indigo-600;
+    }
+    nav[aria-label="pagination"] span[aria-current="page"] > span {
+        @apply bg-indigo-600 text-white border-indigo-600 min-w-9 h-9 flex items-center
+               justify-center rounded-lg;
+    }
+
+    /* ── Scrollbar ───────────────────────────────────────── */
+    ::-webkit-scrollbar       { width: 6px; height: 6px; }
+    ::-webkit-scrollbar-track { background: transparent; }
+    ::-webkit-scrollbar-thumb { background: #334155; border-radius: 3px; }
+    ::-webkit-scrollbar-thumb:hover { background: #475569; }
+
+    /* ── Animaciones ─────────────────────────────────────── */
+    @keyframes modalIn {
+        from { opacity:0; transform: scale(.95) translateY(10px); }
+        to   { opacity:1; transform: scale(1)   translateY(0); }
+    }
+    @keyframes fadeIn {
+        from { opacity:0; transform:translateY(-4px); }
+        to   { opacity:1; transform:translateY(0); }
+    }
+
+</style>

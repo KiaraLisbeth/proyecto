@@ -1,0 +1,60 @@
+<?php
+
+namespace App\Http\Requests\Docente;
+
+use Illuminate\Foundation\Http\FormRequest;
+
+/**
+ * FormRequest para validar la subida de archivos por parte del docente.
+ * Valida tipo, tamaño (50MB máx.) y que la asignación pertenezca al docente.
+ */
+class StoreArchivoRequest extends FormRequest
+{
+    public function authorize(): bool
+    {
+        return $this->user()->esDocente();
+    }
+
+    public function rules(): array
+    {
+        return [
+            // El archivo es obligatorio y debe ser uno de los tipos permitidos
+            'archivo' => [
+                'required',
+                'file',
+                'max:51200', // 50 MB en kilobytes (50 * 1024)
+                'mimes:pdf,doc,docx,xls,xlsx,ppt,pptx',
+            ],
+
+            // La descripción es opcional
+            'descripcion' => ['nullable', 'string', 'max:500'],
+
+            // La asignación debe pertenecer al docente autenticado
+            'asignacion_id' => [
+                'required',
+                'integer',
+                // Verificar que la asignación existe y pertenece al docente
+                function ($attribute, $value, $fail) {
+                    $existe = $this->user()
+                                   ->asignaciones()
+                                   ->where('id', $value)
+                                   ->exists();
+
+                    if (!$existe) {
+                        $fail('La asignación seleccionada no es válida o no te pertenece.');
+                    }
+                },
+            ],
+        ];
+    }
+
+    public function messages(): array
+    {
+        return [
+            'archivo.required'  => 'Debes seleccionar un archivo.',
+            'archivo.max'       => 'El archivo no puede superar los 50 MB.',
+            'archivo.mimes'     => 'Solo se permiten archivos PDF, Word, Excel o PowerPoint.',
+            'asignacion_id.required' => 'Debes seleccionar una asignación.',
+        ];
+    }
+}
