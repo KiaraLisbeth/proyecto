@@ -4,6 +4,15 @@
 @section('page-title', 'Documentos del Sistema')
 @section('breadcrumb', 'Admin / Documentos')
 
+@section('topbar-actions')
+    <a href="{{ route('admin.archivos.papelera') }}" class="btn btn-ghost btn-sm text-slate-400 hover:text-white">
+        <svg class="w-4 h-4 mr-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
+        </svg>
+        Ver Papelera
+    </a>
+@endsection
+
 @section('content')
 
 {{-- Filtros --}}
@@ -152,11 +161,23 @@
                     </td>
                     <td>
                         <div class="flex items-center justify-center gap-1.5">
+                            <button type="button" class="btn btn-ghost btn-xs text-sky-500 hover:text-sky-600 dark:text-sky-400 dark:hover:text-sky-300 btn-preview"
+                                    title="Previsualizar"
+                                    data-url="{{ route('admin.archivos.stream', $archivo) }}"
+                                    data-ext="{{ $ext }}"
+                                    data-name="{{ $archivo->nombre_original }}"
+                                    data-download="{{ route('admin.archivos.download', $archivo) }}"
+                                    onclick="openPreviewModal(this.dataset.url, this.dataset.ext, this.dataset.name, this.dataset.download)">
+                                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                                </svg>
+                            </button>
                             <a href="{{ route('admin.archivos.download', $archivo) }}"
                                class="btn btn-ghost btn-xs" title="Descargar">⬇</a>
-                            <button type="button" class="btn btn-danger btn-xs"
-                                    title="Eliminar"
-                                    onclick="openModal('{{ route('admin.archivos.destroy', $archivo) }}', '¿Eliminar el archivo &quot;{{ addslashes($archivo->nombre_original) }}&quot;? Se borrará permanentemente del servidor.')">
+                            <button type="button" class="btn btn-warning btn-xs"
+                                    title="Mover a Papelera"
+                                    onclick="openModal('{{ route('admin.archivos.destroy', $archivo) }}', '¿Mover el archivo &quot;{{ addslashes($archivo->nombre_original) }}&quot; a la papelera? Podrás restaurarlo más adelante.')">
                                 🗑
                             </button>
                         </div>

@@ -103,21 +103,71 @@ class ArchivoController extends Controller
     }
 
     /**
-     * Elimina un archivo del sistema (registro DB + archivo físico).
+     * Devuelve el archivo inline para su previsualización en el navegador.
+     */
+    public function stream(Archivo $archivo)
+    {
+        if (!Storage::disk('public')->exists($archivo->ruta)) {
+            abort(404, 'El archivo no se encuentra en el servidor.');
+        }
+
+        return Storage::disk('public')->response($archivo->ruta);
+    }
+
+    /**
+     * Elimina lógicamente un archivo (lo envía a la papelera).
      * Requiere confirmación previa desde la vista.
      */
     public function destroy(Archivo $archivo)
     {
-        // Eliminar el archivo físico del disco 'public' si existe
-        if (Storage::disk('public')->exists($archivo->ruta)) {
-            Storage::disk('public')->delete($archivo->ruta);
-        }
-
-        // Eliminar el registro de la base de datos
+        // Eliminar el registro de la base de datos (Soft delete)
         $nombre = $archivo->nombre_original;
         $archivo->delete();
 
         return redirect()->back()
-                         ->with('success', "Archivo \"{$nombre}\" eliminado exitosamente.");
+                         ->with('success', "Archivo \"{$nombre}\" movido a la papelera.");
+    }
+
+    /**
+     * Muestra la papelera de reciclaje.
+     */
+    public function papelera(Request $request)
+    {
+        $archivos = Archivo::onlyTrashed()
+                            ->with(['docente', 'curso', 'grado.nivel', 'seccion'])
+                            ->latest('deleted_at')
+                            ->paginate(20);
+
+        return view('admin.archivos.papelera', compact('archivos'));
+    }
+
+    /**
+     * Restaura un archivo de la papelera.
+     */
+    public function restaurar($id)
+    {
+        $archivo = Archivo::onlyTrashed()->findOrFail($id);
+        $archivo->restore();
+
+        return redirect()->route('admin.archivos.papelera')
+                         ->with('success', "Archivo \"{$archivo->nombre_original}\" restaurado exitosamente.");
+    }
+
+    /**
+     * Elimina definitivamente un archivo de la papelera y del disco.
+     */
+    public function forzarEliminacion($id)
+    {
+        $archivo = Archivo::onlyTrashed()->findOrFail($id);
+
+        if (Storage::disk('public')->exists($archivo->ruta)) {
+            Storage::disk('public')->delete($archivo->ruta);
+        }
+
+        $nombre = $archivo->nombre_original;
+        $archivo->forceDelete();
+
+        return redirect()->route('admin.archivos.papelera')
+                         ->with('success', "Archivo \"{$nombre}\" eliminado definitivamente.");
     }
 }

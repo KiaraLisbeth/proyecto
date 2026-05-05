@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Facades\Storage;
 
 /**
@@ -12,6 +13,8 @@ use Illuminate\Support\Facades\Storage;
  */
 class Archivo extends Model
 {
+    use SoftDeletes;
+
     protected $table = 'archivos';
 
     protected $fillable = [

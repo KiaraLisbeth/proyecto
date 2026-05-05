@@ -136,8 +136,24 @@ class ArchivoController extends Controller
     }
 
     /**
-     * Elimina un archivo del sistema y del disco.
-     * Solo permite eliminar archivos propios del docente autenticado.
+     * Devuelve el archivo inline para su previsualización en el navegador.
+     */
+    public function stream(Archivo $archivo)
+    {
+        // Seguridad: verificar que el archivo pertenece al docente autenticado
+        if ($archivo->user_id !== auth()->id()) {
+            abort(403, 'No tienes permiso para previsualizar este archivo.');
+        }
+
+        if (!Storage::disk('public')->exists($archivo->ruta)) {
+            abort(404, 'El archivo no se encuentra en el servidor.');
+        }
+
+        return Storage::disk('public')->response($archivo->ruta);
+    }
+
+    /**
+     * Elimina lógicamente un archivo (lo envía a la papelera).
      */
     public function destroy(Archivo $archivo)
     {
@@ -146,15 +162,57 @@ class ArchivoController extends Controller
             abort(403, 'No tienes permiso para eliminar este archivo.');
         }
 
-        // Eliminar el archivo físico del disco 'public'
+        $nombre = $archivo->nombre_original;
+        $archivo->delete(); // Soft delete
+
+        return redirect()->route('docente.archivos.index')
+                         ->with('success', "Archivo \"{$nombre}\" movido a la papelera.");
+    }
+
+    /**
+     * Muestra la papelera de reciclaje.
+     */
+    public function papelera()
+    {
+        $docente = auth()->user();
+        $archivos = $docente->archivos()
+                            ->onlyTrashed()
+                            ->with(['curso', 'grado.nivel', 'seccion'])
+                            ->latest('deleted_at')
+                            ->paginate(15);
+
+        return view('docente.archivos.papelera', compact('archivos'));
+    }
+
+    /**
+     * Restaura un archivo de la papelera.
+     */
+    public function restaurar($id)
+    {
+        $docente = auth()->user();
+        $archivo = $docente->archivos()->onlyTrashed()->findOrFail($id);
+        $archivo->restore();
+
+        return redirect()->route('docente.archivos.papelera')
+                         ->with('success', "Archivo \"{$archivo->nombre_original}\" restaurado exitosamente.");
+    }
+
+    /**
+     * Elimina definitivamente un archivo de la papelera y del disco.
+     */
+    public function forzarEliminacion($id)
+    {
+        $docente = auth()->user();
+        $archivo = $docente->archivos()->onlyTrashed()->findOrFail($id);
+
         if (Storage::disk('public')->exists($archivo->ruta)) {
             Storage::disk('public')->delete($archivo->ruta);
         }
 
         $nombre = $archivo->nombre_original;
-        $archivo->delete();
+        $archivo->forceDelete();
 
-        return redirect()->route('docente.archivos.index')
-                         ->with('success', "Archivo \"{$nombre}\" eliminado correctamente.");
+        return redirect()->route('docente.archivos.papelera')
+                         ->with('success', "Archivo \"{$nombre}\" eliminado definitivamente.");
     }
 }
