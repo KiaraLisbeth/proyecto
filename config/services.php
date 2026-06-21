@@ -35,4 +35,8 @@ return [
         ],
     ],
 
+    'decolecta' => [
+        'token' => env('RENIEC_API_TOKEN'),
+    ],
+
 ];

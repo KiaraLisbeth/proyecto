@@ -12,6 +12,7 @@ use App\Models\Seccion;
 use App\Models\DocenteAsignacion;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Http;
 use App\Rules\DniValido;
 
 /**
@@ -200,6 +201,7 @@ class DocenteController extends Controller
 
     /**
      * Verifica si un DNI ya existe en el sistema (base de datos local) y si es válido.
+     * Si está libre, intenta autocompletar nombre y apellido consultando RENIEC.
      */
     public function buscarDni(Request $request)
     {
@@ -226,7 +228,46 @@ class DocenteController extends Controller
             ], 409);
         }
 
-        // DNI libre — puede registrarse
-        return response()->json(['status' => 'available']);
+        // DNI libre — puede registrarse. Intentar autocompletar datos desde RENIEC.
+        $persona = $this->consultarReniec($dni);
+
+        return response()->json([
+            'status'   => 'available',
+            'nombre'   => $persona['nombre'] ?? null,
+            'apellido' => $persona['apellido'] ?? null,
+        ]);
+    }
+
+    /**
+     * Consulta la API de RENIEC (decolecta.com, capa gratuita) para obtener
+     * nombres y apellidos asociados a un DNI. Devuelve null si no hay token
+     * configurado o si la consulta falla, sin interrumpir el registro manual.
+     */
+    private function consultarReniec(string $dni): ?array
+    {
+        $token = config('services.decolecta.token');
+
+        if (!$token) {
+            return null;
+        }
+
+        try {
+            $response = Http::withToken($token)
+                ->timeout(5)
+                ->get('https://api.decolecta.com/v1/reniec/dni', ['numero' => $dni]);
+
+            if (!$response->successful()) {
+                return null;
+            }
+
+            $data = $response->json();
+
+            return [
+                'nombre'   => $data['first_name'] ?? null,
+                'apellido' => trim(($data['first_last_name'] ?? '') . ' ' . ($data['second_last_name'] ?? '')),
+            ];
+        } catch (\Throwable $e) {
+            return null;
+        }
     }
 }

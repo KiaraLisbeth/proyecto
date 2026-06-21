@@ -256,13 +256,20 @@ document.getElementById('username').addEventListener('input', function () {
 });
 
 // ─── Verificación de DNI duplicado (solo base de datos local) ───────────────
-const dniInput  = document.getElementById('dni');
-const spinner   = document.getElementById('dniSpinner');
-const checkIcon = document.getElementById('dniCheck');
-const errorIcon = document.getElementById('dniError');
-const dniMsg    = document.getElementById('dniMsg');
-const DNI_URL   = "{{ route('admin.docentes.buscarDni') }}";
+const dniInput      = document.getElementById('dni');
+const spinner       = document.getElementById('dniSpinner');
+const checkIcon     = document.getElementById('dniCheck');
+const errorIcon     = document.getElementById('dniError');
+const dniMsg        = document.getElementById('dniMsg');
+const nombreInput   = document.getElementById('nombre');
+const apellidoInput = document.getElementById('apellido');
+const DNI_URL       = "{{ route('admin.docentes.buscarDni') }}";
 let dniTimer = null;
+
+// Si el usuario edita nombre/apellido a mano, dejamos de pisarlo en futuras
+// búsquedas de DNI (un input por script no dispara 'input', solo el tecleo real).
+nombreInput.addEventListener('input', () => { nombreInput.dataset.autofilled = 'false'; });
+apellidoInput.addEventListener('input', () => { apellidoInput.dataset.autofilled = 'false'; });
 
 function resetDniIcons() {
     spinner.classList.add('hidden');
@@ -298,9 +305,25 @@ async function verificarDni(dni) {
         } else if (res.ok) {
             // DNI disponible
             checkIcon.classList.remove('hidden');
+
+            // Autocompletar nombre/apellido si RENIEC devolvió datos.
+            // Se sobreescribe (incluso limpiando lo del DNI anterior) salvo
+            // que el usuario ya haya editado el campo a mano.
+            let autocompletado = false;
+            if (nombreInput.dataset.autofilled !== 'false') {
+                nombreInput.value = data.nombre || '';
+                if (data.nombre) { nombreInput.dataset.autofilled = 'true'; autocompletado = true; }
+            }
+            if (apellidoInput.dataset.autofilled !== 'false') {
+                apellidoInput.value = data.apellido || '';
+                if (data.apellido) { apellidoInput.dataset.autofilled = 'true'; autocompletado = true; }
+            }
+
             if (dniMsg) {
                 dniMsg.className = 'mt-1.5 text-xs px-3 py-2 rounded-lg bg-emerald-50 text-emerald-700 dark:bg-emerald-500/10 dark:text-emerald-400 border border-emerald-200 dark:border-emerald-500/30';
-                dniMsg.innerHTML = '✓ DNI disponible. Completa los datos del docente.';
+                dniMsg.innerHTML = autocompletado
+                    ? '✓ DNI disponible. Nombre y apellido autocompletados, verifícalos.'
+                    : '✓ DNI disponible. Completa los datos del docente.';
             }
         }
     } catch (e) {
