@@ -171,24 +171,16 @@
                 <label class="form-label" for="selectGradoAgregar">
                     Agregar cursos de un Grado
                 </label>
-                <div class="flex gap-2">
-                    <select id="selectGradoAgregar" class="input flex-1">
-                        <option value="">— Elige un grado —</option>
-                        @foreach($grados as $g)
-                            <option value="{{ $g->id }}"
-                                    data-nivel="{{ $g->nivel->nombre }}"
-                                    data-grado="{{ $g->nombre }}">
-                                {{ $g->nivel->nombre }} &mdash; {{ $g->nombre }}
-                            </option>
-                        @endforeach
-                    </select>
-                    <button type="button" id="btnAgregarGrado" class="btn btn-primary whitespace-nowrap">
-                        <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
-                        </svg>
-                        Agregar cursos
-                    </button>
-                </div>
+                <select id="selectGradoAgregar" class="input w-full">
+                    <option value="">— Elige un grado —</option>
+                    @foreach($grados as $g)
+                        <option value="{{ $g->id }}"
+                                data-nivel="{{ $g->nivel->nombre }}"
+                                data-grado="{{ $g->nombre }}">
+                            {{ $g->nivel->nombre }} &mdash; {{ $g->nombre }}
+                        </option>
+                    @endforeach
+                </select>
                 <p class="text-xs text-slate-400 mt-1.5">
                     Al seleccionar un grado se añaden automáticamente todos sus cursos.
                     Al guardar, las asignaciones actuales serán <strong>reemplazadas</strong> por las de abajo.
@@ -476,7 +468,6 @@ function agregarCursosDeGrado() {
     sel.value = '';
 }
 
-document.getElementById('btnAgregarGrado').addEventListener('click', agregarCursosDeGrado);
 document.getElementById('selectGradoAgregar').addEventListener('change', agregarCursosDeGrado);
 
 function removeFila(tr) {
