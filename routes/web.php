@@ -51,7 +51,9 @@ Route::prefix('admin')
     // ── Gestión de Docentes ────────────────────────────────────────────────
 
     // Consulta de datos por DNI (proxy a API RENIEC) — debe ir ANTES del resource
+    // Throttle para no agotar la cuota mensual gratuita de decolecta.com
     Route::get('docentes/buscar-dni', [DocenteController::class, 'buscarDni'])
+         ->middleware('throttle:30,1')
          ->name('docentes.buscarDni');
 
     Route::resource('docentes', DocenteController::class)

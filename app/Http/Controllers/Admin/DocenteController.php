@@ -11,6 +11,7 @@ use App\Models\Grado;
 use App\Models\Seccion;
 use App\Models\DocenteAsignacion;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Http;
 use App\Rules\DniValido;
@@ -251,6 +252,15 @@ class DocenteController extends Controller
             return null;
         }
 
+        // El nombre asociado a un DNI no cambia: cachear evita gastar la cuota
+        // mensual gratuita de decolecta.com en consultas repetidas del mismo DNI.
+        // Solo se cachean respuestas exitosas — un fallo de red no debe quedar pegado.
+        $cacheKey = "reniec_dni_{$dni}";
+        $cached   = Cache::get($cacheKey);
+        if ($cached !== null) {
+            return $cached;
+        }
+
         try {
             $response = Http::withToken($token)
                 ->timeout(5)
@@ -262,10 +272,14 @@ class DocenteController extends Controller
 
             $data = $response->json();
 
-            return [
+            $persona = [
                 'nombre'   => $data['first_name'] ?? null,
                 'apellido' => trim(($data['first_last_name'] ?? '') . ' ' . ($data['second_last_name'] ?? '')),
             ];
+
+            Cache::forever($cacheKey, $persona);
+
+            return $persona;
         } catch (\Throwable $e) {
             return null;
         }

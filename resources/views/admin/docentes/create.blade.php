@@ -156,28 +156,34 @@
                 <label class="form-label" for="selectGradoAgregar">
                     Selecciona un Grado para agregar sus cursos
                 </label>
-                <div class="flex gap-2">
-                    <select id="selectGradoAgregar" class="input flex-1">
-                        <option value="">— Elige un grado —</option>
-                        @foreach($grados as $g)
-                            <option value="{{ $g->id }}"
-                                    data-nivel="{{ $g->nivel->nombre }}"
-                                    data-grado="{{ $g->nombre }}">
-                                {{ $g->nivel->nombre }} &mdash; {{ $g->nombre }}
-                            </option>
-                        @endforeach
-                    </select>
-                    <button type="button" id="btnAgregarGrado" class="btn btn-primary whitespace-nowrap">
-                        <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
-                        </svg>
-                        Agregar cursos
-                    </button>
-                </div>
+                <select id="selectGradoAgregar" class="input w-full">
+                    <option value="">— Elige un grado —</option>
+                    @foreach($grados as $g)
+                        <option value="{{ $g->id }}"
+                                data-nivel="{{ $g->nivel->nombre }}"
+                                data-grado="{{ $g->nombre }}">
+                            {{ $g->nivel->nombre }} &mdash; {{ $g->nombre }}
+                        </option>
+                    @endforeach
+                </select>
                 <p class="text-xs text-slate-400 mt-1.5">
-                    Al seleccionar un grado se añaden automáticamente todos sus cursos.
-                    Puedes eliminar los que no correspondan.
+                    En Inicial y Primaria se añaden automáticamente todos los cursos del grado.
+                    En Secundaria podrás elegir los cursos específicos a asignar.
                 </p>
+            </div>
+
+            {{-- Selector de cursos específicos (solo Secundaria) --}}
+            <div id="cursosSecundariaBox" class="mb-5 hidden">
+                <label class="form-label">Selecciona los cursos a asignar</label>
+                <div id="cursosCheckboxList"
+                     class="grid grid-cols-2 gap-2 mb-3 max-h-48 overflow-y-auto p-3
+                            border border-slate-200 dark:border-slate-700/50 rounded-lg"></div>
+                <button type="button" id="btnAgregarSeleccionados" class="btn btn-primary btn-sm">
+                    <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
+                    </svg>
+                    Agregar cursos seleccionados
+                </button>
             </div>
 
             {{-- Tabla de asignaciones generadas --}}
@@ -453,42 +459,94 @@ function existeAsignacion(gradoId, cursoNombre) {
     return false;
 }
 
-// Agrega todas las filas de cursos para el grado seleccionado
-function agregarCursosDeGrado() {
-    const sel      = document.getElementById('selectGradoAgregar');
-    const gradoId  = sel.value;
-    const opt      = sel.options[sel.selectedIndex];
-    if (!gradoId) return;
-
-    const nivel  = opt.dataset.nivel;
-    const grado  = opt.dataset.grado;
-    const nombre = opt.text;
-    const cursos = cursosParaNivel(nivel, grado);
-
-    if (!cursos.length) {
-        alert('No hay cursos registrados para este nivel.');
-        return;
-    }
-
+// Agrega automáticamente todas las filas de cursos para el grado seleccionado
+// (usado para Inicial y Primaria, donde el docente dicta todos los cursos del grado)
+function agregarCursosAutomatico(gradoId, nombre, cursos) {
     // Limpiar toda la tabla para reemplazar los cursos anteriores
     document.querySelectorAll('.fila-asig').forEach(tr => tr.remove());
 
-    const body = document.getElementById('filasBody');
     const empty = document.getElementById('emptyRow');
-
     cursos.forEach(c => {
         const tr = crearFila(gradoId, nombre, c.nombre);
         empty.insertAdjacentElement('beforebegin', tr);
     });
 
     checkEmpty();
-    sel.value = ''; // Resetear el selector
 }
 
-document.getElementById('btnAgregarGrado').addEventListener('click', agregarCursosDeGrado);
+// ─── Selector de cursos específicos para Secundaria ──────────────────────────
+const cursosSecundariaBox = document.getElementById('cursosSecundariaBox');
+const cursosCheckboxList  = document.getElementById('cursosCheckboxList');
+let secundariaActual = null; // { gradoId, gradoNombre }
+let lastNivelSeleccionado = null; // evita mezclar cursos de niveles distintos en la tabla
 
-// También dispara al pulsar Enter en el select
-document.getElementById('selectGradoAgregar').addEventListener('change', agregarCursosDeGrado);
+function mostrarSelectorCursos(nivel, grado, gradoId, gradoNombre) {
+    const cursos = cursosParaNivel(nivel, grado);
+    secundariaActual = { gradoId, gradoNombre };
+
+    cursosCheckboxList.innerHTML = cursos.map(c => `
+        <label class="flex items-center gap-2 text-xs text-slate-600 dark:text-slate-400">
+            <input type="checkbox" class="chk-curso-sec" value="${c.nombre}">
+            ${c.nombre}
+        </label>
+    `).join('');
+
+    cursosSecundariaBox.classList.remove('hidden');
+}
+
+document.getElementById('btnAgregarSeleccionados').addEventListener('click', () => {
+    if (!secundariaActual) return;
+    const { gradoId, gradoNombre } = secundariaActual;
+    const empty = document.getElementById('emptyRow');
+
+    document.querySelectorAll('.chk-curso-sec:checked').forEach(chk => {
+        if (!existeAsignacion(gradoId, chk.value)) {
+            const tr = crearFila(gradoId, gradoNombre, chk.value);
+            empty.insertAdjacentElement('beforebegin', tr);
+        }
+    });
+
+    checkEmpty();
+    cursosSecundariaBox.classList.add('hidden');
+    document.getElementById('selectGradoAgregar').value = '';
+});
+
+// Al elegir un grado: Secundaria muestra el selector de cursos, los demás niveles autocompletan
+document.getElementById('selectGradoAgregar').addEventListener('change', function () {
+    const sel      = this;
+    const gradoId  = sel.value;
+    const opt      = sel.options[sel.selectedIndex];
+
+    if (!gradoId) {
+        cursosSecundariaBox.classList.add('hidden');
+        return;
+    }
+
+    const nivel  = opt.dataset.nivel;
+    const grado  = opt.dataset.grado;
+    const nombre = opt.text;
+    const nv     = nivel.toLowerCase();
+
+    if (nv === 'secundaria') {
+        // Si venimos de otro nivel (Inicial/Primaria), limpiar lo que quedó antes
+        if (lastNivelSeleccionado !== 'secundaria') {
+            document.querySelectorAll('.fila-asig').forEach(tr => tr.remove());
+            checkEmpty();
+        }
+        mostrarSelectorCursos(nivel, grado, gradoId, nombre);
+    } else {
+        cursosSecundariaBox.classList.add('hidden');
+        const cursos = cursosParaNivel(nivel, grado);
+        if (!cursos.length) {
+            alert('No hay cursos registrados para este nivel.');
+            return;
+        }
+        agregarCursosAutomatico(gradoId, nombre, cursos);
+        sel.value = '';
+    }
+
+    lastNivelSeleccionado = nv;
+});
 
 function removeFila(tr) {
     tr.style.opacity = '0';
