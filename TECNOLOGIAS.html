@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Tecnologías Utilizadas</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 50px; font-size: 14px; }
+        h3 { color: #1f3864; font-size: 18px; text-align: center; margin-bottom: 20px; }
+        table { width: 100%; border-collapse: collapse; margin-top: 10px; }
+        th, td { border: 1px solid #1f3864; padding: 12px; text-align: left; }
+        th { background-color: #1f3864; color: white; font-weight: bold; text-align: center; }
+        .category { background-color: #d9e1f2; font-weight: bold; text-align: center; vertical-align: middle; }
+    </style>
+</head>
+<body>
+
+    <h3>Cuadro de Tecnologías y Herramientas Utilizadas</h3>
+    
+    <table>
+        <thead>
+            <tr>
+                <th style="width: 25%;">Categoría</th>
+                <th style="width: 25%;">Tecnología / Herramienta</th>
+                <th style="width: 50%;">Descripción y Uso en el Proyecto</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td class="category" rowspan="2">Backend (Lógica de Servidor)</td>
+                <td><strong>PHP</strong></td>
+                <td>Lenguaje de programación principal del lado del servidor utilizado para desarrollar toda la lógica de negocio.</td>
+            </tr>
+            <tr>
+                <td><strong>Laravel Framework</strong></td>
+                <td>Framework PHP de código abierto que proporciona la estructura base del sistema (Patrón MVC), ruteo seguro y autenticación.</td>
+            </tr>
+            <tr>
+                <td class="category" rowspan="3">Frontend (Interfaz de Usuario)</td>
+                <td><strong>Laravel Blade</strong></td>
+                <td>Motor de plantillas nativo de Laravel utilizado para generar las vistas dinámicas en HTML (interfaces de docentes y administradores).</td>
+            </tr>
+            <tr>
+                <td><strong>Tailwind CSS (v4)</strong></td>
+                <td>Framework CSS de utilidad utilizado para el diseño moderno, la estilización de componentes y la adaptabilidad móvil (Responsive Design).</td>
+            </tr>
+            <tr>
+                <td><strong>Vite & JavaScript</strong></td>
+                <td>Vite actúa como empaquetador ultrarrápido para procesar los estilos y scripts modernos en JavaScript.</td>
+            </tr>
+            <tr>
+                <td class="category" rowspan="1">Base de Datos</td>
+                <td><strong>MySQL</strong></td>
+                <td>Sistema Gestor de Base de Datos Relacional (RDBMS) utilizado para el almacenamiento persistente de usuarios, archivos, grados y secciones.</td>
+            </tr>
+            <tr>
+                <td class="category" rowspan="2">Entorno y Dependencias</td>
+                <td><strong>Composer & NPM</strong></td>
+                <td>Gestores de paquetes utilizados para administrar e instalar las dependencias de PHP (Composer) y de JavaScript (NPM).</td>
+            </tr>
+            <tr>
+                <td><strong>Git</strong></td>
+                <td>Sistema de control de versiones distribuido utilizado para llevar el registro de cambios en el código fuente del proyecto.</td>
+            </tr>
+        </tbody>
+    </table>
+
+</body>
+</html>

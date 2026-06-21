@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Modelo de Base de Datos</title>
+    <script type="module">
+      import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
+      mermaid.initialize({ startOnLoad: true, theme: 'default' });
+    </script>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 40px; text-align: center; background-color: white;}
+        h3 { color: #1f3864; font-size: 22px; margin-bottom: 40px;}
+        .mermaid { display: flex; justify-content: center; margin-bottom: 50px;}
+    </style>
+</head>
+<body>
+
+    <h3>3.2.7.2 Modelo de base de datos del sistema</h3>
+    
+    <div class="mermaid">
+        classDiagram
+            USERS "1" -- "*" DOCENTE_ASIGNACIONES : tiene
+            USERS "1" -- "*" ARCHIVOS : sube
+            
+            NIVELES "1" -- "*" GRADOS : contiene
+            
+            GRADOS "1" -- "*" DOCENTE_ASIGNACIONES : asignado a
+            GRADOS "1" -- "*" ARCHIVOS : clasifica
+            
+            SECCIONES "1" -- "*" DOCENTE_ASIGNACIONES : asignado a
+            SECCIONES "1" -- "*" ARCHIVOS : clasifica
+            
+            CURSOS "1" -- "*" DOCENTE_ASIGNACIONES : asignado a
+            CURSOS "1" -- "*" ARCHIVOS : clasifica
+
+            class USERS {
+                +int id
+                +varchar nombre
+                +varchar apellido
+                +varchar email
+                +varchar password
+                +varchar rol
+                +int activo
+                +varchar username
+            }
+
+            class NIVELES {
+                +int id
+                +varchar nombre
+            }
+
+            class GRADOS {
+                +int id
+                +varchar nombre
+                +int nivel_id
+            }
+
+            class SECCIONES {
+                +int id
+                +varchar nombre
+            }
+
+            class CURSOS {
+                +int id
+                +varchar nombre
+            }
+
+            class DOCENTE_ASIGNACIONES {
+                +int id
+                +int user_id
+                +int curso_id
+                +int grado_id
+                +int seccion_id
+            }
+
+            class ARCHIVOS {
+                +int id
+                +int user_id
+                +varchar nombre_original
+                +varchar ruta
+                +int tamanio
+                +int curso_id
+                +int grado_id
+                +int seccion_id
+                +int bimestre
+                +int año
+            }
+
+            class AÑO_LECTIVOS {
+                +int id
+                +int año
+                +int activo
+                +date fecha_inicio
+            }
+    </div>
+
+</body>
+</html>

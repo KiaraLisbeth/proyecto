@@ -26,6 +26,9 @@ class StoreArchivoRequest extends FormRequest
                 'mimes:pdf,doc,docx,xls,xlsx,ppt,pptx',
             ],
 
+            // El bimestre es obligatorio (1=I, 2=II, 3=III, 4=IV)
+            'bimestre' => ['required', 'integer', 'between:1,4'],
+
             // La descripción es opcional
             'descripcion' => ['nullable', 'string', 'max:500'],
 
@@ -54,6 +57,8 @@ class StoreArchivoRequest extends FormRequest
             'archivo.required'  => 'Debes seleccionar un archivo.',
             'archivo.max'       => 'El archivo no puede superar los 50 MB.',
             'archivo.mimes'     => 'Solo se permiten archivos PDF, Word, Excel o PowerPoint.',
+            'bimestre.required' => 'Debes seleccionar el bimestre.',
+            'bimestre.between'  => 'El bimestre debe ser I, II, III o IV.',
             'asignacion_id.required' => 'Debes seleccionar una asignación.',
         ];
     }

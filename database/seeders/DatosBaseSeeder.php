@@ -43,11 +43,9 @@ class DatosBaseSeeder extends Seeder
         }
 
         // ──────────────────────────────────────────────────────────
-        // 3. SECCIONES
+        // 3. SECCIONES  (institución con sección única por grado)
         // ──────────────────────────────────────────────────────────
-        foreach (['A', 'B', 'C', 'D'] as $seccion) {
-            Seccion::firstOrCreate(['nombre' => $seccion]);
-        }
+        Seccion::firstOrCreate(['nombre' => 'Única']);
 
         // ──────────────────────────────────────────────────────────
         // 4. CURSOS
@@ -64,6 +62,13 @@ class DatosBaseSeeder extends Seeder
             'Personal Social',
             'Computación',
             'Tutoría',
+            'Ciencia y Tecnología',
+            'Educación Cristiana',
+            'Álgebra',
+            'Geometría',
+            'Literatura',
+            'Razonamiento Matemático',
+            'Razonamiento Verbal',
         ];
 
         foreach ($cursos as $curso) {

@@ -15,6 +15,37 @@
 
 @section('content')
 
+{{-- Buscador de Docentes --}}
+<div class="card mb-5">
+    <div class="card-body">
+        <form method="GET" action="{{ route('admin.docentes.index') }}">
+            <div class="flex flex-col sm:flex-row gap-3 items-end">
+                <div class="flex-1">
+                    <label class="form-label text-xs font-bold text-slate-400 uppercase tracking-wider">Buscar Docente</label>
+                    <div class="relative mt-1">
+                        <span class="absolute inset-y-0 left-3 flex items-center text-slate-500 pointer-events-none">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                      d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0"/>
+                            </svg>
+                        </span>
+                        <input type="text" name="search"
+                               class="input !pl-10"
+                               placeholder="Buscar por nombre, apellido o usuario..."
+                               value="{{ request('search') }}">
+                    </div>
+                </div>
+                <div class="flex gap-2">
+                    <button type="submit" class="btn btn-primary">🔍 Buscar</button>
+                    @if(request()->filled('search'))
+                        <a href="{{ route('admin.docentes.index') }}" class="btn btn-ghost">✕ Limpiar</a>
+                    @endif
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
 <div class="card">
     <div class="card-header">
         <span class="card-title">👩‍🏫 Listado de Docentes</span>
@@ -26,7 +57,7 @@
             <thead>
                 <tr>
                     <th>Docente</th>
-                    <th>Email</th>
+                    <th>Usuario</th>
                     <th>Estado</th>
                     <th>Asignaciones</th>
                     <th>Archivos</th>
@@ -35,7 +66,9 @@
             </thead>
             <tbody>
                 @forelse($docentes as $docente)
-                <tr>
+                <tr data-row-type="docente-row"
+                    data-row-name="{{ $docente->nombre_completo }}"
+                    data-row-username="{{ $docente->username }}">
                     {{-- Avatar + nombre --}}
                     <td>
                         <div class="flex items-center gap-3">
@@ -45,7 +78,7 @@
                             <span class="font-medium text-sm">{{ $docente->nombre_completo }}</span>
                         </div>
                     </td>
-                    <td class="text-slate-400 text-sm">{{ $docente->email }}</td>
+                    <td class="text-slate-400 text-sm">{{ $docente->username }}</td>
 
                     {{-- Estado --}}
                     <td>
@@ -100,4 +133,23 @@
     @endif
 </div>
 
+@endsection
+
+@section('scripts')
+<script>
+    document.querySelector('input[name="search"]')?.addEventListener('input', function(e) {
+        const term = e.target.value.toLowerCase().trim();
+        const rows = document.querySelectorAll('[data-row-type="docente-row"]');
+        rows.forEach(row => {
+            const name = row.getAttribute('data-row-name').toLowerCase();
+            const username = row.getAttribute('data-row-username').toLowerCase();
+            
+            if (name.includes(term) || username.includes(term)) {
+                row.style.display = '';
+            } else {
+                row.style.display = 'none';
+            }
+        });
+    });
+</script>
 @endsection

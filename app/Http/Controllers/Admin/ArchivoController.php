@@ -11,6 +11,7 @@ use App\Models\Seccion;
 use App\Models\Nivel;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\URL;
 
 /**
  * Controlador para visualizar y gestionar los archivos subidos por los docentes.
@@ -35,9 +36,18 @@ class ArchivoController extends Controller
             $query->where('user_id', $request->docente_id);
         }
 
-        // Filtrar por curso
+        // Filtrar por bimestre (excluyendo el "0" que representa todos los bimestres)
+        if ($request->filled('bimestre') && $request->bimestre != '0') {
+            $query->where('bimestre', $request->bimestre);
+        }
+
+        // Filtrar por curso (por ID o por Nombre)
         if ($request->filled('curso_id')) {
             $query->where('curso_id', $request->curso_id);
+        } elseif ($request->filled('curso_nombre')) {
+            $query->whereHas('curso', function ($q) use ($request) {
+                $q->where('nombre', 'like', '%' . $request->curso_nombre . '%');
+            });
         }
 
         // Filtrar por grado
@@ -67,8 +77,45 @@ class ArchivoController extends Controller
             $query->whereDate('created_at', '<=', $request->fecha_hasta);
         }
 
-        // Paginar resultados
-        $archivos = $query->paginate(20)->withQueryString();
+        // Filtrar por año lectivo (por defecto muestra el año actual)
+        $anioSeleccionado = $request->filled('anio') ? $request->anio : now()->year;
+        $query->where('anio', $anioSeleccionado);
+
+        // Filtrar por término de búsqueda general (nombre, descripción, docente o curso)
+        if ($request->filled('buscar')) {
+            $term = $request->buscar;
+            $query->where(function ($q) use ($term) {
+                $q->where('nombre_original', 'like', '%' . $term . '%')
+                  ->orWhere('descripcion', 'like', '%' . $term . '%')
+                  ->orWhereHas('docente', function ($sub) use ($term) {
+                      $sub->where('nombre', 'like', '%' . $term . '%')
+                          ->orWhere('apellido', 'like', '%' . $term . '%')
+                          ->orWhere('username', 'like', '%' . $term . '%');
+                  })
+                  ->orWhereHas('curso', function ($sub) use ($term) {
+                      $sub->where('nombre', 'like', '%' . $term . '%');
+                  });
+            });
+        }
+
+        // Detectar si hay algún filtro activo para mostrar resultados
+        $hasActiveFilter = $request->filled('docente_id') ||
+                           $request->filled('bimestre') ||
+                           $request->filled('buscar') ||
+                           $request->filled('curso_id') ||
+                           $request->filled('curso_nombre') ||
+                           $request->filled('grado_id') ||
+                           $request->filled('seccion_id') ||
+                           $request->filled('nivel_id') ||
+                           $request->filled('fecha_desde') ||
+                           $request->filled('fecha_hasta');
+
+        if (!$hasActiveFilter) {
+            $query->whereNull('id');
+        }
+
+        // Paginar resultados (ordenado por bimestre primero)
+        $archivos = $query->orderBy('bimestre')->latest()->paginate(20)->withQueryString();
 
         // Cargar datos para los selectores de filtros
         $docentes  = User::where('rol', 'docente')->orderBy('apellido')->get();
@@ -76,6 +123,8 @@ class ArchivoController extends Controller
         $grados    = Grado::with('nivel')->orderBy('nivel_id')->orderBy('nombre')->get();
         $secciones = Seccion::orderBy('nombre')->get();
         $niveles   = Nivel::orderBy('nombre')->get();
+        $bimestres = \App\Models\Archivo::bimestres();
+        $anios     = \App\Models\Archivo::aniosDisponibles();
 
         return view('admin.archivos.index', compact(
             'archivos',
@@ -83,7 +132,10 @@ class ArchivoController extends Controller
             'cursos',
             'grados',
             'secciones',
-            'niveles'
+            'niveles',
+            'bimestres',
+            'anios',
+            'anioSeleccionado'
         ));
     }
 
@@ -107,6 +159,40 @@ class ArchivoController extends Controller
      */
     public function stream(Archivo $archivo)
     {
+        if (!Storage::disk('public')->exists($archivo->ruta)) {
+            abort(404, 'El archivo no se encuentra en el servidor.');
+        }
+
+        return Storage::disk('public')->response($archivo->ruta);
+    }
+
+    /**
+     * Genera una URL firmada temporal (10 min) para acceder al archivo sin sesión.
+     * Útil para Google Docs Viewer que necesita una URL pública accesible.
+     */
+    public function signedUrl(Archivo $archivo)
+    {
+        $url = URL::temporarySignedRoute(
+            'archivos.public-stream',
+            now()->addMinutes(10),
+            ['id' => $archivo->id]
+        );
+
+        return response()->json(['url' => $url]);
+    }
+
+    /**
+     * Sirve el archivo usando una URL firmada temporal (sin auth de sesión).
+     * Solo accesible con una firma válida y no expirada.
+     */
+    public function streamPublico(Request $request, $id)
+    {
+        if (!$request->hasValidSignature()) {
+            abort(403, 'Enlace expirado o inválido.');
+        }
+
+        $archivo = Archivo::findOrFail($id);
+
         if (!Storage::disk('public')->exists($archivo->ruta)) {
             abort(404, 'El archivo no se encuentra en el servidor.');
         }

@@ -46,6 +46,35 @@
                     @endif
                 </div>
 
+                {{-- Selector de Bimestre --}}
+                <div class="form-group mb-0">
+                    <label class="form-label">Bimestre *</label>
+                    <p class="text-xs text-slate-500 mb-3">
+                        Indica a qué bimestre pertenece esta sesión de aprendizaje.
+                    </p>
+                    <div class="grid grid-cols-4 gap-2">
+                        @foreach($bimestres as $num => $nombre)
+                            @if($num > 0)
+                                <label class="cursor-pointer">
+                                    <input type="radio" name="bimestre" value="{{ $num }}"
+                                           class="sr-only peer"
+                                           {{ old('bimestre', 1) == $num ? 'checked' : '' }} required>
+                                    <div class="peer-checked:bg-emerald-600 peer-checked:border-emerald-500 peer-checked:text-white
+                                                border border-slate-600 rounded-xl p-3 text-center
+                                                hover:border-emerald-500 hover:bg-emerald-500/10
+                                                transition-all duration-150 select-none">
+                                        <div class="text-lg font-bold">{{ ['I','II','III','IV'][$num - 1] }}</div>
+                                        <div class="text-xs mt-0.5 opacity-70">Bimestre</div>
+                                    </div>
+                                </label>
+                            @endif
+                        @endforeach
+                    </div>
+                    @error('bimestre')
+                        <p class="error-msg">⚠ {{ $message }}</p>
+                    @enderror
+                </div>
+
                 {{-- Zona de carga de archivo --}}
                 <div class="form-group mb-0">
                     <label class="form-label" for="archivo">Archivo *</label>

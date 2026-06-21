@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Historias de Usuario</title>
+    <style>
+        body { font-family: Arial, sans-serif; line-height: 1.6; margin: 40px; color: #333; }
+        h1 { color: #2c3e50; text-align: center; border-bottom: 2px solid #2c3e50; padding-bottom: 10px; }
+        h2 { color: #34495e; margin-top: 30px; border-bottom: 1px solid #bdc3c7; padding-bottom: 5px; }
+        h3 { color: #2980b9; margin-top: 20px; }
+        ul { margin-top: 0; }
+        li { margin-bottom: 8px; }
+        .story-block { background: #f9f9f9; padding: 15px; border-left: 4px solid #2980b9; margin-bottom: 20px; }
+        strong { color: #2c3e50; }
+    </style>
+</head>
+<body>
+
+    <h1>Historias de Usuario - Sistema de Gestión Escolar</h1>
+
+    <h2>Módulo 1: Gestión de Sesión y Control de Accesos</h2>
+
+    <div class="story-block">
+        <h3>HU-01: Login de Acceso Seguro</h3>
+        <p><strong>Como</strong> usuario registrado (Administrador o Docente)<br>
+        <strong>Quiero</strong> iniciar sesión en el sistema usando mi usuario y contraseña<br>
+        <strong>Para</strong> poder acceder a las funcionalidades correspondientes a mi rol de forma segura.</p>
+        
+        <p><strong>Criterios de Aceptación:</strong></p>
+        <ul>
+            <li>El sistema debe mostrar un formulario con los campos de usuario y contraseña.</li>
+            <li>Las contraseñas deben estar encriptadas usando bcrypt (Laravel <code>Hash::make()</code>) [RNF1.1].</li>
+            <li>Si las credenciales son incorrectas, el sistema debe mostrar un mensaje de error en línea sin recargar la página completa [RNF2.2].</li>
+            <li>El sistema debe denegar el acceso a un usuario marcado como "inactivo" [RF-01-4].</li>
+        </ul>
+    </div>
+
+    <div class="story-block">
+        <h3>HU-02: Restricción de Acceso por Roles</h3>
+        <p><strong>Como</strong> administrador del sistema<br>
+        <strong>Quiero</strong> que el sistema restrinja las vistas según los roles definidos (Administrador y Docente)<br>
+        <strong>Para</strong> asegurar que cada usuario solo acceda a la información y opciones permitidas para su perfil.</p>
+        
+        <p><strong>Criterios de Aceptación:</strong></p>
+        <ul>
+            <li>Un Docente no debe poder acceder a las rutas de Administración (ej. gestión de docentes, años lectivos).</li>
+            <li>Si un usuario intenta acceder a una ruta no autorizada, el sistema debe redirigirlo a una página de error o al dashboard correspondiente.</li>
+        </ul>
+    </div>
+
+    <div class="story-block">
+        <h3>HU-03: Cierre de Sesión e Invalidación</h3>
+        <p><strong>Como</strong> usuario logueado (Administrador o Docente)<br>
+        <strong>Quiero</strong> poder cerrar sesión de forma segura<br>
+        <strong>Para</strong> proteger mis datos cuando termino de usar el sistema.</p>
+        
+        <p><strong>Criterios de Aceptación:</strong></p>
+        <ul>
+            <li>Debe existir un botón o enlace visible para cerrar sesión.</li>
+            <li>Al cerrar sesión, la sesión activa en el servidor debe invalidarse [RF-01.3].</li>
+            <li>El sistema debe denegar el acceso continuo si el administrador marca al usuario como inactivo mientras tiene una sesión activa [RF-01-4].</li>
+        </ul>
+    </div>
+
+    <h2>Módulo 2: Gestión Académica (Rol Administrador)</h2>
+
+    <div class="story-block">
+        <h3>HU-04: Gestión de Docentes</h3>
+        <p><strong>Como</strong> administrador<br>
+        <strong>Quiero</strong> registrar, modificar y cambiar el estado (activo/inactivo) de los docentes<br>
+        <strong>Para</strong> mantener actualizada la plantilla de personal sin perder su historial de archivos.</p>
+        
+        <p><strong>Criterios de Aceptación:</strong></p>
+        <ul>
+            <li>El administrador debe poder llenar un formulario para registrar un nuevo docente.</li>
+            <li>El administrador debe poder modificar los datos de un docente existente.</li>
+            <li>El sistema no debe permitir la eliminación física (borrado de base de datos) de los docentes, solo desactivarlos [RNF3.2].</li>
+            <li>El sistema debe mostrar un mensaje flash de éxito o error al realizar cualquiera de estas operaciones [RNF2.3].</li>
+            <li>La lista de docentes debe estar paginada (15-20 elementos por página) [RNF3.1].</li>
+        </ul>
+    </div>
+
+    <div class="story-block">
+        <h3>HU-05: Gestión de Año Lectivo</h3>
+        <p><strong>Como</strong> administrador<br>
+        <strong>Quiero</strong> poder activar un año lectivo<br>
+        <strong>Para</strong> que las operaciones del sistema (subida de archivos, asignaciones) se registren en el periodo correcto.</p>
+        
+        <p><strong>Criterios de Aceptación:</strong></p>
+        <ul>
+            <li>El administrador debe poder seleccionar y activar un año lectivo.</li>
+            <li>Solo puede haber un (1) año lectivo activo a la vez [RF-02.2].</li>
+        </ul>
+    </div>
+
+    <div class="story-block">
+        <h3>HU-06: Gestión de Carga Académica (Asignaciones)</h3>
+        <p><strong>Como</strong> administrador<br>
+        <strong>Quiero</strong> asociar a cada docente los cursos, grados y secciones que le corresponden dictar<br>
+        <strong>Para</strong> organizar la carga de trabajo y permitir que los docentes suban archivos en sus áreas correspondientes.</p>
+        
+        <p><strong>Criterios de Aceptación:</strong></p>
+        <ul>
+            <li>El sistema debe proporcionar una interfaz para seleccionar un docente y asignarle grado, sección y curso.</li>
+            <li>Las asignaciones deben reflejarse inmediatamente en el perfil del docente.</li>
+        </ul>
+    </div>
+
+    <div class="story-block">
+        <h3>HU-07: Visualización del Dashboard General</h3>
+        <p><strong>Como</strong> administrador<br>
+        <strong>Quiero</strong> visualizar un dashboard general<br>
+        <strong>Para</strong> obtener una vista rápida del estado del sistema y accesos directos a las funciones principales.</p>
+        
+        <p><strong>Criterios de Aceptación:</strong></p>
+        <ul>
+            <li>El dashboard debe ser responsivo y amigable [RNF2.1].</li>
+            <li>Debe mostrar un resumen o atajos a la gestión de docentes, años lectivos y archivos.</li>
+        </ul>
+    </div>
+
+    <h2>Módulo 3: Gestión de Archivos y Evidencias (Rol Docente)</h2>
+
+    <div class="story-block">
+        <h3>HU-08: Subida de Archivos y Evidencias</h3>
+        <p><strong>Como</strong> docente<br>
+        <strong>Quiero</strong> subir archivos digitales asociados a mis asignaciones vigentes (grado, curso, bimestre)<br>
+        <strong>Para</strong> mantener un registro de mis evidencias de trabajo durante el año escolar activo.</p>
+        
+        <p><strong>Criterios de Aceptación:</strong></p>
+        <ul>
+            <li>El docente debe poder seleccionar un archivo de su dispositivo.</li>
+            <li>Debe poder elegir el grado, curso (de entre sus asignaciones) y el bimestre correspondiente.</li>
+            <li>El sistema debe mostrar mensajes de error si falta algún campo o el archivo no es válido (validación en línea) [RNF2.2].</li>
+            <li>Al subir el archivo con éxito, se debe mostrar un mensaje flash [RNF2.3].</li>
+        </ul>
+    </div>
+
+    <div class="story-block">
+        <h3>HU-09: Listado de Archivos Propios</h3>
+        <p><strong>Como</strong> docente<br>
+        <strong>Quiero</strong> ver la lista de todos mis archivos cargados durante el año escolar activo<br>
+        <strong>Para</strong> llevar un control de lo que he reportado en el sistema.</p>
+        
+        <p><strong>Criterios de Aceptación:</strong></p>
+        <ul>
+            <li>La lista debe mostrar solo los archivos pertenecientes al docente autenticado y del año activo.</li>
+            <li>La lista debe estar paginada (15-20 elementos por página) [RNF3.1].</li>
+        </ul>
+    </div>
+
+    <div class="story-block">
+        <h3>HU-10: Previsualización de Archivos</h3>
+        <p><strong>Como</strong> docente<br>
+        <strong>Quiero</strong> previsualizar mis documentos subidos en línea<br>
+        <strong>Para</strong> verificar su contenido sin necesidad de descargarlos en mi dispositivo.</p>
+        
+        <p><strong>Criterios de Aceptación:</strong></p>
+        <ul>
+            <li>Debe existir un botón de previsualización junto a cada archivo en la lista.</li>
+            <li>La previsualización debe abrirse en el navegador.</li>
+        </ul>
+    </div>
+
+    <div class="story-block">
+        <h3>HU-11: Papelera de Reciclaje</h3>
+        <p><strong>Como</strong> docente<br>
+        <strong>Quiero</strong> poder enviar mis archivos a una Papelera de Reciclaje temporal y restaurarlos si es necesario<br>
+        <strong>Para</strong> corregir errores de subida sin perder la información de forma permanente.</p>
+        
+        <p><strong>Criterios de Aceptación:</strong></p>
+        <ul>
+            <li>El docente puede mover un archivo a la papelera.</li>
+            <li>La lista de la papelera debe estar paginada [RNF3.1].</li>
+            <li>El docente puede visualizar los archivos en su papelera y elegir restaurarlos a su ubicación original.</li>
+            <li>Se debe mostrar un mensaje flash al mover o restaurar archivos [RNF2.3].</li>
+        </ul>
+    </div>
+
+    <h2>Módulo 4: Control y Auditoría de Archivos (Rol Administrador)</h2>
+
+    <div class="story-block">
+        <h3>HU-12: Visualización y Búsqueda Global de Archivos</h3>
+        <p><strong>Como</strong> administrador<br>
+        <strong>Quiero</strong> visualizar y buscar todos los archivos subidos por todos los docentes de la institución<br>
+        <strong>Para</strong> realizar auditorías y controlar el cumplimiento de las entregas.</p>
+        
+        <p><strong>Criterios de Aceptación:</strong></p>
+        <ul>
+            <li>El administrador debe tener acceso a una vista con todos los archivos del sistema.</li>
+            <li>Debe poder usar filtros de búsqueda por: docente, año lectivo y bimestre.</li>
+            <li>Los resultados deben estar paginados (15-20 elementos) [RNF3.1].</li>
+        </ul>
+    </div>
+
+    <div class="story-block">
+        <h3>HU-13: Descarga y Previsualización Global</h3>
+        <p><strong>Como</strong> administrador<br>
+        <strong>Quiero</strong> descargar o previsualizar en el navegador cualquier archivo del sistema<br>
+        <strong>Para</strong> revisar a detalle las evidencias subidas por los docentes.</p>
+        
+        <p><strong>Criterios de Aceptación:</strong></p>
+        <ul>
+            <li>El sistema debe permitir la previsualización directa en el navegador de cualquier archivo [RF-04-3].</li>
+            <li>Las URLs generadas para visores externos deben tener una vida máxima de 10 minutos (URLs firmadas temporales) [RNF1.2].</li>
+        </ul>
+    </div>
+
+    <div class="story-block">
+        <h3>HU-14: Generación y Descarga de Reportes</h3>
+        <p><strong>Como</strong> administrador<br>
+        <strong>Quiero</strong> generar reportes de cumplimiento filtrando por año lectivo y bimestre, y descargarlos (PDF, Word o Excel)<br>
+        <strong>Para</strong> documentar y presentar el estado de entrega de evidencias de la institución.</p>
+        
+        <p><strong>Criterios de Aceptación:</strong></p>
+        <ul>
+            <li>El sistema debe permitir seleccionar el año lectivo y el bimestre para generar el reporte.</li>
+            <li>El reporte debe mostrar qué docentes han cumplido con sus entregas y cuáles no.</li>
+            <li>Deben existir opciones claras para exportar el reporte en formatos PDF, Word o Excel [RF-04.6].</li>
+        </ul>
+    </div>
+
+</body>
+</html>

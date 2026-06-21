@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Infraestructura Tecnológica</title>
+    <script type="module">
+      import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
+      mermaid.initialize({ startOnLoad: true, theme: 'default' });
+    </script>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 40px; text-align: center; background-color: white;}
+        h3 { color: #1f3864; font-size: 22px; margin-bottom: 40px;}
+        .mermaid { display: flex; justify-content: center; margin-bottom: 50px;}
+    </style>
+</head>
+<body>
+
+    <h3>Diagrama de Infraestructura Tecnológica</h3>
+    
+    <div class="mermaid">
+        flowchart TD
+            %% Estilos de los nodos
+            classDef client fill:#d9e1f2,stroke:#1f3864,stroke-width:2px,color:#000
+            classDef server fill:#e2efda,stroke:#385723,stroke-width:2px,color:#000
+            classDef data fill:#fff2cc,stroke:#bf8f00,stroke-width:2px,color:#000
+
+            subgraph Clientes ["Nivel de Cliente (Usuarios)"]
+                Admin["💻 Administrador<br/>(Navegador Web)"]:::client
+                Docente["📱 Docente<br/>(PC / Móvil)"]:::client
+            end
+
+            subgraph Internet ["Red"]
+                HTTP{"🌐 Protocolo HTTP/HTTPS"}
+            end
+
+            subgraph Servidor ["Infraestructura del Servidor (Hosting / VPS)"]
+                
+                subgraph Aplicacion ["Capa de Aplicación"]
+                    WebSrv["Servidor Web<br/>(Apache / Nginx)"]:::server
+                    Laravel["⚙️ Aplicación Laravel<br/>(PHP)"]:::server
+                end
+                
+                subgraph Datos ["Capa de Datos y Almacenamiento"]
+                    MySQL[("🗄️ Base de Datos<br/>(MySQL)")]:::data
+                    Storage["📁 Almacenamiento Local<br/>(Archivos y Evidencias)"]:::data
+                end
+            end
+
+            %% Relaciones y flujo de información
+            Admin -->|Peticiones Web| HTTP
+            Docente -->|Peticiones Web| HTTP
+            
+            HTTP -->|Enruta peticiones| WebSrv
+            WebSrv -->|Procesa lógica| Laravel
+            
+            Laravel <-->|Consultas SQL| MySQL
+            Laravel <-->|Guarda / Lee Documentos| Storage
+    </div>
+
+</body>
+</html>

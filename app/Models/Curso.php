@@ -23,6 +23,14 @@ class Curso extends Model
     }
 
     /**
+     * Un curso tiene docentes asignados.
+     */
+    public function docentes()
+    {
+        return $this->belongsToMany(User::class, 'docente_asignaciones', 'curso_id', 'user_id')->distinct();
+    }
+
+    /**
      * Un curso tiene muchos archivos subidos.
      */
     public function archivos(): HasMany

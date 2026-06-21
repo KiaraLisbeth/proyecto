@@ -1,0 +1,720 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Requerimientos del Sistema — I.E.P. Esther Carson</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: 'Inter', Arial, sans-serif;
+      font-size: 10.5pt;
+      color: #1e293b;
+      background: #fff;
+      line-height: 1.6;
+    }
+
+    /* ── PORTADA ── */
+    .cover {
+      width: 100%;
+      min-height: 100vh;
+      background: linear-gradient(135deg, #0f172a 0%, #1e3a8a 50%, #1d4ed8 100%);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 60px 40px;
+      page-break-after: always;
+      position: relative;
+      overflow: hidden;
+    }
+    .cover::before {
+      content: '';
+      position: absolute;
+      top: -80px; right: -80px;
+      width: 400px; height: 400px;
+      border-radius: 50%;
+      background: rgba(99,102,241,0.15);
+    }
+    .cover::after {
+      content: '';
+      position: absolute;
+      bottom: -100px; left: -60px;
+      width: 350px; height: 350px;
+      border-radius: 50%;
+      background: rgba(59,130,246,0.12);
+    }
+    .cover-logo {
+      width: 90px; height: 90px;
+      background: rgba(255,255,255,0.15);
+      border-radius: 24px;
+      display: flex; align-items: center; justify-content: center;
+      margin: 0 auto 28px;
+      border: 2px solid rgba(255,255,255,0.25);
+      font-size: 40px;
+    }
+    .cover-badge {
+      display: inline-block;
+      background: rgba(99,102,241,0.35);
+      color: #a5b4fc;
+      font-size: 8pt;
+      font-weight: 700;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      padding: 5px 16px;
+      border-radius: 20px;
+      border: 1px solid rgba(165,180,252,0.3);
+      margin-bottom: 24px;
+    }
+    .cover h1 {
+      color: #ffffff;
+      font-size: 30pt;
+      font-weight: 800;
+      line-height: 1.2;
+      margin-bottom: 12px;
+      text-shadow: 0 2px 20px rgba(0,0,0,0.3);
+    }
+    .cover h2 {
+      color: #93c5fd;
+      font-size: 13pt;
+      font-weight: 400;
+      margin-bottom: 40px;
+    }
+    .cover-meta {
+      display: flex;
+      gap: 40px;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+    .cover-meta-item {
+      color: rgba(255,255,255,0.75);
+      font-size: 9pt;
+    }
+    .cover-meta-item strong {
+      display: block;
+      color: #fff;
+      font-size: 11pt;
+      font-weight: 600;
+    }
+    .cover-divider {
+      width: 60px; height: 3px;
+      background: linear-gradient(90deg, #6366f1, #3b82f6);
+      border-radius: 2px;
+      margin: 32px auto;
+    }
+    .cover-stats {
+      display: flex;
+      gap: 24px;
+      justify-content: center;
+      margin-top: 8px;
+    }
+    .cover-stat {
+      background: rgba(255,255,255,0.1);
+      border: 1px solid rgba(255,255,255,0.2);
+      border-radius: 12px;
+      padding: 16px 28px;
+      text-align: center;
+    }
+    .cover-stat .num {
+      font-size: 22pt;
+      font-weight: 800;
+      color: #fff;
+      display: block;
+    }
+    .cover-stat .lbl {
+      font-size: 8pt;
+      color: rgba(255,255,255,0.6);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    /* ── CONTENIDO ── */
+    .content {
+      padding: 48px 52px;
+      max-width: 780px;
+      margin: 0 auto;
+    }
+
+    /* ── TABLA DE CONTENIDO ── */
+    .toc {
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-radius: 12px;
+      padding: 28px 32px;
+      margin-bottom: 40px;
+      page-break-after: always;
+    }
+    .toc-title {
+      font-size: 14pt;
+      font-weight: 700;
+      color: #0f172a;
+      margin-bottom: 20px;
+      padding-bottom: 12px;
+      border-bottom: 2px solid #e2e8f0;
+    }
+    .toc ul { list-style: none; }
+    .toc > ul > li { margin-bottom: 8px; }
+    .toc a {
+      color: #3b82f6;
+      text-decoration: none;
+      font-weight: 500;
+      font-size: 10pt;
+    }
+    .toc > ul > li > a { font-size: 11pt; font-weight: 600; color: #1e3a8a; }
+    .toc ul ul { margin-left: 20px; margin-top: 4px; }
+    .toc ul ul li { margin-bottom: 4px; }
+    .toc ul ul a { font-size: 9.5pt; color: #475569; font-weight: 400; }
+    .toc-dot { display: inline-block; width: 6px; height: 6px; border-radius: 50%; background: #3b82f6; margin-right: 8px; vertical-align: middle; }
+
+    /* ── SECCIONES ── */
+    .section { margin-bottom: 48px; }
+    .section-header {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      margin-bottom: 24px;
+      padding-bottom: 14px;
+      border-bottom: 3px solid #1d4ed8;
+    }
+    .section-icon {
+      width: 44px; height: 44px;
+      border-radius: 12px;
+      background: linear-gradient(135deg, #1e3a8a, #3b82f6);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 20px;
+      flex-shrink: 0;
+    }
+    .section-title {
+      font-size: 16pt;
+      font-weight: 800;
+      color: #0f172a;
+    }
+    .section-subtitle {
+      font-size: 9pt;
+      color: #64748b;
+      font-weight: 400;
+    }
+
+    /* ── SUBSECCIONES ── */
+    .subsection { margin-bottom: 32px; }
+    .subsection-header {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 14px;
+      background: linear-gradient(90deg, #eff6ff, transparent);
+      padding: 10px 14px;
+      border-radius: 8px;
+      border-left: 4px solid #3b82f6;
+    }
+    .subsection-title {
+      font-size: 12pt;
+      font-weight: 700;
+      color: #1e40af;
+    }
+
+    /* ── TABLAS DE REQUERIMIENTOS ── */
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-bottom: 20px;
+      font-size: 9.5pt;
+      border-radius: 10px;
+      overflow: hidden;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+    }
+    thead tr {
+      background: linear-gradient(90deg, #1e3a8a, #2563eb);
+      color: white;
+    }
+    thead th {
+      padding: 10px 14px;
+      text-align: left;
+      font-size: 8.5pt;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+    }
+    tbody tr:nth-child(even) { background: #f8fafc; }
+    tbody tr:nth-child(odd)  { background: #ffffff; }
+    tbody tr:hover           { background: #eff6ff; }
+    tbody td {
+      padding: 10px 14px;
+      border-bottom: 1px solid #e2e8f0;
+      vertical-align: top;
+      line-height: 1.5;
+    }
+    .id-badge {
+      display: inline-block;
+      background: linear-gradient(135deg, #1e3a8a, #2563eb);
+      color: #fff;
+      font-size: 7.5pt;
+      font-weight: 700;
+      padding: 3px 8px;
+      border-radius: 5px;
+      white-space: nowrap;
+      letter-spacing: 0.3px;
+    }
+    .id-badge.green  { background: linear-gradient(135deg, #065f46, #059669); }
+    .id-badge.purple { background: linear-gradient(135deg, #4c1d95, #7c3aed); }
+    .id-badge.orange { background: linear-gradient(135deg, #92400e, #d97706); }
+    .id-badge.red    { background: linear-gradient(135deg, #7f1d1d, #dc2626); }
+
+    /* ── ALERT BOXES ── */
+    .alert {
+      padding: 14px 18px;
+      border-radius: 10px;
+      margin-bottom: 20px;
+      font-size: 9.5pt;
+      display: flex;
+      gap: 12px;
+      align-items: flex-start;
+    }
+    .alert-icon { font-size: 16px; flex-shrink: 0; margin-top: 1px; }
+    .alert.info  { background: #eff6ff; border-left: 4px solid #3b82f6; color: #1e40af; }
+    .alert.warn  { background: #fffbeb; border-left: 4px solid #f59e0b; color: #92400e; }
+    .alert.green { background: #f0fdf4; border-left: 4px solid #22c55e; color: #14532d; }
+
+    /* ── INFO CARDS ── */
+    .info-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+      margin-bottom: 32px;
+    }
+    .info-card {
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-radius: 10px;
+      padding: 16px;
+      text-align: center;
+    }
+    .info-card .label { font-size: 8pt; color: #64748b; text-transform: uppercase; font-weight: 600; letter-spacing: 1px; margin-bottom: 4px; }
+    .info-card .value { font-size: 11pt; font-weight: 700; color: #0f172a; }
+
+    /* ── SUMMARY TABLE ── */
+    .summary-table th { background: #0f172a; }
+    .summary-table td:first-child { font-weight: 600; color: #1e3a8a; }
+
+    /* ── PAGE BREAKS ── */
+    .page-break { page-break-before: always; padding-top: 20px; }
+
+    /* ── FOOTER ── */
+    .doc-footer {
+      margin-top: 60px;
+      padding-top: 24px;
+      border-top: 2px solid #e2e8f0;
+      text-align: center;
+      color: #94a3b8;
+      font-size: 8pt;
+    }
+
+    /* ── DESCRIPCION GENERAL ── */
+    .desc-box {
+      background: linear-gradient(135deg, #eff6ff, #f0f9ff);
+      border: 1px solid #bfdbfe;
+      border-radius: 12px;
+      padding: 24px 28px;
+      margin-bottom: 32px;
+    }
+    .desc-box p { color: #1e40af; font-size: 10.5pt; line-height: 1.7; }
+
+    h3.sub { font-size: 11pt; font-weight: 700; color: #1e40af; margin: 24px 0 12px; padding-left: 10px; border-left: 3px solid #60a5fa; }
+
+    @media print {
+      body { print-color-adjust: exact; -webkit-print-color-adjust: exact; }
+      .cover { min-height: 100vh; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ═══════════════════════════════════════════════════════════ PORTADA -->
+<div class="cover">
+  <div class="cover-logo">📚</div>
+  <div class="cover-badge">Documento Técnico Oficial</div>
+  <h1>Requerimientos<br/>del Sistema</h1>
+  <h2>Sistema de Gestión Académica y Portafolio Docente</h2>
+  <div class="cover-divider"></div>
+  <div class="cover-meta">
+    <div class="cover-meta-item">
+      <strong>I.E.P. Esther Carson</strong>
+      Institución Educativa
+    </div>
+    <div class="cover-meta-item">
+      <strong>Laravel / PHP</strong>
+      Tecnología Backend
+    </div>
+    <div class="cover-meta-item">
+      <strong>Junio 2026</strong>
+      Fecha de Elaboración
+    </div>
+  </div>
+  <div style="height:32px"></div>
+  <div class="cover-stats">
+    <div class="cover-stat">
+      <span class="num">22</span>
+      <span class="lbl">Req. Funcionales</span>
+    </div>
+    <div class="cover-stat">
+      <span class="num">18</span>
+      <span class="lbl">Req. No Funcionales</span>
+    </div>
+    <div class="cover-stat">
+      <span class="num">6</span>
+      <span class="lbl">Módulos</span>
+    </div>
+    <div class="cover-stat">
+      <span class="num">2</span>
+      <span class="lbl">Roles de Usuario</span>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════ CONTENIDO -->
+<div class="content">
+
+  <!-- TABLA DE CONTENIDO -->
+  <div class="toc">
+    <div class="toc-title">📋 Tabla de Contenido</div>
+    <ul>
+      <li><a href="#desc">1. Descripción General del Sistema</a></li>
+      <li>
+        <a href="#rf">2. Requerimientos Funcionales (RF)</a>
+        <ul>
+          <li><span class="toc-dot"></span><a href="#rf1">RF1 — Gestión de Autenticación, Roles y Perfiles</a></li>
+          <li><span class="toc-dot"></span><a href="#rf2">RF2 — Estructura Académica e Institucional</a></li>
+          <li><span class="toc-dot"></span><a href="#rf3">RF3 — Gestión y Asignación de Docentes</a></li>
+          <li><span class="toc-dot"></span><a href="#rf4">RF4 — Gestión de Archivos y Portafolio Docente</a></li>
+          <li><span class="toc-dot"></span><a href="#rf5">RF5 — Configuración de la Institución</a></li>
+          <li><span class="toc-dot"></span><a href="#rf6">RF6 — Reportes de Cumplimiento</a></li>
+        </ul>
+      </li>
+      <li>
+        <a href="#rnf">3. Requerimientos No Funcionales (RNF)</a>
+        <ul>
+          <li><span class="toc-dot"></span><a href="#rnf1">RNF1 — Seguridad y Privacidad</a></li>
+          <li><span class="toc-dot"></span><a href="#rnf2">RNF2 — Usabilidad e Interfaz</a></li>
+          <li><span class="toc-dot"></span><a href="#rnf3">RNF3 — Rendimiento</a></li>
+          <li><span class="toc-dot"></span><a href="#rnf4">RNF4 — Confiabilidad e Integridad</a></li>
+          <li><span class="toc-dot"></span><a href="#rnf5">RNF5 — Portabilidad y Mantenibilidad</a></li>
+          <li><span class="toc-dot"></span><a href="#rnf6">RNF6 — Reportes y Exportaciones</a></li>
+        </ul>
+      </li>
+      <li><a href="#resumen">4. Tabla Resumen General</a></li>
+    </ul>
+  </div>
+
+  <!-- ══ DESCRIPCIÓN GENERAL ══ -->
+  <div class="section" id="desc">
+    <div class="section-header">
+      <div class="section-icon">🏫</div>
+      <div>
+        <div class="section-title">1. Descripción General del Sistema</div>
+        <div class="section-subtitle">Visión, contexto y datos técnicos</div>
+      </div>
+    </div>
+
+    <div class="desc-box">
+      <p>El sistema es una <strong>plataforma web desarrollada en PHP/Laravel</strong> que permite a la institución educativa <strong>I.E.P. Esther Carson</strong> gestionar su estructura académica completa y administrar un <strong>portafolio digital docente</strong>. Está orientado a dos tipos de usuarios: el <strong>Administrador</strong>, que supervisa y configura la institución, y los <strong>Docentes</strong>, que cargan sus materiales académicos organizados por bimestre y año lectivo.</p>
+    </div>
+
+    <div class="info-grid">
+      <div class="info-card"><div class="label">Framework</div><div class="value">Laravel / PHP</div></div>
+      <div class="info-card"><div class="label">Base de Datos</div><div class="value">SQLite / MySQL</div></div>
+      <div class="info-card"><div class="label">Patrón</div><div class="value">MVC (Blade)</div></div>
+      <div class="info-card"><div class="label">Roles</div><div class="value">Admin · Docente</div></div>
+      <div class="info-card"><div class="label">Módulos</div><div class="value">6 Módulos</div></div>
+      <div class="info-card"><div class="label">Tipo</div><div class="value">Aplicación Web</div></div>
+    </div>
+
+    <div class="alert info">
+      <span class="alert-icon">ℹ️</span>
+      <div>Los requerimientos de este documento fueron extraídos mediante análisis directo del código fuente del proyecto: controladores (<code>Admin/</code>, <code>Docente/</code>), modelos Eloquent, migraciones de base de datos y vistas Blade.</div>
+    </div>
+  </div>
+
+  <!-- ══ REQUERIMIENTOS FUNCIONALES ══ -->
+  <div class="section page-break" id="rf">
+    <div class="section-header">
+      <div class="section-icon">⚙️</div>
+      <div>
+        <div class="section-title">2. Requerimientos Funcionales (RF)</div>
+        <div class="section-subtitle">22 requerimientos distribuidos en 6 módulos funcionales</div>
+      </div>
+    </div>
+
+    <!-- RF1 -->
+    <div class="subsection" id="rf1">
+      <div class="subsection-header">
+        <div class="subsection-title">🔐 RF1 — Gestión de Autenticación, Roles y Perfiles</div>
+      </div>
+      <p style="color:#475569;font-size:9.5pt;margin-bottom:14px;">El sistema proporciona acceso seguro y diferenciado según el rol del usuario autenticado. No se utiliza correo electrónico para el login; se emplea únicamente el <code>username</code>.</p>
+      <table>
+        <thead><tr><th style="width:90px">ID</th><th>Descripción del Requerimiento</th></tr></thead>
+        <tbody>
+          <tr><td><span class="id-badge">RF1.1</span></td><td><strong>Autenticación por credenciales:</strong> El sistema permite iniciar sesión únicamente mediante <code>username</code> y <code>password</code>. No se usa correo electrónico.</td></tr>
+          <tr><td><span class="id-badge">RF1.2</span></td><td><strong>Control de estado:</strong> Si el administrador marca un usuario como <em>Inactivo</em> (<code>activo = false</code>), el sistema deniega el acceso de inmediato, incluso si tiene sesión iniciada.</td></tr>
+          <tr><td><span class="id-badge">RF1.3</span></td><td><strong>Roles de usuario:</strong> Existen dos roles definidos: <code>admin</code> y <code>docente</code>. Cada rol accede a un conjunto de rutas e interfaz independientes.</td></tr>
+          <tr><td><span class="id-badge">RF1.4</span></td><td><strong>Actualización de perfil:</strong> Todo usuario autenticado puede modificar su nombre, apellido y username. El sistema valida que el username sea único en todo el sistema.</td></tr>
+          <tr><td><span class="id-badge">RF1.5</span></td><td><strong>Cambio de contraseña seguro:</strong> Para cambiar la contraseña, el sistema exige verificar la contraseña actual. La nueva contraseña debe tener mínimo 8 caracteres y confirmación.</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- RF2 -->
+    <div class="subsection page-break" id="rf2">
+      <div class="subsection-header">
+        <div class="subsection-title">🏫 RF2 — Estructura Académica e Institucional</div>
+      </div>
+      <p style="color:#475569;font-size:9.5pt;margin-bottom:14px;">El administrador configura la jerarquía académica completa de la institución: Niveles → Grados → Secciones → Cursos → Años Lectivos.</p>
+      <table>
+        <thead><tr><th style="width:90px">ID</th><th>Descripción del Requerimiento</th></tr></thead>
+        <tbody>
+          <tr><td><span class="id-badge green">RF2.1</span></td><td><strong>Gestión de Niveles:</strong> Crear, editar y eliminar niveles educativos (Ej: <em>Inicial, Primaria, Secundaria</em>).</td></tr>
+          <tr><td><span class="id-badge green">RF2.2</span></td><td><strong>Gestión de Grados:</strong> Registrar y gestionar grados, vinculados obligatoriamente a un nivel educativo (Ej: <em>1er Grado → Primaria</em>).</td></tr>
+          <tr><td><span class="id-badge green">RF2.3</span></td><td><strong>Gestión de Secciones:</strong> Crear y administrar secciones para subdividir los grados (Ej: <em>A, B, C, Única</em>).</td></tr>
+          <tr><td><span class="id-badge green">RF2.4</span></td><td><strong>Gestión de Cursos:</strong> Crear, actualizar y eliminar los cursos o materias que conforman la currícula escolar.</td></tr>
+          <tr><td><span class="id-badge green">RF2.5</span></td><td><strong>Gestión de Años Lectivos:</strong> Registrar años académicos y permitir activar un único año lectivo a la vez. El año activo es la referencia para carga y consulta por defecto.</td></tr>
+          <tr><td><span class="id-badge green">RF2.6</span></td><td><strong>Mapa Académico (Vista Jerárquica):</strong> El dashboard muestra una vista consolidada Niveles → Grados → Cursos con los docentes asignados a cada combinación.</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- RF3 -->
+    <div class="subsection" id="rf3">
+      <div class="subsection-header">
+        <div class="subsection-title">👤 RF3 — Gestión y Asignación de Docentes</div>
+      </div>
+      <p style="color:#475569;font-size:9.5pt;margin-bottom:14px;">El administrador gestiona el alta, estado y asignaciones académicas de cada docente dentro del sistema.</p>
+      <table>
+        <thead><tr><th style="width:90px">ID</th><th>Descripción del Requerimiento</th></tr></thead>
+        <tbody>
+          <tr><td><span class="id-badge purple">RF3.1</span></td><td><strong>Registro de Docentes:</strong> Crear perfiles de profesores con nombre, apellido, username y contraseña. El correo se autogenera con el formato <code>{username}@docente.local</code>.</td></tr>
+          <tr><td><span class="id-badge purple">RF3.2</span></td><td><strong>Activar / Desactivar Docente:</strong> El administrador habilita o deshabilita el acceso mediante un botón <em>toggle</em>. Los docentes no se eliminan físicamente para preservar la integridad referencial de sus archivos.</td></tr>
+          <tr><td><span class="id-badge purple">RF3.3</span></td><td><strong>Asignación de Cursos y Aulas:</strong> Vincular a un docente con una o más combinaciones de <code>[Curso + Grado + Sección]</code>. Cada combinación representa una clase activa a su cargo.</td></tr>
+          <tr><td><span class="id-badge purple">RF3.4</span></td><td><strong>Actualización de Asignaciones:</strong> Al editar un docente, el sistema elimina todas sus asignaciones previas y crea las nuevas en un único formulario sincronizado.</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- RF4 -->
+    <div class="subsection page-break" id="rf4">
+      <div class="subsection-header">
+        <div class="subsection-title">📁 RF4 — Gestión de Archivos y Portafolio Docente</div>
+      </div>
+      <p style="color:#475569;font-size:9.5pt;margin-bottom:14px;">Núcleo del sistema: carga, organización, búsqueda, previsualización y control de materiales educativos digitales por bimestre y año lectivo.</p>
+
+      <h3 class="sub">4.1 — Funciones del Docente</h3>
+      <table>
+        <thead><tr><th style="width:90px">ID</th><th>Descripción del Requerimiento</th></tr></thead>
+        <tbody>
+          <tr><td><span class="id-badge orange">RF4.1</span></td><td><strong>Carga de Archivos:</strong> El docente sube archivos (PDF, Word, imágenes, etc.) asociándolos a una de sus asignaciones activas. Cada archivo requiere: asignación, bimestre (I–IV) y descripción opcional. El año lectivo se asocia automáticamente.</td></tr>
+          <tr><td><span class="id-badge orange">RF4.2</span></td><td><strong>Listado y Búsqueda de Archivos Propios:</strong> Ver los archivos subidos paginados (15/pág), con filtros por: año lectivo, bimestre, curso (por ID o nombre), rango de fechas, nombre y descripción.</td></tr>
+          <tr><td><span class="id-badge orange">RF4.3</span></td><td><strong>Descarga y Stream Personal:</strong> El docente puede descargar un archivo con su nombre original o visualizarlo en línea (<em>stream inline</em>). El sistema verifica que el archivo le pertenece antes de servir.</td></tr>
+          <tr><td><span class="id-badge orange">RF4.4</span></td><td><strong>URL Firmada para Previsualización Externa:</strong> Generar una URL criptográficamente firmada válida por <strong>10 minutos</strong> para que visores externos (Google Docs Viewer) carguen documentos sin requerir sesión del usuario.</td></tr>
+          <tr><td><span class="id-badge orange">RF4.5</span></td><td><strong>Papelera de Reciclaje (Docente):</strong> El docente puede enviar archivos a la papelera (<em>soft delete</em>), restaurarlos, o eliminarlos definitivamente (borrando el registro en BD y el archivo físico del servidor).</td></tr>
+        </tbody>
+      </table>
+
+      <h3 class="sub">4.2 — Funciones del Administrador</h3>
+      <table>
+        <thead><tr><th style="width:90px">ID</th><th>Descripción del Requerimiento</th></tr></thead>
+        <tbody>
+          <tr><td><span class="id-badge red">RF4.6</span></td><td><strong>Consola de Supervisión Global:</strong> Visualizar todos los archivos subidos por todos los docentes de la institución en un único panel centralizado.</td></tr>
+          <tr><td><span class="id-badge red">RF4.7</span></td><td><strong>Filtrado Avanzado (Admin):</strong> Buscar documentos por: docente, año lectivo, bimestre, curso, grado, sección, nivel y rango de fechas de creación.</td></tr>
+          <tr><td><span class="id-badge red">RF4.8</span></td><td><strong>Descarga y Stream Administrativo:</strong> El administrador puede descargar o previsualizar en el navegador cualquier archivo del sistema.</td></tr>
+          <tr><td><span class="id-badge red">RF4.9</span></td><td><strong>Papelera Administrativa:</strong> Ver todos los archivos en papelera de todos los docentes. El administrador puede restaurarlos o eliminarlos definitivamente del servidor.</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- RF5 -->
+    <div class="subsection" id="rf5">
+      <div class="subsection-header">
+        <div class="subsection-title">⚙️ RF5 — Configuración de la Institución</div>
+      </div>
+      <p style="color:#475569;font-size:9.5pt;margin-bottom:14px;">Personalización de la identidad visual y los datos informativos de la institución educativa.</p>
+      <table>
+        <thead><tr><th style="width:90px">ID</th><th>Descripción del Requerimiento</th></tr></thead>
+        <tbody>
+          <tr><td><span class="id-badge">RF5.1</span></td><td><strong>Información Institucional:</strong> Editar el Nombre, Dirección, Teléfono, Correo Electrónico y Sitio Web de la institución. Campos opcionales excepto el nombre.</td></tr>
+          <tr><td><span class="id-badge">RF5.2</span></td><td><strong>Logotipo Institucional:</strong> Subir un logo en formatos <code>.jpg</code>, <code>.png</code> o <code>.webp</code> (máx. 2 MB). El logo se muestra dinámicamente en los layouts de administración y docentes.</td></tr>
+          <tr><td><span class="id-badge">RF5.3</span></td><td><strong>Persistencia en JSON:</strong> Los datos institucionales se guardan en <code>config/institucion.json</code> (archivo local), optimizando el tiempo de respuesta y evitando consultas innecesarias a la base de datos.</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- RF6 -->
+    <div class="subsection page-break" id="rf6">
+      <div class="subsection-header">
+        <div class="subsection-title">📊 RF6 — Reportes de Cumplimiento</div>
+      </div>
+      <p style="color:#475569;font-size:9.5pt;margin-bottom:14px;">El sistema genera reportes estadísticos del estado de entrega de documentos por parte de los docentes, con capacidad de exportación en múltiples formatos.</p>
+      <table>
+        <thead><tr><th style="width:90px">ID</th><th>Descripción del Requerimiento</th></tr></thead>
+        <tbody>
+          <tr><td><span class="id-badge green">RF6.1</span></td><td><strong>Reporte por Bimestre:</strong> Generar un reporte filtrando por año lectivo y bimestre específico (I, II, III o IV). Muestra por cada docente: total de asignaciones, completadas, pendientes y porcentaje de cumplimiento.</td></tr>
+          <tr><td><span class="id-badge green">RF6.2</span></td><td><strong>Reporte Consolidado Anual:</strong> Generar un reporte que englobe los 4 bimestres simultáneamente (opción "Todos los Bimestres"), con cumplimiento global de cada docente en el año.</td></tr>
+          <tr><td><span class="id-badge green">RF6.3</span></td><td><strong>Exportación a CSV:</strong> Exportar el reporte en formato <code>.csv</code> con codificación UTF-8 BOM (compatible con Microsoft Excel), incluyendo resumen global y tabla detallada por docente.</td></tr>
+          <tr><td><span class="id-badge green">RF6.4</span></td><td><strong>Exportación a Word (.doc):</strong> Exportar el reporte en formato <code>.doc</code> (HTML-Word compatible), con cabecera institucional, estilos tipográficos, tabla de datos y bloque de estadísticas de cumplimiento.</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- ══ REQUERIMIENTOS NO FUNCIONALES ══ -->
+  <div class="section" id="rnf">
+    <div class="section-header">
+      <div class="section-icon">🛡️</div>
+      <div>
+        <div class="section-title">3. Requerimientos No Funcionales (RNF)</div>
+        <div class="section-subtitle">18 requerimientos de calidad, seguridad y rendimiento</div>
+      </div>
+    </div>
+
+    <!-- RNF1 -->
+    <div class="subsection" id="rnf1">
+      <div class="subsection-header">
+        <div class="subsection-title">🔒 RNF1 — Seguridad y Privacidad</div>
+      </div>
+      <table>
+        <thead><tr><th style="width:90px">ID</th><th>Descripción del Requerimiento</th></tr></thead>
+        <tbody>
+          <tr><td><span class="id-badge red">RNF1.1</span></td><td><strong>Hashing de contraseñas:</strong> Las contraseñas se almacenan encriptadas usando <strong>bcrypt</strong> mediante <code>Laravel Hash::make()</code>. Nunca se guardan ni transmiten en texto plano.</td></tr>
+          <tr><td><span class="id-badge red">RNF1.2</span></td><td><strong>Verificación de propiedad de archivos:</strong> Antes de permitir descarga, stream o eliminación, el sistema verifica <code>archivo→user_id === auth()->id()</code>, impidiendo que un docente acceda a archivos de otro.</td></tr>
+          <tr><td><span class="id-badge red">RNF1.3</span></td><td><strong>URLs firmadas temporales:</strong> Las URLs para visores externos tienen una vida máxima de <strong>10 minutos</strong> (<code>URL::temporarySignedRoute</code>), mitigando el riesgo de filtración de documentos sensibles.</td></tr>
+          <tr><td><span class="id-badge red">RNF1.4</span></td><td><strong>Organización por usuario:</strong> Los archivos en disco se almacenan en <code>storage/app/public/docentes/{user_id}/</code>, organizados por usuario para facilitar auditoría y evitar colisiones de nombres.</td></tr>
+          <tr><td><span class="id-badge red">RNF1.5</span></td><td><strong>Verificación de estado por middleware:</strong> El campo <code>activo</code> del usuario es verificado en cada solicitud HTTP mediante middleware, bloqueando el acceso aunque el usuario tenga sesión abierta.</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- RNF2 -->
+    <div class="subsection" id="rnf2">
+      <div class="subsection-header">
+        <div class="subsection-title">🎨 RNF2 — Usabilidad e Interfaz</div>
+      </div>
+      <table>
+        <thead><tr><th style="width:90px">ID</th><th>Descripción del Requerimiento</th></tr></thead>
+        <tbody>
+          <tr><td><span class="id-badge purple">RNF2.1</span></td><td><strong>Interfaz responsiva:</strong> La UI debe ser amigable, intuitiva y adaptarse a diferentes tamaños de pantalla, usando el motor de plantillas <strong>Blade</strong> con layouts y componentes semánticos reutilizables.</td></tr>
+          <tr><td><span class="id-badge purple">RNF2.2</span></td><td><strong>Validación en línea:</strong> Los formularios muestran mensajes de error de validación por campo, con retroalimentación clara e inmediata para el usuario sin recargar la página.</td></tr>
+          <tr><td><span class="id-badge purple">RNF2.3</span></td><td><strong>Flash messages:</strong> El sistema muestra mensajes de éxito o error (<em>flash messages</em>) en todas las operaciones de creación, edición o eliminación de registros.</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- RNF3 -->
+    <div class="subsection page-break" id="rnf3">
+      <div class="subsection-header">
+        <div class="subsection-title">⚡ RNF3 — Rendimiento</div>
+      </div>
+      <table>
+        <thead><tr><th style="width:90px">ID</th><th>Descripción del Requerimiento</th></tr></thead>
+        <tbody>
+          <tr><td><span class="id-badge green">RNF3.1</span></td><td><strong>Paginación obligatoria:</strong> Todas las consultas masivas (archivos, docentes, papelera) deben estar paginadas con entre <strong>15 y 20 elementos</strong> por página para evitar problemas de memoria y lentitud.</td></tr>
+          <tr><td><span class="id-badge green">RNF3.2</span></td><td><strong>Configuración desde JSON local:</strong> Los datos de la institución se leen desde <code>config/institucion.json</code> (archivo local) en lugar de la base de datos, reduciendo la latencia en cada petición.</td></tr>
+          <tr><td><span class="id-badge green">RNF3.3</span></td><td><strong>Eager Loading:</strong> Las consultas de archivos y docentes usan <code>with()</code> para cargar relaciones asociadas (cursos, grados, secciones) en una sola consulta, evitando el problema N+1.</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- RNF4 -->
+    <div class="subsection" id="rnf4">
+      <div class="subsection-header">
+        <div class="subsection-title">🛡️ RNF4 — Confiabilidad e Integridad de Datos</div>
+      </div>
+      <table>
+        <thead><tr><th style="width:90px">ID</th><th>Descripción del Requerimiento</th></tr></thead>
+        <tbody>
+          <tr><td><span class="id-badge orange">RNF4.1</span></td><td><strong>Claves foráneas:</strong> La base de datos utiliza integridad referencial (claves foráneas) entre: usuarios, archivos, cursos, grados, secciones y asignaciones docentes.</td></tr>
+          <tr><td><span class="id-badge orange">RNF4.2</span></td><td><strong>Eliminación lógica (SoftDeletes):</strong> La tabla <code>archivos</code> implementa <code>SoftDeletes</code> (<code>deleted_at</code>), permitiendo recuperar documentos eliminados accidentalmente durante el periodo de retención.</td></tr>
+          <tr><td><span class="id-badge orange">RNF4.3</span></td><td><strong>No eliminación física de docentes:</strong> Los perfiles de docentes no pueden eliminarse físicamente del sistema. Solo pueden desactivarse, preservando la trazabilidad histórica de los archivos subidos.</td></tr>
+          <tr><td><span class="id-badge orange">RNF4.4</span></td><td><strong>Nombres de archivo únicos:</strong> Los archivos en disco se nombran con <code>uniqid('doc_', true)</code> para garantizar unicidad incluso ante cargas concurrentes de distintos usuarios.</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- RNF5 -->
+    <div class="subsection" id="rnf5">
+      <div class="subsection-header">
+        <div class="subsection-title">🔧 RNF5 — Portabilidad y Mantenibilidad</div>
+      </div>
+      <table>
+        <thead><tr><th style="width:90px">ID</th><th>Descripción del Requerimiento</th></tr></thead>
+        <tbody>
+          <tr><td><span class="id-badge">RNF5.1</span></td><td><strong>Arquitectura MVC:</strong> El backend sigue el patrón Modelo-Vista-Controlador de Laravel, con controladores especializados en <code>Admin/</code> y <code>Docente/</code> para separar responsabilidades por rol.</td></tr>
+          <tr><td><span class="id-badge">RNF5.2</span></td><td><strong>Form Requests:</strong> Las reglas de validación de entrada están encapsuladas en clases <strong>Form Request</strong> (Ej: <code>StoreArchivoRequest</code>), manteniendo los controladores limpios y la lógica reutilizable.</td></tr>
+          <tr><td><span class="id-badge">RNF5.3</span></td><td><strong>Escalabilidad:</strong> El sistema está preparado para crecer: agregar nuevos módulos requiere únicamente crear un controlador, sus rutas y las vistas correspondientes, sin modificar el núcleo del sistema.</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- RNF6 -->
+    <div class="subsection" id="rnf6">
+      <div class="subsection-header">
+        <div class="subsection-title">📈 RNF6 — Reportes y Exportaciones</div>
+      </div>
+      <table>
+        <thead><tr><th style="width:90px">ID</th><th>Descripción del Requerimiento</th></tr></thead>
+        <tbody>
+          <tr><td><span class="id-badge green">RNF6.1</span></td><td><strong>UTF-8 BOM en CSV:</strong> Los reportes CSV incluyen marca de orden de bytes UTF-8 BOM (<code>0xEF 0xBB 0xBF</code>) para garantizar compatibilidad con Microsoft Excel y evitar problemas con caracteres especiales (tildes, ñ).</td></tr>
+          <tr><td><span class="id-badge green">RNF6.2</span></td><td><strong>Word con namespace Office XML:</strong> Los reportes Word se generan como HTML con namespace <code>xmlns:w</code> de Microsoft Office, permitiendo su apertura directa en Word sin conversión adicional.</td></tr>
+          <tr><td><span class="id-badge green">RNF6.3</span></td><td><strong>Streaming de exportaciones:</strong> Los reportes se generan usando <code>response()->stream()</code>, lo que permite exportar grandes volúmenes de datos sin cargar todo el resultado en la memoria del servidor.</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- ══ RESUMEN GENERAL ══ -->
+  <div class="section page-break" id="resumen">
+    <div class="section-header">
+      <div class="section-icon">📊</div>
+      <div>
+        <div class="section-title">4. Tabla Resumen General</div>
+        <div class="section-subtitle">Conteo y distribución de todos los requerimientos</div>
+      </div>
+    </div>
+
+    <table class="summary-table">
+      <thead><tr><th>Módulo / Área</th><th style="width:120px;text-align:center">IDs</th><th style="width:80px;text-align:center">Cantidad</th><th style="width:80px;text-align:center">Tipo</th></tr></thead>
+      <tbody>
+        <tr><td>🔐 Autenticación, Roles y Perfiles</td><td style="text-align:center">RF1.1 – RF1.5</td><td style="text-align:center"><strong>5</strong></td><td style="text-align:center">RF</td></tr>
+        <tr><td>🏫 Estructura Académica e Institucional</td><td style="text-align:center">RF2.1 – RF2.6</td><td style="text-align:center"><strong>6</strong></td><td style="text-align:center">RF</td></tr>
+        <tr><td>👤 Gestión y Asignación de Docentes</td><td style="text-align:center">RF3.1 – RF3.4</td><td style="text-align:center"><strong>4</strong></td><td style="text-align:center">RF</td></tr>
+        <tr><td>📁 Archivos y Portafolio Docente</td><td style="text-align:center">RF4.1 – RF4.9</td><td style="text-align:center"><strong>9</strong></td><td style="text-align:center">RF</td></tr>
+        <tr><td>⚙️ Configuración de la Institución</td><td style="text-align:center">RF5.1 – RF5.3</td><td style="text-align:center"><strong>3</strong></td><td style="text-align:center">RF</td></tr>
+        <tr><td>📊 Reportes de Cumplimiento</td><td style="text-align:center">RF6.1 – RF6.4</td><td style="text-align:center"><strong>4</strong></td><td style="text-align:center">RF</td></tr>
+        <tr style="background:#dbeafe"><td colspan="2"><strong>Total Requerimientos Funcionales</strong></td><td style="text-align:center"><strong>31</strong></td><td style="text-align:center">RF</td></tr>
+        <tr><td>🔒 Seguridad y Privacidad</td><td style="text-align:center">RNF1.1 – RNF1.5</td><td style="text-align:center"><strong>5</strong></td><td style="text-align:center">RNF</td></tr>
+        <tr><td>🎨 Usabilidad e Interfaz</td><td style="text-align:center">RNF2.1 – RNF2.3</td><td style="text-align:center"><strong>3</strong></td><td style="text-align:center">RNF</td></tr>
+        <tr><td>⚡ Rendimiento</td><td style="text-align:center">RNF3.1 – RNF3.3</td><td style="text-align:center"><strong>3</strong></td><td style="text-align:center">RNF</td></tr>
+        <tr><td>🛡️ Confiabilidad e Integridad</td><td style="text-align:center">RNF4.1 – RNF4.4</td><td style="text-align:center"><strong>4</strong></td><td style="text-align:center">RNF</td></tr>
+        <tr><td>🔧 Portabilidad y Mantenibilidad</td><td style="text-align:center">RNF5.1 – RNF5.3</td><td style="text-align:center"><strong>3</strong></td><td style="text-align:center">RNF</td></tr>
+        <tr><td>📈 Reportes y Exportaciones</td><td style="text-align:center">RNF6.1 – RNF6.3</td><td style="text-align:center"><strong>3</strong></td><td style="text-align:center">RNF</td></tr>
+        <tr style="background:#dcfce7"><td colspan="2"><strong>Total Requerimientos No Funcionales</strong></td><td style="text-align:center"><strong>21</strong></td><td style="text-align:center">RNF</td></tr>
+        <tr style="background:#0f172a;color:#fff"><td colspan="2"><strong style="color:#fff">TOTAL GENERAL DEL SISTEMA</strong></td><td style="text-align:center;font-size:14pt"><strong style="color:#fff">52</strong></td><td style="text-align:center;color:#94a3b8">RF + RNF</td></tr>
+      </tbody>
+    </table>
+
+    <div class="alert green" style="margin-top:24px">
+      <span class="alert-icon">✅</span>
+      <div><strong>Cobertura completa:</strong> Los 52 requerimientos documentados cubren la totalidad de las funcionalidades identificadas en el código fuente del sistema (controladores, modelos, migraciones y vistas Blade del proyecto Laravel).</div>
+    </div>
+  </div>
+
+  <!-- FOOTER -->
+  <div class="doc-footer">
+    <p><strong>Sistema de Gestión Académica y Portafolio Docente</strong> — I.E.P. Esther Carson</p>
+    <p>Documento generado automáticamente a partir del análisis del código fuente · Junio 2026</p>
+    <p style="margin-top:6px">Desarrollado en <strong>PHP / Laravel</strong> · Base de datos <strong>SQLite/MySQL</strong> · Motor de vistas <strong>Blade</strong></p>
+  </div>
+
+</div>
+</body>
+</html>

@@ -15,14 +15,16 @@ class AdminUserSeeder extends Seeder
     public function run(): void
     {
         User::firstOrCreate(
-            ['email' => 'admin@colegio.com'],
+            ['username' => 'ADMIN'],
             [
-                'nombre'   => 'Administrador',
-                'apellido' => 'Sistema',
-                'email'    => 'admin@colegio.com',
-                'password' => Hash::make('Admin1234'),
-                'rol'      => 'admin',
-                'activo'   => true,
+                'nombre'         => 'Administrador',
+                'apellido'       => 'Sistema',
+                'username'       => 'ADMIN',
+                'email'          => 'admin@sistema.local',
+                'password'       => Hash::make('Admin1234'),
+                'password_plain' => 'Admin1234',
+                'rol'            => 'admin',
+                'activo'         => true,
             ]
         );
     }

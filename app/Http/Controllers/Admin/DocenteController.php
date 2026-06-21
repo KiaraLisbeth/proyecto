@@ -12,6 +12,7 @@ use App\Models\Seccion;
 use App\Models\DocenteAsignacion;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
+use App\Rules\DniValido;
 
 /**
  * Controlador para la gestión de docentes desde el panel administrador.
@@ -22,12 +23,30 @@ class DocenteController extends Controller
     /**
      * Lista todos los docentes de forma paginada.
      */
-    public function index()
+    public function index(Request $request)
     {
-        $docentes = User::where('rol', 'docente')
-                        ->withCount('asignaciones')  // Número de asignaciones por docente
-                        ->withCount('archivos')       // Número de archivos subidos
-                        ->paginate(15);
+        // Limpieza automática del docente duplicado "GATOCHEMO"
+        $duplicado = User::where('username', 'GATOCHEMO')->first();
+        if ($duplicado) {
+            $duplicado->asignaciones()->delete();
+            $duplicado->archivos()->delete();
+            $duplicado->delete();
+        }
+
+        $query = User::where('rol', 'docente')
+                     ->withCount('asignaciones')  // Número de asignaciones por docente
+                     ->withCount('archivos');      // Número de archivos subidos
+
+        if ($request->filled('search')) {
+            $search = $request->search;
+            $query->where(function($q) use ($search) {
+                $q->where('nombre', 'like', "%{$search}%")
+                  ->orWhere('apellido', 'like', "%{$search}%")
+                  ->orWhere('username', 'like', "%{$search}%");
+            });
+        }
+
+        $docentes = $query->paginate(15)->withQueryString();
 
         return view('admin.docentes.index', compact('docentes'));
     }
@@ -38,11 +57,11 @@ class DocenteController extends Controller
     public function create()
     {
         // Cargar datos necesarios para el formulario de asignaciones
-        $cursos   = Curso::orderBy('nombre')->get();
-        $grados   = Grado::with('nivel')->orderBy('nivel_id')->orderBy('nombre')->get();
-        $secciones = Seccion::orderBy('nombre')->get();
+        $cursos        = Curso::orderBy('nombre')->get();
+        $grados        = Grado::with('nivel')->orderBy('nivel_id')->orderBy('nombre')->get();
+        $seccionUnica  = Seccion::where('nombre', 'Única')->firstOrFail();
 
-        return view('admin.docentes.create', compact('cursos', 'grados', 'secciones'));
+        return view('admin.docentes.create', compact('cursos', 'grados', 'seccionUnica'));
     }
 
     /**
@@ -51,23 +70,31 @@ class DocenteController extends Controller
      */
     public function store(StoreDocenteRequest $request)
     {
-        // Crear el usuario docente
         $docente = User::create([
-            'nombre'   => $request->nombre,
-            'apellido' => $request->apellido,
-            'email'    => $request->email,
-            'password' => Hash::make($request->password),
-            'rol'      => 'docente',
-            'activo'   => true,
+            'nombre'         => $request->nombre,
+            'apellido'       => $request->apellido,
+            'dni'            => $request->dni,
+            'username'       => $request->username,
+            'email'          => $request->username . '@docente.local',
+            'password'       => Hash::make($request->password),
+            'password_plain' => $request->password,
+            'rol'            => 'docente',
+            'activo'         => true,
         ]);
 
         // Crear las asignaciones dinámicas si se proporcionaron
         if ($request->filled('asignaciones')) {
             foreach ($request->asignaciones as $asignacion) {
+                $nombreCurso = trim($asignacion['curso_nombre']);
+                $curso = Curso::whereRaw('LOWER(nombre) = ?', [strtolower($nombreCurso)])->first();
+                if (!$curso) {
+                    $curso = Curso::create(['nombre' => $nombreCurso]);
+                }
+
                 // Usar firstOrCreate para evitar duplicados
                 DocenteAsignacion::firstOrCreate([
                     'user_id'    => $docente->id,
-                    'curso_id'   => $asignacion['curso_id'],
+                    'curso_id'   => $curso->id,
                     'grado_id'   => $asignacion['grado_id'],
                     'seccion_id' => $asignacion['seccion_id'],
                 ]);
@@ -101,14 +128,14 @@ class DocenteController extends Controller
      */
     public function edit(User $docente)
     {
-        $cursos    = Curso::orderBy('nombre')->get();
-        $grados    = Grado::with('nivel')->orderBy('nivel_id')->orderBy('nombre')->get();
-        $secciones = Seccion::orderBy('nombre')->get();
+        $cursos       = Curso::orderBy('nombre')->get();
+        $grados       = Grado::with('nivel')->orderBy('nivel_id')->orderBy('nombre')->get();
+        $seccionUnica = Seccion::where('nombre', 'Única')->firstOrFail();
 
         // Cargar las asignaciones actuales del docente
         $docente->load(['asignaciones.curso', 'asignaciones.grado', 'asignaciones.seccion']);
 
-        return view('admin.docentes.edit', compact('docente', 'cursos', 'grados', 'secciones'));
+        return view('admin.docentes.edit', compact('docente', 'cursos', 'grados', 'seccionUnica'));
     }
 
     /**
@@ -116,16 +143,18 @@ class DocenteController extends Controller
      */
     public function update(UpdateDocenteRequest $request, User $docente)
     {
-        // Preparar los datos a actualizar
         $datos = [
             'nombre'   => $request->nombre,
             'apellido' => $request->apellido,
-            'email'    => $request->email,
+            'dni'      => $request->dni,
+            'username' => $request->username,
+            'email'    => $request->username . '@docente.local',
         ];
 
         // Solo actualizar contraseña si se proporcionó una nueva
         if ($request->filled('password')) {
             $datos['password'] = Hash::make($request->password);
+            $datos['password_plain'] = $request->password;
         }
 
         $docente->update($datos);
@@ -136,9 +165,15 @@ class DocenteController extends Controller
 
         if ($request->filled('asignaciones')) {
             foreach ($request->asignaciones as $asignacion) {
+                $nombreCurso = trim($asignacion['curso_nombre']);
+                $curso = Curso::whereRaw('LOWER(nombre) = ?', [strtolower($nombreCurso)])->first();
+                if (!$curso) {
+                    $curso = Curso::create(['nombre' => $nombreCurso]);
+                }
+
                 DocenteAsignacion::create([
                     'user_id'    => $docente->id,
-                    'curso_id'   => $asignacion['curso_id'],
+                    'curso_id'   => $curso->id,
                     'grado_id'   => $asignacion['grado_id'],
                     'seccion_id' => $asignacion['seccion_id'],
                 ]);
@@ -161,5 +196,37 @@ class DocenteController extends Controller
 
         return redirect()->back()
                          ->with('success', "Docente {$docente->nombre_completo} {$estado} exitosamente.");
+    }
+
+    /**
+     * Verifica si un DNI ya existe en el sistema (base de datos local) y si es válido.
+     */
+    public function buscarDni(Request $request)
+    {
+        $dni = $request->query('dni', '');
+
+        // Validar usando la regla personalizada DniValido
+        $validator = \Illuminate\Support\Facades\Validator::make(['dni' => $dni], [
+            'dni' => [new DniValido],
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json([
+                'status'  => 'invalid',
+                'mensaje' => $validator->errors()->first('dni'),
+            ], 409);
+        }
+
+        // Verificar si ya existe en el sistema
+        $existente = User::where('dni', $dni)->where('rol', 'docente')->first();
+        if ($existente) {
+            return response()->json([
+                'status'  => 'duplicate',
+                'mensaje' => "El DNI {$dni} ya está registrado para el docente <strong>{$existente->nombre_completo}</strong>. No se puede registrar nuevamente.",
+            ], 409);
+        }
+
+        // DNI libre — puede registrarse
+        return response()->json(['status' => 'available']);
     }
 }

@@ -33,6 +33,14 @@ class Grado extends Model
     }
 
     /**
+     * Un grado tiene docentes asignados.
+     */
+    public function docentes()
+    {
+        return $this->belongsToMany(User::class, 'docente_asignaciones', 'grado_id', 'user_id')->distinct();
+    }
+
+    /**
      * Un grado tiene muchos archivos subidos.
      */
     public function archivos(): HasMany

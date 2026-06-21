@@ -12,6 +12,7 @@
 <script src="https://cdn.tailwindcss.com"></script>
 <script>
     tailwind.config = {
+        darkMode: 'class',
         theme: {
             extend: {
                 fontFamily: {
@@ -22,14 +23,58 @@
     }
 </script>
 
+{{-- Inicializar tema antes de renderizar para evitar destellos --}}
+<script>
+    if (localStorage.getItem('theme') === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+        document.documentElement.classList.add('dark');
+    } else {
+        document.documentElement.classList.remove('dark');
+    }
+
+    // Lógica del botón toggle (espera al DOM)
+    document.addEventListener('DOMContentLoaded', () => {
+        const themeToggleBtn = document.getElementById('themeToggle');
+        
+        if(themeToggleBtn) {
+            themeToggleBtn.addEventListener('click', function() {
+                if (document.documentElement.classList.contains('dark')) {
+                    document.documentElement.classList.remove('dark');
+                    localStorage.setItem('theme', 'light');
+                } else {
+                    document.documentElement.classList.add('dark');
+                    localStorage.setItem('theme', 'dark');
+                }
+            });
+        }
+
+        // Lógica Global para Botones de Previsualización
+        document.querySelectorAll('.btn-preview').forEach(btn => {
+            btn.addEventListener('click', function(e) {
+                e.preventDefault();
+                const url = this.dataset.url;
+                const ext = this.dataset.ext;
+                const name = this.dataset.name;
+                const downloadUrl = this.dataset.download;
+
+                if (typeof openPreviewModal === 'function') {
+                    openPreviewModal(url, ext, name, downloadUrl);
+                } else {
+                    alert('Error: La función openPreviewModal no está definida.');
+                }
+            });
+        });
+    });
+
+</script>
+
 {{-- Componentes personalizados del sistema de diseño --}}
 <style type="text/tailwindcss">
 
     /* ── Inputs ─────────────────────────────────────────── */
     .input {
-        @apply w-full bg-slate-700/60 border border-slate-600 rounded-lg px-4 py-2.5
-               text-slate-100 placeholder-slate-500 focus:outline-none focus:border-indigo-500
-               focus:ring-2 focus:ring-indigo-500/20 transition-all duration-200;
+        @apply w-full bg-white dark:bg-slate-800 border border-gray-300 dark:border-slate-600 rounded-lg px-4 py-2.5
+               text-gray-800 dark:text-slate-100 placeholder-gray-400 dark:placeholder-slate-400 focus:outline-none focus:border-sky-500
+               focus:ring-2 focus:ring-sky-500/20 transition-all duration-200;
     }
     .input-error {
         @apply border-red-500 focus:border-red-500 focus:ring-red-500/20;
@@ -37,20 +82,24 @@
 
     /* ── Sidebar nav ─────────────────────────────────────── */
     .nav-link {
-        @apply flex items-center gap-3 px-3 py-2.5 rounded-lg text-slate-400 text-sm font-medium
-               hover:bg-slate-700/60 hover:text-slate-100 transition-all duration-200;
+        @apply flex items-center gap-3 px-4 py-3 mx-4 rounded-xl text-sm font-medium
+               text-slate-400 hover:text-white hover:bg-white/10 transition-colors;
     }
     .nav-link.active {
-        @apply bg-indigo-500/10 text-indigo-400 border border-indigo-500/20;
+        @apply bg-sky-500/10 text-sky-400 font-semibold;
+    }
+    .nav-link.active::before {
+        content: '';
+        @apply absolute left-0 w-1 h-8 bg-sky-400 rounded-r-md;
     }
 
     /* ── Botones ─────────────────────────────────────────── */
     .btn {
-        @apply inline-flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-semibold
-               transition-all duration-200 cursor-pointer border-0 no-underline;
+        @apply inline-flex items-center gap-2 px-4 py-2.5 rounded-xl text-sm font-semibold
+               transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-offset-1 focus:ring-offset-blue-50 dark:focus:ring-offset-slate-900;
     }
     .btn-primary {
-        @apply bg-indigo-600 hover:bg-indigo-500 text-white shadow-lg shadow-indigo-500/25
+        @apply bg-sky-600 hover:bg-sky-500 text-white shadow-lg shadow-sky-500/25
                hover:-translate-y-px;
     }
     .btn-success {
@@ -72,12 +121,12 @@
 
     /* ── Cards ───────────────────────────────────────────── */
     .card {
-        @apply bg-slate-800 border border-slate-700/50 rounded-xl overflow-hidden;
+        @apply bg-white dark:bg-slate-800 border border-gray-200 dark:border-slate-700/50 rounded-xl overflow-hidden shadow-sm;
     }
     .card-header {
-        @apply px-6 py-4 border-b border-slate-700/50 flex items-center justify-between;
+        @apply px-6 py-4 border-b border-gray-100 dark:border-slate-700/50 flex items-center justify-between;
     }
-    .card-title { @apply text-sm font-semibold text-slate-100; }
+    .card-title { @apply text-sm font-semibold text-gray-800 dark:text-slate-100; }
     .card-body  { @apply p-6; }
 
     /* ── Badges ──────────────────────────────────────────── */
@@ -86,7 +135,7 @@
     }
     .badge-success { @apply bg-emerald-500/10 text-emerald-400 border border-emerald-500/20; }
     .badge-danger  { @apply bg-red-500/10  text-red-400  border border-red-500/20; }
-    .badge-primary { @apply bg-indigo-500/10 text-indigo-400 border border-indigo-500/20; }
+    .badge-primary { @apply bg-sky-500/10 text-sky-400 border border-sky-500/20; }
     .badge-muted   { @apply bg-slate-700 text-slate-400 border border-slate-600; }
     .badge-warning { @apply bg-amber-500/10 text-amber-400 border border-amber-500/20; }
 
@@ -94,26 +143,26 @@
     .table-wrap { @apply overflow-x-auto; }
     .table      { @apply w-full text-sm; }
     .table thead th {
-        @apply bg-slate-700/50 px-4 py-3 text-left text-xs font-semibold uppercase
-               tracking-wider text-slate-400 border-b border-slate-700/50;
+        @apply bg-gray-50 dark:bg-slate-700/50 px-4 py-3 text-left text-xs font-semibold uppercase
+               tracking-wider text-gray-500 dark:text-slate-400 border-b border-gray-200 dark:border-slate-700/50;
     }
     .table tbody tr {
-        @apply border-b border-slate-700/30 transition-colors duration-150;
+        @apply border-b border-gray-100 dark:border-slate-700/30 transition-colors duration-150;
     }
-    .table tbody tr:hover  { @apply bg-slate-700/20; }
+    .table tbody tr:hover  { @apply bg-sky-50 dark:bg-slate-700/20; }
     .table tbody tr:last-child { @apply border-b-0; }
-    .table tbody td { @apply px-4 py-3 align-middle; }
+    .table tbody td { @apply px-4 py-3 align-middle text-gray-700 dark:text-slate-300; }
 
     /* ── Formulario ──────────────────────────────────────── */
     .form-group { @apply mb-5; }
     .form-label {
-        @apply block text-xs font-semibold text-slate-400 mb-1.5 uppercase tracking-wide;
+        @apply block text-xs font-semibold text-gray-600 dark:text-slate-400 mb-1.5 uppercase tracking-wide;
     }
-    .error-msg { @apply text-xs text-red-400 mt-1.5 flex items-center gap-1; }
+    .error-msg { @apply text-xs text-red-500 dark:text-red-400 mt-1.5 flex items-center gap-1; }
 
     /* ── Stat card ───────────────────────────────────────── */
     .stat-card {
-        @apply bg-slate-800 border border-slate-700/50 rounded-xl p-6 relative overflow-hidden
+        @apply bg-white dark:bg-slate-800 border border-gray-200 dark:border-slate-700/50 rounded-xl p-6 relative overflow-hidden shadow-sm
                transition-transform duration-200 hover:-translate-y-1;
     }
 
@@ -136,9 +185,9 @@
     .modal-overlay {
         @apply fixed inset-0 bg-black/70 backdrop-blur-sm z-50 hidden items-center justify-center;
     }
-    .modal-overlay.show { @apply flex; }
+    .modal-overlay.show { display: flex !important; }
     .modal-box {
-        @apply bg-slate-800 border border-slate-700 rounded-2xl p-7 max-w-md w-11/12 shadow-2xl;
+        @apply bg-white dark:bg-slate-800 border border-gray-200 dark:border-slate-700 rounded-2xl p-7 max-w-md w-11/12 shadow-2xl;
         animation: modalIn .2s cubic-bezier(0.34,1.56,0.64,1);
     }
 
@@ -149,14 +198,14 @@
     nav[aria-label="pagination"] span,
     nav[aria-label="pagination"] a {
         @apply inline-flex items-center justify-center min-w-9 h-9 px-3 rounded-lg text-xs
-               font-medium border border-slate-700 text-slate-400 bg-slate-800 no-underline
+               font-medium border border-gray-200 dark:border-slate-700 text-gray-600 dark:text-slate-400 bg-white dark:bg-slate-800 no-underline
                transition-all duration-150;
     }
     nav[aria-label="pagination"] a:hover {
-        @apply bg-indigo-600 text-white border-indigo-600;
+        @apply bg-sky-600 text-white border-sky-600 dark:border-sky-600;
     }
     nav[aria-label="pagination"] span[aria-current="page"] > span {
-        @apply bg-indigo-600 text-white border-indigo-600 min-w-9 h-9 flex items-center
+        @apply bg-sky-600 text-white border-sky-600 min-w-9 h-9 flex items-center
                justify-center rounded-lg;
     }
 

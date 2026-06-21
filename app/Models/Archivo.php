@@ -27,6 +27,8 @@ class Archivo extends Model
         'curso_id',
         'grado_id',
         'seccion_id',
+        'bimestre',
+        'anio',
         'descripcion',
     ];
 
@@ -80,5 +82,50 @@ class Archivo extends Model
     public function getUrlPublicaAttribute(): string
     {
         return Storage::url($this->ruta);
+    }
+
+    /**
+     * Retorna el nombre del bimestre en formato romano.
+     * Ej: 1 => 'I Bimestre', 2 => 'II Bimestre'
+     */
+    public function getBimestreNombreAttribute(): string
+    {
+        return match ((int) $this->bimestre) {
+            1 => 'I Bimestre',
+            2 => 'II Bimestre',
+            3 => 'III Bimestre',
+            4 => 'IV Bimestre',
+            default => 'Sin Bimestre',
+        };
+    }
+
+    /**
+     * Lista de bimestres disponibles (para vistas y formularios).
+     * El valor 0 representa "Todos los Bimestres" (reporte consolidado).
+     */
+    public static function bimestres(): array
+    {
+        return [
+            0 => 'Todos los Bimestres',
+            1 => 'I Bimestre',
+            2 => 'II Bimestre',
+            3 => 'III Bimestre',
+            4 => 'IV Bimestre',
+        ];
+    }
+
+    /**
+     * Retorna los años lectivos disponibles (desde 2026 hasta el año actual).
+     * Usado para el selector de filtro en vistas.
+     */
+    public static function aniosDisponibles(): array
+    {
+        $anioInicio = 2026;
+        $anioActual = (int) now()->year;
+        $anios = [];
+        for ($a = $anioActual; $a >= $anioInicio; $a--) {
+            $anios[$a] = "Año Lectivo $a";
+        }
+        return $anios;
     }
 }

@@ -1,0 +1,1268 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Historias de Usuario — I.E.P. Esther Carson</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: 'Inter', Arial, sans-serif;
+      font-size: 10.5pt;
+      color: #1e293b;
+      background: #fff;
+      line-height: 1.6;
+    }
+
+    /* ══ PORTADA ══ */
+    .cover {
+      width: 100%;
+      min-height: 100vh;
+      background: linear-gradient(135deg, #0f172a 0%, #065f46 50%, #059669 100%);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 60px 40px;
+      page-break-after: always;
+      position: relative;
+      overflow: hidden;
+    }
+    .cover::before {
+      content:''; position:absolute; top:-80px; right:-80px;
+      width:420px; height:420px; border-radius:50%;
+      background:rgba(16,185,129,0.12);
+    }
+    .cover::after {
+      content:''; position:absolute; bottom:-100px; left:-60px;
+      width:360px; height:360px; border-radius:50%;
+      background:rgba(52,211,153,0.10);
+    }
+    .cover-logo {
+      width:90px; height:90px;
+      background:rgba(255,255,255,0.15);
+      border-radius:24px;
+      display:flex; align-items:center; justify-content:center;
+      margin:0 auto 28px;
+      border:2px solid rgba(255,255,255,0.25);
+      font-size:40px;
+    }
+    .cover-badge {
+      display:inline-block;
+      background:rgba(16,185,129,0.3);
+      color:#6ee7b7;
+      font-size:8pt; font-weight:700;
+      letter-spacing:3px; text-transform:uppercase;
+      padding:5px 16px; border-radius:20px;
+      border:1px solid rgba(110,231,183,0.3);
+      margin-bottom:24px;
+    }
+    .cover h1 { color:#fff; font-size:30pt; font-weight:800; line-height:1.2; margin-bottom:12px; }
+    .cover h2 { color:#6ee7b7; font-size:13pt; font-weight:400; margin-bottom:40px; }
+    .cover-divider { width:60px; height:3px; background:linear-gradient(90deg,#10b981,#34d399); border-radius:2px; margin:32px auto; }
+    .cover-meta { display:flex; gap:40px; justify-content:center; flex-wrap:wrap; }
+    .cover-meta-item { color:rgba(255,255,255,0.75); font-size:9pt; }
+    .cover-meta-item strong { display:block; color:#fff; font-size:11pt; font-weight:600; }
+    .cover-stats { display:flex; gap:20px; justify-content:center; margin-top:32px; flex-wrap:wrap; }
+    .cover-stat {
+      background:rgba(255,255,255,0.1); border:1px solid rgba(255,255,255,0.2);
+      border-radius:12px; padding:16px 24px; text-align:center;
+    }
+    .cover-stat .num { font-size:22pt; font-weight:800; color:#fff; display:block; }
+    .cover-stat .lbl { font-size:8pt; color:rgba(255,255,255,0.6); text-transform:uppercase; letter-spacing:1px; }
+
+    /* ══ CONTENIDO ══ */
+    .content { padding:48px 52px; max-width:780px; margin:0 auto; }
+
+    /* ══ TABLA DE CONTENIDO ══ */
+    .toc {
+      background:#f0fdf4; border:1px solid #bbf7d0;
+      border-radius:12px; padding:28px 32px;
+      margin-bottom:40px; page-break-after:always;
+    }
+    .toc-title { font-size:14pt; font-weight:700; color:#065f46; margin-bottom:20px; padding-bottom:12px; border-bottom:2px solid #bbf7d0; }
+    .toc ul { list-style:none; }
+    .toc > ul > li { margin-bottom:10px; }
+    .toc > ul > li > a { font-size:11pt; font-weight:700; color:#047857; text-decoration:none; }
+    .toc ul ul { margin-left:20px; margin-top:4px; }
+    .toc ul ul li { margin-bottom:3px; }
+    .toc ul ul a { font-size:9.5pt; color:#374151; font-weight:400; text-decoration:none; }
+    .toc-dot { display:inline-block; width:6px; height:6px; border-radius:50%; background:#10b981; margin-right:8px; vertical-align:middle; }
+
+    /* ══ SECCIÓN PRINCIPAL ══ */
+    .section { margin-bottom:48px; }
+    .section-header {
+      display:flex; align-items:center; gap:14px;
+      margin-bottom:24px; padding-bottom:14px;
+      border-bottom:3px solid #059669;
+    }
+    .section-icon {
+      width:44px; height:44px; border-radius:12px;
+      background:linear-gradient(135deg,#065f46,#059669);
+      display:flex; align-items:center; justify-content:center;
+      font-size:20px; flex-shrink:0;
+    }
+    .section-title { font-size:16pt; font-weight:800; color:#0f172a; }
+    .section-subtitle { font-size:9pt; color:#64748b; font-weight:400; }
+
+    /* ══ TARJETA DE HISTORIA DE USUARIO ══ */
+    .story-card {
+      border:1px solid #e2e8f0;
+      border-radius:14px;
+      margin-bottom:28px;
+      overflow:hidden;
+      box-shadow:0 2px 8px rgba(0,0,0,0.06);
+      page-break-inside: avoid;
+    }
+    .story-header {
+      display:flex; align-items:center; gap:14px;
+      padding:14px 20px;
+      background:linear-gradient(90deg, #065f46, #059669);
+      color:#fff;
+    }
+    .story-id {
+      background:rgba(255,255,255,0.2);
+      border:1px solid rgba(255,255,255,0.3);
+      border-radius:8px;
+      padding:4px 12px;
+      font-size:9pt; font-weight:800;
+      white-space:nowrap; letter-spacing:0.5px;
+      flex-shrink:0;
+    }
+    .story-title { font-size:11pt; font-weight:700; }
+    .story-role-badge {
+      margin-left:auto; flex-shrink:0;
+      background:rgba(255,255,255,0.15);
+      border:1px solid rgba(255,255,255,0.25);
+      border-radius:20px; padding:3px 12px;
+      font-size:8pt; color:#a7f3d0;
+      white-space:nowrap;
+    }
+
+    /* Variantes de color por módulo */
+    .story-card.auth .story-header   { background:linear-gradient(90deg,#1e3a8a,#2563eb); }
+    .story-card.acad .story-header   { background:linear-gradient(90deg,#065f46,#059669); }
+    .story-card.doc  .story-header   { background:linear-gradient(90deg,#4c1d95,#7c3aed); }
+    .story-card.arch .story-header   { background:linear-gradient(90deg,#92400e,#d97706); }
+    .story-card.conf .story-header   { background:linear-gradient(90deg,#0f172a,#334155); }
+    .story-card.rep  .story-header   { background:linear-gradient(90deg,#7f1d1d,#dc2626); }
+
+    .story-body { padding:18px 20px; background:#fff; }
+
+    .story-narrative {
+      background:#f8fafc; border-left:4px solid #10b981;
+      border-radius:0 8px 8px 0; padding:12px 16px;
+      margin-bottom:16px; font-size:10pt; color:#1e293b;
+      font-style:italic; line-height:1.7;
+    }
+    .story-narrative.blue  { border-left-color:#3b82f6; }
+    .story-narrative.purple{ border-left-color:#7c3aed; }
+    .story-narrative.orange{ border-left-color:#d97706; }
+    .story-narrative.slate { border-left-color:#64748b; }
+    .story-narrative.red   { border-left-color:#dc2626; }
+
+    .story-narrative strong { font-style:normal; color:#059669; }
+    .story-narrative.blue   strong { color:#2563eb; }
+    .story-narrative.purple strong { color:#7c3aed; }
+    .story-narrative.orange strong { color:#d97706; }
+    .story-narrative.slate  strong { color:#475569; }
+    .story-narrative.red    strong { color:#dc2626; }
+
+    .criteria-title {
+      font-size:9pt; font-weight:700; text-transform:uppercase;
+      letter-spacing:1px; color:#64748b; margin-bottom:10px;
+      display:flex; align-items:center; gap:8px;
+    }
+    .criteria-title::after { content:''; flex:1; height:1px; background:#e2e8f0; }
+
+    .criteria-list { list-style:none; display:flex; flex-direction:column; gap:6px; }
+    .criteria-list li {
+      display:flex; gap:10px; align-items:flex-start;
+      font-size:9.5pt; color:#374151; line-height:1.5;
+    }
+    .criteria-list li::before {
+      content:'✓';
+      color:#10b981; font-weight:800; font-size:10pt;
+      flex-shrink:0; margin-top:1px;
+    }
+    .story-card.auth .criteria-list li::before { color:#3b82f6; }
+    .story-card.doc  .criteria-list li::before { color:#7c3aed; }
+    .story-card.arch .criteria-list li::before { color:#d97706; }
+    .story-card.conf .criteria-list li::before { color:#475569; }
+    .story-card.rep  .criteria-list li::before { color:#dc2626; }
+
+    .story-meta {
+      display:flex; gap:12px; margin-top:14px; padding-top:14px;
+      border-top:1px solid #f1f5f9; flex-wrap:wrap;
+    }
+    .meta-tag {
+      display:inline-flex; align-items:center; gap:5px;
+      background:#f8fafc; border:1px solid #e2e8f0;
+      border-radius:20px; padding:3px 10px;
+      font-size:8pt; color:#64748b; font-weight:500;
+    }
+    .meta-tag.priority-alta   { background:#fef2f2; border-color:#fecaca; color:#dc2626; }
+    .meta-tag.priority-media  { background:#fffbeb; border-color:#fde68a; color:#d97706; }
+    .meta-tag.priority-baja   { background:#f0fdf4; border-color:#bbf7d0; color:#059669; }
+
+    /* ══ GRUPO DE MÓDULO ══ */
+    .module-group { margin-bottom:40px; }
+    .module-label {
+      font-size:13pt; font-weight:800; color:#0f172a;
+      padding:10px 16px;
+      background:linear-gradient(90deg,#f8fafc,transparent);
+      border-left:5px solid #10b981;
+      border-radius:0 8px 8px 0;
+      margin-bottom:20px;
+    }
+    .module-label.auth-label  { border-left-color:#3b82f6; }
+    .module-label.doc-label   { border-left-color:#7c3aed; }
+    .module-label.arch-label  { border-left-color:#d97706; }
+    .module-label.conf-label  { border-left-color:#64748b; }
+    .module-label.rep-label   { border-left-color:#dc2626; }
+
+    /* ══ ALERTS ══ */
+    .alert {
+      padding:14px 18px; border-radius:10px;
+      margin-bottom:20px; font-size:9.5pt;
+      display:flex; gap:12px; align-items:flex-start;
+    }
+    .alert-icon { font-size:16px; flex-shrink:0; }
+    .alert.info  { background:#eff6ff; border-left:4px solid #3b82f6; color:#1e40af; }
+    .alert.green { background:#f0fdf4; border-left:4px solid #22c55e; color:#14532d; }
+
+    /* ══ RESUMEN ══ */
+    .summary-table th { background:#0f172a; color:#fff; }
+    table { width:100%; border-collapse:collapse; margin-bottom:20px; font-size:9.5pt; border-radius:10px; overflow:hidden; box-shadow:0 1px 4px rgba(0,0,0,0.06); }
+    thead th { padding:10px 14px; text-align:left; font-size:8.5pt; font-weight:700; text-transform:uppercase; letter-spacing:0.8px; }
+    tbody tr:nth-child(even) { background:#f8fafc; }
+    tbody tr:nth-child(odd)  { background:#fff; }
+    tbody td { padding:10px 14px; border-bottom:1px solid #e2e8f0; vertical-align:top; }
+
+    .page-break { page-break-before:always; padding-top:20px; }
+
+    .doc-footer {
+      margin-top:60px; padding-top:24px;
+      border-top:2px solid #e2e8f0;
+      text-align:center; color:#94a3b8; font-size:8pt;
+    }
+
+    code {
+      background:#f1f5f9; padding:1px 5px;
+      border-radius:4px; font-size:9pt;
+      font-family: monospace; color:#334155;
+    }
+
+    @media print {
+      body { print-color-adjust:exact; -webkit-print-color-adjust:exact; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ══════════════════════════════════════════ PORTADA -->
+<div class="cover">
+  <div class="cover-logo">📖</div>
+  <div class="cover-badge">Documento de Requisitos Ágiles</div>
+  <h1>Historias<br/>de Usuario</h1>
+  <h2>Sistema de Gestión Académica y Portafolio Docente</h2>
+  <div class="cover-divider"></div>
+  <div class="cover-meta">
+    <div class="cover-meta-item"><strong>I.E.P. Esther Carson</strong>Institución Educativa</div>
+    <div class="cover-meta-item"><strong>Laravel / PHP</strong>Tecnología Backend</div>
+    <div class="cover-meta-item"><strong>Junio 2026</strong>Fecha de Elaboración</div>
+  </div>
+  <div class="cover-stats">
+    <div class="cover-stat"><span class="num">28</span><span class="lbl">Historias de Usuario</span></div>
+    <div class="cover-stat"><span class="num">6</span><span class="lbl">Módulos</span></div>
+    <div class="cover-stat"><span class="num">2</span><span class="lbl">Roles</span></div>
+    <div class="cover-stat"><span class="num">100+</span><span class="lbl">Criterios de Aceptación</span></div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════ CONTENIDO -->
+<div class="content">
+
+  <!-- TABLA DE CONTENIDO -->
+  <div class="toc">
+    <div class="toc-title">📋 Tabla de Contenido</div>
+    <ul>
+      <li><a href="#intro">1. Introducción y Formato</a></li>
+      <li>
+        <a href="#modulo1">2. Módulo 1 — Autenticación y Perfiles</a>
+        <ul>
+          <li><span class="toc-dot"></span><a href="#hu01">HU-01: Iniciar sesión en el sistema</a></li>
+          <li><span class="toc-dot"></span><a href="#hu02">HU-02: Cerrar sesión</a></li>
+          <li><span class="toc-dot"></span><a href="#hu03">HU-03: Actualizar mi perfil</a></li>
+          <li><span class="toc-dot"></span><a href="#hu04">HU-04: Cambiar contraseña</a></li>
+          <li><span class="toc-dot"></span><a href="#hu05">HU-05: Bloquear acceso a usuario inactivo</a></li>
+        </ul>
+      </li>
+      <li>
+        <a href="#modulo2">3. Módulo 2 — Estructura Académica</a>
+        <ul>
+          <li><span class="toc-dot"></span><a href="#hu06">HU-06: Gestionar Niveles Educativos</a></li>
+          <li><span class="toc-dot"></span><a href="#hu07">HU-07: Gestionar Grados</a></li>
+          <li><span class="toc-dot"></span><a href="#hu08">HU-08: Gestionar Secciones</a></li>
+          <li><span class="toc-dot"></span><a href="#hu09">HU-09: Gestionar Cursos</a></li>
+          <li><span class="toc-dot"></span><a href="#hu10">HU-10: Gestionar Años Lectivos</a></li>
+          <li><span class="toc-dot"></span><a href="#hu11">HU-11: Ver Mapa Académico</a></li>
+        </ul>
+      </li>
+      <li>
+        <a href="#modulo3">4. Módulo 3 — Gestión de Docentes</a>
+        <ul>
+          <li><span class="toc-dot"></span><a href="#hu12">HU-12: Registrar nuevo docente</a></li>
+          <li><span class="toc-dot"></span><a href="#hu13">HU-13: Activar / Desactivar docente</a></li>
+          <li><span class="toc-dot"></span><a href="#hu14">HU-14: Asignar cursos a un docente</a></li>
+          <li><span class="toc-dot"></span><a href="#hu15">HU-15: Editar datos y asignaciones del docente</a></li>
+        </ul>
+      </li>
+      <li>
+        <a href="#modulo4">5. Módulo 4 — Portafolio de Archivos</a>
+        <ul>
+          <li><span class="toc-dot"></span><a href="#hu16">HU-16: Subir archivo al portafolio</a></li>
+          <li><span class="toc-dot"></span><a href="#hu17">HU-17: Buscar y filtrar mis archivos</a></li>
+          <li><span class="toc-dot"></span><a href="#hu18">HU-18: Descargar mis archivos</a></li>
+          <li><span class="toc-dot"></span><a href="#hu19">HU-19: Previsualizar archivo en el navegador</a></li>
+          <li><span class="toc-dot"></span><a href="#hu20">HU-20: Mover archivos a la papelera</a></li>
+          <li><span class="toc-dot"></span><a href="#hu21">HU-21: Restaurar archivos de la papelera</a></li>
+          <li><span class="toc-dot"></span><a href="#hu22">HU-22: Eliminar archivos definitivamente</a></li>
+          <li><span class="toc-dot"></span><a href="#hu23">HU-23: Supervisar archivos de todos los docentes</a></li>
+          <li><span class="toc-dot"></span><a href="#hu24">HU-24: Gestionar papelera administrativa</a></li>
+        </ul>
+      </li>
+      <li>
+        <a href="#modulo5">6. Módulo 5 — Configuración Institucional</a>
+        <ul>
+          <li><span class="toc-dot"></span><a href="#hu25">HU-25: Editar datos de la institución</a></li>
+          <li><span class="toc-dot"></span><a href="#hu26">HU-26: Actualizar logo institucional</a></li>
+        </ul>
+      </li>
+      <li>
+        <a href="#modulo6">7. Módulo 6 — Reportes de Cumplimiento</a>
+        <ul>
+          <li><span class="toc-dot"></span><a href="#hu27">HU-27: Generar reporte de cumplimiento</a></li>
+          <li><span class="toc-dot"></span><a href="#hu28">HU-28: Exportar reporte en CSV y Word</a></li>
+        </ul>
+      </li>
+      <li><a href="#resumen">8. Tabla Resumen de Historias</a></li>
+    </ul>
+  </div>
+
+  <!-- INTRODUCCIÓN -->
+  <div class="section" id="intro">
+    <div class="section-header">
+      <div class="section-icon">📌</div>
+      <div>
+        <div class="section-title">1. Introducción y Formato</div>
+        <div class="section-subtitle">Convenciones utilizadas en este documento</div>
+      </div>
+    </div>
+    <div class="alert info">
+      <span class="alert-icon">ℹ️</span>
+      <div>Las historias de usuario fueron definidas a partir del análisis directo del código fuente del proyecto (controladores, modelos y vistas Blade). Cada historia sigue el formato estándar ágil: <em>"Como [rol], quiero [acción], para [beneficio]"</em>, complementada con criterios de aceptación verificables.</div>
+    </div>
+    <table>
+      <thead><tr><th>Elemento</th><th>Descripción</th></tr></thead>
+      <tbody>
+        <tr><td><strong>ID</strong></td><td>Identificador único: HU-01, HU-02, … HU-28</td></tr>
+        <tr><td><strong>Rol</strong></td><td>Administrador o Docente (actores del sistema)</td></tr>
+        <tr><td><strong>Narrativa</strong></td><td>Como [rol], quiero [acción], para [beneficio]</td></tr>
+        <tr><td><strong>Criterios de Aceptación</strong></td><td>Condiciones verificables que deben cumplirse para considerar la historia como completada</td></tr>
+        <tr><td><strong>Prioridad</strong></td><td>Alta 🔴 / Media 🟡 / Baja 🟢</td></tr>
+        <tr><td><strong>Módulo</strong></td><td>Agrupación funcional a la que pertenece</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- ═══ MÓDULO 1: AUTENTICACIÓN ═══ -->
+  <div class="section page-break" id="modulo1">
+    <div class="section-header">
+      <div class="section-icon">🔐</div>
+      <div>
+        <div class="section-title">2. Módulo 1 — Autenticación y Perfiles</div>
+        <div class="section-subtitle">5 historias de usuario · Roles: Administrador y Docente</div>
+      </div>
+    </div>
+
+    <!-- HU-01 -->
+    <div class="story-card auth" id="hu01">
+      <div class="story-header">
+        <span class="story-id">HU-01</span>
+        <span class="story-title">Iniciar sesión en el sistema</span>
+        <span class="story-role-badge">👤 Admin / Docente</span>
+      </div>
+      <div class="story-body">
+        <div class="story-narrative blue">
+          <strong>Como</strong> usuario registrado (administrador o docente), <strong>quiero</strong> iniciar sesión con mi nombre de usuario y contraseña, <strong>para</strong> acceder al sistema de acuerdo con mi rol y permisos asignados.
+        </div>
+        <div class="criteria-title">✅ Criterios de Aceptación</div>
+        <ul class="criteria-list">
+          <li>El formulario de login solicita únicamente <code>username</code> y <code>password</code> (no correo electrónico).</li>
+          <li>Si las credenciales son correctas y el usuario está activo, el sistema redirige al panel correspondiente (admin o docente).</li>
+          <li>Si las credenciales son incorrectas, el sistema muestra un mensaje de error genérico sin revelar qué campo es incorrecto.</li>
+          <li>Si el usuario está marcado como inactivo, el sistema deniega el acceso y muestra un mensaje indicando que la cuenta está deshabilitada.</li>
+          <li>La sesión persiste hasta que el usuario cierre sesión manualmente o expire.</li>
+        </ul>
+        <div class="story-meta">
+          <span class="meta-tag priority-alta">🔴 Prioridad Alta</span>
+          <span class="meta-tag">📦 Módulo: Autenticación</span>
+          <span class="meta-tag">🔗 RF1.1, RF1.2, RF1.3</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- HU-02 -->
+    <div class="story-card auth" id="hu02">
+      <div class="story-header">
+        <span class="story-id">HU-02</span>
+        <span class="story-title">Cerrar sesión del sistema</span>
+        <span class="story-role-badge">👤 Admin / Docente</span>
+      </div>
+      <div class="story-body">
+        <div class="story-narrative blue">
+          <strong>Como</strong> usuario autenticado, <strong>quiero</strong> cerrar mi sesión de forma segura, <strong>para</strong> proteger mi cuenta al terminar de usar el sistema.
+        </div>
+        <div class="criteria-title">✅ Criterios de Aceptación</div>
+        <ul class="criteria-list">
+          <li>Existe un botón o enlace visible de "Cerrar sesión" en el menú de navegación.</li>
+          <li>Al cerrar sesión, el sistema invalida la sesión del servidor y redirige al usuario a la página de login.</li>
+          <li>Tras cerrar sesión, el usuario no puede acceder a páginas protegidas usando el botón "Atrás" del navegador.</li>
+        </ul>
+        <div class="story-meta">
+          <span class="meta-tag priority-alta">🔴 Prioridad Alta</span>
+          <span class="meta-tag">📦 Módulo: Autenticación</span>
+          <span class="meta-tag">🔗 RF1.1</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- HU-03 -->
+    <div class="story-card auth" id="hu03">
+      <div class="story-header">
+        <span class="story-id">HU-03</span>
+        <span class="story-title">Actualizar mi perfil de usuario</span>
+        <span class="story-role-badge">👤 Admin / Docente</span>
+      </div>
+      <div class="story-body">
+        <div class="story-narrative blue">
+          <strong>Como</strong> usuario autenticado, <strong>quiero</strong> poder editar mi nombre, apellido y nombre de usuario, <strong>para</strong> mantener actualizada mi información personal en el sistema.
+        </div>
+        <div class="criteria-title">✅ Criterios de Aceptación</div>
+        <ul class="criteria-list">
+          <li>El formulario de perfil muestra los datos actuales del usuario precargados.</li>
+          <li>El sistema valida que el nuevo <code>username</code> no esté ya en uso por otro usuario.</li>
+          <li>Al guardar cambios exitosamente, el sistema muestra un mensaje de confirmación.</li>
+          <li>Si hay errores de validación, se muestran mensajes descriptivos junto al campo correspondiente.</li>
+          <li>El campo <code>nombre</code> y <code>apellido</code> son obligatorios con máximo 100 caracteres cada uno.</li>
+        </ul>
+        <div class="story-meta">
+          <span class="meta-tag priority-media">🟡 Prioridad Media</span>
+          <span class="meta-tag">📦 Módulo: Autenticación</span>
+          <span class="meta-tag">🔗 RF1.4</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- HU-04 -->
+    <div class="story-card auth" id="hu04">
+      <div class="story-header">
+        <span class="story-id">HU-04</span>
+        <span class="story-title">Cambiar mi contraseña de acceso</span>
+        <span class="story-role-badge">👤 Admin / Docente</span>
+      </div>
+      <div class="story-body">
+        <div class="story-narrative blue">
+          <strong>Como</strong> usuario autenticado, <strong>quiero</strong> poder cambiar mi contraseña de forma segura, <strong>para</strong> proteger mi cuenta si creo que ha sido comprometida.
+        </div>
+        <div class="criteria-title">✅ Criterios de Aceptación</div>
+        <ul class="criteria-list">
+          <li>El formulario solicita la contraseña actual, la nueva contraseña y su confirmación.</li>
+          <li>Si la contraseña actual no coincide, el sistema muestra un error sin actualizar nada.</li>
+          <li>La nueva contraseña debe tener mínimo 8 caracteres.</li>
+          <li>La nueva contraseña y su confirmación deben ser idénticas.</li>
+          <li>La contraseña se almacena encriptada con bcrypt (nunca en texto plano).</li>
+          <li>Al cambiar con éxito, el sistema muestra un mensaje de confirmación.</li>
+        </ul>
+        <div class="story-meta">
+          <span class="meta-tag priority-alta">🔴 Prioridad Alta</span>
+          <span class="meta-tag">📦 Módulo: Autenticación</span>
+          <span class="meta-tag">🔗 RF1.5, RNF1.1</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- HU-05 -->
+    <div class="story-card auth" id="hu05">
+      <div class="story-header">
+        <span class="story-id">HU-05</span>
+        <span class="story-title">Bloquear acceso a usuarios inactivos</span>
+        <span class="story-role-badge">🛡️ Administrador</span>
+      </div>
+      <div class="story-body">
+        <div class="story-narrative blue">
+          <strong>Como</strong> administrador, <strong>quiero</strong> que el sistema bloquee automáticamente el acceso a usuarios marcados como inactivos, <strong>para</strong> revocar permisos de forma inmediata sin eliminar sus datos.
+        </div>
+        <div class="criteria-title">✅ Criterios de Aceptación</div>
+        <ul class="criteria-list">
+          <li>El sistema verifica el estado <code>activo</code> del usuario en cada petición HTTP mediante middleware.</li>
+          <li>Si un usuario con sesión activa es marcado como inactivo, la siguiente petición cierra su sesión y lo redirige al login.</li>
+          <li>El usuario inactivo no puede iniciar sesión aunque ingrese credenciales correctas.</li>
+          <li>Al reactivar el usuario, puede volver a iniciar sesión normalmente.</li>
+        </ul>
+        <div class="story-meta">
+          <span class="meta-tag priority-alta">🔴 Prioridad Alta</span>
+          <span class="meta-tag">📦 Módulo: Autenticación</span>
+          <span class="meta-tag">🔗 RF1.2, RNF1.5</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══ MÓDULO 2: ESTRUCTURA ACADÉMICA ═══ -->
+  <div class="section page-break" id="modulo2">
+    <div class="section-header">
+      <div class="section-icon">🏫</div>
+      <div>
+        <div class="section-title">3. Módulo 2 — Estructura Académica</div>
+        <div class="section-subtitle">6 historias de usuario · Rol: Administrador</div>
+      </div>
+    </div>
+
+    <!-- HU-06 -->
+    <div class="story-card acad" id="hu06">
+      <div class="story-header">
+        <span class="story-id">HU-06</span>
+        <span class="story-title">Gestionar Niveles Educativos</span>
+        <span class="story-role-badge">🛡️ Administrador</span>
+      </div>
+      <div class="story-body">
+        <div class="story-narrative">
+          <strong>Como</strong> administrador, <strong>quiero</strong> crear, editar y eliminar niveles educativos (Inicial, Primaria, Secundaria), <strong>para</strong> definir la estructura base de la institución sobre la cual se organizan los grados y cursos.
+        </div>
+        <div class="criteria-title">✅ Criterios de Aceptación</div>
+        <ul class="criteria-list">
+          <li>El administrador puede crear un nivel ingresando únicamente su nombre.</li>
+          <li>El administrador puede editar el nombre de un nivel existente.</li>
+          <li>El sistema impide eliminar un nivel si tiene grados asociados, mostrando un mensaje de advertencia.</li>
+          <li>Los niveles se listan en orden y son visibles en el módulo de grados para su selección.</li>
+        </ul>
+        <div class="story-meta">
+          <span class="meta-tag priority-alta">🔴 Prioridad Alta</span>
+          <span class="meta-tag">📦 Módulo: Estructura Académica</span>
+          <span class="meta-tag">🔗 RF2.1</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- HU-07 -->
+    <div class="story-card acad" id="hu07">
+      <div class="story-header">
+        <span class="story-id">HU-07</span>
+        <span class="story-title">Gestionar Grados</span>
+        <span class="story-role-badge">🛡️ Administrador</span>
+      </div>
+      <div class="story-body">
+        <div class="story-narrative">
+          <strong>Como</strong> administrador, <strong>quiero</strong> registrar y gestionar los grados escolares vinculados a un nivel, <strong>para</strong> organizar correctamente la estructura curricular de la institución.
+        </div>
+        <div class="criteria-title">✅ Criterios de Aceptación</div>
+        <ul class="criteria-list">
+          <li>Al crear un grado, es obligatorio seleccionar el nivel al que pertenece.</li>
+          <li>El administrador puede editar el nombre y nivel de un grado existente.</li>
+          <li>El sistema impide eliminar grados que tengan secciones o asignaciones docentes activas.</li>
+          <li>Los grados aparecen correctamente asociados a su nivel en el mapa académico.</li>
+        </ul>
+        <div class="story-meta">
+          <span class="meta-tag priority-alta">🔴 Prioridad Alta</span>
+          <span class="meta-tag">📦 Módulo: Estructura Académica</span>
+          <span class="meta-tag">🔗 RF2.2</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- HU-08 -->
+    <div class="story-card acad" id="hu08">
+      <div class="story-header">
+        <span class="story-id">HU-08</span>
+        <span class="story-title">Gestionar Secciones</span>
+        <span class="story-role-badge">🛡️ Administrador</span>
+      </div>
+      <div class="story-body">
+        <div class="story-narrative">
+          <strong>Como</strong> administrador, <strong>quiero</strong> crear y administrar secciones (A, B, C, Única) para subdividir los grados, <strong>para</strong> poder asignar docentes y grupos de alumnos específicos dentro de un mismo grado.
+        </div>
+        <div class="criteria-title">✅ Criterios de Aceptación</div>
+        <ul class="criteria-list">
+          <li>El administrador puede crear secciones con un nombre identificativo (letras o palabras).</li>
+          <li>Las secciones se listan y están disponibles en los formularios de asignación docente.</li>
+          <li>El sistema impide eliminar secciones que tengan asignaciones activas.</li>
+        </ul>
+        <div class="story-meta">
+          <span class="meta-tag priority-alta">🔴 Prioridad Alta</span>
+          <span class="meta-tag">📦 Módulo: Estructura Académica</span>
+          <span class="meta-tag">🔗 RF2.3</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- HU-09 -->
+    <div class="story-card acad" id="hu09">
+      <div class="story-header">
+        <span class="story-id">HU-09</span>
+        <span class="story-title">Gestionar Cursos / Materias</span>
+        <span class="story-role-badge">🛡️ Administrador</span>
+      </div>
+      <div class="story-body">
+        <div class="story-narrative">
+          <strong>Como</strong> administrador, <strong>quiero</strong> crear, editar y eliminar cursos o materias de la currícula, <strong>para</strong> que los docentes puedan ser asignados a las materias que imparten.
+        </div>
+        <div class="criteria-title">✅ Criterios de Aceptación</div>
+        <ul class="criteria-list">
+          <li>El administrador puede crear un curso ingresando su nombre.</li>
+          <li>Los cursos están disponibles en los formularios de asignación docente y en el filtro de archivos.</li>
+          <li>El sistema impide eliminar un curso que tenga asignaciones docentes o archivos asociados.</li>
+        </ul>
+        <div class="story-meta">
+          <span class="meta-tag priority-alta">🔴 Prioridad Alta</span>
+          <span class="meta-tag">📦 Módulo: Estructura Académica</span>
+          <span class="meta-tag">🔗 RF2.4</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- HU-10 -->
+    <div class="story-card acad" id="hu10">
+      <div class="story-header">
+        <span class="story-id">HU-10</span>
+        <span class="story-title">Gestionar Años Lectivos</span>
+        <span class="story-role-badge">🛡️ Administrador</span>
+      </div>
+      <div class="story-body">
+        <div class="story-narrative">
+          <strong>Como</strong> administrador, <strong>quiero</strong> registrar y activar años lectivos, <strong>para</strong> que las operaciones de carga y consulta de archivos estén siempre referenciadas al año académico correcto.
+        </div>
+        <div class="criteria-title">✅ Criterios de Aceptación</div>
+        <ul class="criteria-list">
+          <li>El administrador puede registrar un año lectivo especificando el año (Ej: 2026).</li>
+          <li>Solo puede haber un año lectivo activo a la vez; activar uno desactiva al anterior.</li>
+          <li>El año lectivo activo es el que aparece por defecto en los filtros y formularios de archivos.</li>
+          <li>El sistema muestra claramente cuál es el año lectivo actualmente activo.</li>
+        </ul>
+        <div class="story-meta">
+          <span class="meta-tag priority-alta">🔴 Prioridad Alta</span>
+          <span class="meta-tag">📦 Módulo: Estructura Académica</span>
+          <span class="meta-tag">🔗 RF2.5</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- HU-11 -->
+    <div class="story-card acad" id="hu11">
+      <div class="story-header">
+        <span class="story-id">HU-11</span>
+        <span class="story-title">Ver el Mapa Académico institucional</span>
+        <span class="story-role-badge">🛡️ Administrador</span>
+      </div>
+      <div class="story-body">
+        <div class="story-narrative">
+          <strong>Como</strong> administrador, <strong>quiero</strong> ver una vista jerárquica de Niveles → Grados → Cursos con sus docentes asignados, <strong>para</strong> tener una visión consolidada e inmediata de toda la estructura académica de la institución.
+        </div>
+        <div class="criteria-title">✅ Criterios de Aceptación</div>
+        <ul class="criteria-list">
+          <li>El dashboard muestra todos los niveles activos con sus grados anidados.</li>
+          <li>Cada grado muestra los cursos asignados y el nombre del docente responsable.</li>
+          <li>La vista es navegable y distingue visualmente cada nivel jerárquico.</li>
+          <li>El mapa refleja los datos en tiempo real conforme se realizan cambios en asignaciones.</li>
+        </ul>
+        <div class="story-meta">
+          <span class="meta-tag priority-media">🟡 Prioridad Media</span>
+          <span class="meta-tag">📦 Módulo: Estructura Académica</span>
+          <span class="meta-tag">🔗 RF2.6</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══ MÓDULO 3: DOCENTES ═══ -->
+  <div class="section page-break" id="modulo3">
+    <div class="section-header">
+      <div class="section-icon">👤</div>
+      <div>
+        <div class="section-title">4. Módulo 3 — Gestión de Docentes</div>
+        <div class="section-subtitle">4 historias de usuario · Rol: Administrador</div>
+      </div>
+    </div>
+
+    <!-- HU-12 -->
+    <div class="story-card doc" id="hu12">
+      <div class="story-header">
+        <span class="story-id">HU-12</span>
+        <span class="story-title">Registrar un nuevo docente</span>
+        <span class="story-role-badge">🛡️ Administrador</span>
+      </div>
+      <div class="story-body">
+        <div class="story-narrative purple">
+          <strong>Como</strong> administrador, <strong>quiero</strong> registrar nuevos profesores en el sistema, <strong>para</strong> que puedan acceder a su portafolio y gestionar sus materiales educativos.
+        </div>
+        <div class="criteria-title">✅ Criterios de Aceptación</div>
+        <ul class="criteria-list">
+          <li>El formulario solicita: nombre, apellido, username y contraseña.</li>
+          <li>El correo electrónico se genera automáticamente con el formato <code>{username}@docente.local</code>.</li>
+          <li>El username debe ser único en todo el sistema.</li>
+          <li>La contraseña se almacena encriptada con bcrypt.</li>
+          <li>El docente se crea con estado activo por defecto y con el rol <code>docente</code>.</li>
+          <li>Al crear exitosamente, el sistema muestra un mensaje de confirmación y redirige al listado.</li>
+        </ul>
+        <div class="story-meta">
+          <span class="meta-tag priority-alta">🔴 Prioridad Alta</span>
+          <span class="meta-tag">📦 Módulo: Docentes</span>
+          <span class="meta-tag">🔗 RF3.1</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- HU-13 -->
+    <div class="story-card doc" id="hu13">
+      <div class="story-header">
+        <span class="story-id">HU-13</span>
+        <span class="story-title">Activar o desactivar un docente</span>
+        <span class="story-role-badge">🛡️ Administrador</span>
+      </div>
+      <div class="story-body">
+        <div class="story-narrative purple">
+          <strong>Como</strong> administrador, <strong>quiero</strong> habilitar o deshabilitar el acceso de un docente con un solo clic, <strong>para</strong> gestionar permisos de forma ágil sin perder el historial de archivos del docente.
+        </div>
+        <div class="criteria-title">✅ Criterios de Aceptación</div>
+        <ul class="criteria-list">
+          <li>En el listado de docentes aparece un botón toggle (activo/inactivo) por cada registro.</li>
+          <li>Al desactivar, el campo <code>activo</code> cambia a <code>false</code> y el docente no puede iniciar sesión.</li>
+          <li>Si el docente tiene sesión abierta, la siguiente petición es bloqueada por el middleware.</li>
+          <li>El docente NO es eliminado físicamente, preservando todos sus archivos subidos.</li>
+          <li>Al reactivar, el docente puede iniciar sesión nuevamente de forma normal.</li>
+        </ul>
+        <div class="story-meta">
+          <span class="meta-tag priority-alta">🔴 Prioridad Alta</span>
+          <span class="meta-tag">📦 Módulo: Docentes</span>
+          <span class="meta-tag">🔗 RF3.2, RNF4.3</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- HU-14 -->
+    <div class="story-card doc" id="hu14">
+      <div class="story-header">
+        <span class="story-id">HU-14</span>
+        <span class="story-title">Asignar cursos y aulas a un docente</span>
+        <span class="story-role-badge">🛡️ Administrador</span>
+      </div>
+      <div class="story-body">
+        <div class="story-narrative purple">
+          <strong>Como</strong> administrador, <strong>quiero</strong> vincular a cada docente con una o más combinaciones de Curso + Grado + Sección, <strong>para</strong> que el docente solo vea sus materias asignadas al gestionar su portafolio.
+        </div>
+        <div class="criteria-title">✅ Criterios de Aceptación</div>
+        <ul class="criteria-list">
+          <li>El formulario permite seleccionar múltiples combinaciones [Curso + Grado + Sección] para un docente.</li>
+          <li>Cada combinación representa una clase activa a cargo del docente.</li>
+          <li>Las asignaciones se guardan en la tabla <code>docente_asignaciones</code> con integridad referencial.</li>
+          <li>El docente solo puede subir archivos a sus asignaciones activas.</li>
+          <li>Las asignaciones aparecen correctamente en el selector de asignación del portafolio docente.</li>
+        </ul>
+        <div class="story-meta">
+          <span class="meta-tag priority-alta">🔴 Prioridad Alta</span>
+          <span class="meta-tag">📦 Módulo: Docentes</span>
+          <span class="meta-tag">🔗 RF3.3</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- HU-15 -->
+    <div class="story-card doc" id="hu15">
+      <div class="story-header">
+        <span class="story-id">HU-15</span>
+        <span class="story-title">Editar datos y asignaciones del docente</span>
+        <span class="story-role-badge">🛡️ Administrador</span>
+      </div>
+      <div class="story-body">
+        <div class="story-narrative purple">
+          <strong>Como</strong> administrador, <strong>quiero</strong> actualizar el perfil y las asignaciones de un docente en un único formulario, <strong>para</strong> mantener los datos y carga horaria siempre sincronizados.
+        </div>
+        <div class="criteria-title">✅ Criterios de Aceptación</div>
+        <ul class="criteria-list">
+          <li>El formulario de edición precarga los datos actuales del docente y sus asignaciones vigentes.</li>
+          <li>Al guardar, el sistema elimina todas las asignaciones previas y crea únicamente las nuevas seleccionadas.</li>
+          <li>Si no se selecciona ninguna asignación, el docente queda sin cursos asignados (sin error).</li>
+          <li>Los cambios en el nombre o username se validan igual que en el registro (username único).</li>
+          <li>El sistema muestra confirmación de éxito al guardar.</li>
+        </ul>
+        <div class="story-meta">
+          <span class="meta-tag priority-media">🟡 Prioridad Media</span>
+          <span class="meta-tag">📦 Módulo: Docentes</span>
+          <span class="meta-tag">🔗 RF3.4</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══ MÓDULO 4: ARCHIVOS ═══ -->
+  <div class="section page-break" id="modulo4">
+    <div class="section-header">
+      <div class="section-icon">📁</div>
+      <div>
+        <div class="section-title">5. Módulo 4 — Portafolio de Archivos</div>
+        <div class="section-subtitle">9 historias de usuario · Roles: Docente y Administrador</div>
+      </div>
+    </div>
+
+    <!-- HU-16 -->
+    <div class="story-card arch" id="hu16">
+      <div class="story-header">
+        <span class="story-id">HU-16</span>
+        <span class="story-title">Subir un archivo al portafolio</span>
+        <span class="story-role-badge">🧑‍🏫 Docente</span>
+      </div>
+      <div class="story-body">
+        <div class="story-narrative orange">
+          <strong>Como</strong> docente, <strong>quiero</strong> subir archivos educativos asociados a mis asignaciones y al bimestre correspondiente, <strong>para</strong> construir mi portafolio digital y cumplir con la entrega de materiales académicos.
+        </div>
+        <div class="criteria-title">✅ Criterios de Aceptación</div>
+        <ul class="criteria-list">
+          <li>El formulario permite seleccionar una de mis asignaciones activas (Curso + Grado + Sección).</li>
+          <li>El docente debe seleccionar el bimestre (I, II, III o IV Bimestre).</li>
+          <li>El campo descripción es opcional.</li>
+          <li>Se acepta cualquier tipo de archivo (PDF, Word, Excel, imagen, etc.).</li>
+          <li>El año se asocia automáticamente al año actual en curso.</li>
+          <li>El archivo se guarda en <code>storage/app/public/docentes/{id}/</code> con un nombre único.</li>
+          <li>Al subir exitosamente, el sistema redirige al listado con un mensaje de confirmación.</li>
+        </ul>
+        <div class="story-meta">
+          <span class="meta-tag priority-alta">🔴 Prioridad Alta</span>
+          <span class="meta-tag">📦 Módulo: Portafolio</span>
+          <span class="meta-tag">🔗 RF4.1, RNF4.4</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- HU-17 -->
+    <div class="story-card arch" id="hu17">
+      <div class="story-header">
+        <span class="story-id">HU-17</span>
+        <span class="story-title">Buscar y filtrar mis archivos</span>
+        <span class="story-role-badge">🧑‍🏫 Docente</span>
+      </div>
+      <div class="story-body">
+        <div class="story-narrative orange">
+          <strong>Como</strong> docente, <strong>quiero</strong> filtrar mis archivos por año, bimestre, curso y fechas, <strong>para</strong> encontrar rápidamente cualquier documento que haya subido anteriormente.
+        </div>
+        <div class="criteria-title">✅ Criterios de Aceptación</div>
+        <ul class="criteria-list">
+          <li>El listado muestra los archivos paginados (15 por página) ordenados por bimestre.</li>
+          <li>Se puede filtrar por: año lectivo, bimestre, curso (por ID o nombre), fecha desde y fecha hasta.</li>
+          <li>Se puede buscar por término libre en nombre del archivo o descripción.</li>
+          <li>Los filtros son acumulativos y persisten en la URL para poder compartirlos.</li>
+          <li>Si no hay resultados, se muestra un mensaje amigable indicándolo.</li>
+        </ul>
+        <div class="story-meta">
+          <span class="meta-tag priority-alta">🔴 Prioridad Alta</span>
+          <span class="meta-tag">📦 Módulo: Portafolio</span>
+          <span class="meta-tag">🔗 RF4.2, RNF3.1</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- HU-18 -->
+    <div class="story-card arch" id="hu18">
+      <div class="story-header">
+        <span class="story-id">HU-18</span>
+        <span class="story-title">Descargar mis archivos</span>
+        <span class="story-role-badge">🧑‍🏫 Docente</span>
+      </div>
+      <div class="story-body">
+        <div class="story-narrative orange">
+          <strong>Como</strong> docente, <strong>quiero</strong> descargar mis archivos con su nombre original, <strong>para</strong> obtener una copia local cuando la necesite.
+        </div>
+        <div class="criteria-title">✅ Criterios de Aceptación</div>
+        <ul class="criteria-list">
+          <li>El botón de descarga está disponible en el listado de mis archivos.</li>
+          <li>El archivo descargado conserva su nombre original (no el nombre interno del sistema).</li>
+          <li>El sistema verifica que el archivo pertenece al docente autenticado antes de servirlo.</li>
+          <li>Si el archivo físico no existe en el servidor, el sistema muestra un mensaje de error descriptivo.</li>
+          <li>Un docente no puede descargar archivos de otros docentes (error 403).</li>
+        </ul>
+        <div class="story-meta">
+          <span class="meta-tag priority-alta">🔴 Prioridad Alta</span>
+          <span class="meta-tag">📦 Módulo: Portafolio</span>
+          <span class="meta-tag">🔗 RF4.3, RNF1.2</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- HU-19 -->
+    <div class="story-card arch" id="hu19">
+      <div class="story-header">
+        <span class="story-id">HU-19</span>
+        <span class="story-title">Previsualizar un archivo en el navegador</span>
+        <span class="story-role-badge">🧑‍🏫 Docente / 🛡️ Admin</span>
+      </div>
+      <div class="story-body">
+        <div class="story-narrative orange">
+          <strong>Como</strong> docente o administrador, <strong>quiero</strong> previsualizar archivos directamente en el navegador sin tener que descargarlos, <strong>para</strong> revisar el contenido de forma rápida y eficiente.
+        </div>
+        <div class="criteria-title">✅ Criterios de Aceptación</div>
+        <ul class="criteria-list">
+          <li>Existe un botón "Ver/Previsualizar" junto a cada archivo en el listado.</li>
+          <li>El archivo se abre en línea (<em>stream inline</em>) en el navegador (sin forzar descarga).</li>
+          <li>Para PDFs, el navegador los renderiza directamente; para otros tipos, abre el visor disponible.</li>
+          <li>El sistema genera una URL firmada temporal (10 min) para compatibilidad con Google Docs Viewer.</li>
+          <li>La URL firmada expira automáticamente después de 10 minutos para mayor seguridad.</li>
+        </ul>
+        <div class="story-meta">
+          <span class="meta-tag priority-media">🟡 Prioridad Media</span>
+          <span class="meta-tag">📦 Módulo: Portafolio</span>
+          <span class="meta-tag">🔗 RF4.4, RNF1.3</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- HU-20 -->
+    <div class="story-card arch" id="hu20">
+      <div class="story-header">
+        <span class="story-id">HU-20</span>
+        <span class="story-title">Mover un archivo a la papelera</span>
+        <span class="story-role-badge">🧑‍🏫 Docente</span>
+      </div>
+      <div class="story-body">
+        <div class="story-narrative orange">
+          <strong>Como</strong> docente, <strong>quiero</strong> mover archivos equivocados o innecesarios a la papelera, <strong>para</strong> mantener mi portafolio organizado sin eliminarlos permanentemente de inmediato.
+        </div>
+        <div class="criteria-title">✅ Criterios de Aceptación</div>
+        <ul class="criteria-list">
+          <li>El botón "Eliminar / Mover a papelera" está visible en el listado de archivos.</li>
+          <li>El archivo se marca con eliminación lógica (<code>deleted_at</code>), no se borra físicamente del disco.</li>
+          <li>El archivo desaparece del listado principal pero aparece en la sección Papelera.</li>
+          <li>El sistema muestra un mensaje de confirmación indicando que el archivo fue movido a la papelera.</li>
+          <li>El docente solo puede mover a la papelera sus propios archivos.</li>
+        </ul>
+        <div class="story-meta">
+          <span class="meta-tag priority-media">🟡 Prioridad Media</span>
+          <span class="meta-tag">📦 Módulo: Portafolio</span>
+          <span class="meta-tag">🔗 RF4.5, RNF4.2</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- HU-21 -->
+    <div class="story-card arch" id="hu21">
+      <div class="story-header">
+        <span class="story-id">HU-21</span>
+        <span class="story-title">Restaurar un archivo desde la papelera</span>
+        <span class="story-role-badge">🧑‍🏫 Docente</span>
+      </div>
+      <div class="story-body">
+        <div class="story-narrative orange">
+          <strong>Como</strong> docente, <strong>quiero</strong> restaurar archivos que envié accidentalmente a la papelera, <strong>para</strong> recuperarlos sin perder el trabajo ya realizado.
+        </div>
+        <div class="criteria-title">✅ Criterios de Aceptación</div>
+        <ul class="criteria-list">
+          <li>La sección Papelera muestra todos mis archivos eliminados con su fecha de borrado.</li>
+          <li>El botón "Restaurar" está disponible para cada archivo en la papelera.</li>
+          <li>Al restaurar, el campo <code>deleted_at</code> se limpia y el archivo vuelve al listado principal.</li>
+          <li>El sistema muestra un mensaje de confirmación al restaurar exitosamente.</li>
+          <li>Solo el docente propietario puede restaurar sus archivos.</li>
+        </ul>
+        <div class="story-meta">
+          <span class="meta-tag priority-media">🟡 Prioridad Media</span>
+          <span class="meta-tag">📦 Módulo: Portafolio</span>
+          <span class="meta-tag">🔗 RF4.5, RNF4.2</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- HU-22 -->
+    <div class="story-card arch" id="hu22">
+      <div class="story-header">
+        <span class="story-id">HU-22</span>
+        <span class="story-title">Eliminar un archivo definitivamente</span>
+        <span class="story-role-badge">🧑‍🏫 Docente</span>
+      </div>
+      <div class="story-body">
+        <div class="story-narrative orange">
+          <strong>Como</strong> docente, <strong>quiero</strong> eliminar permanentemente archivos de mi papelera, <strong>para</strong> liberar espacio de almacenamiento y limpiar documentos que ya no necesito.
+        </div>
+        <div class="criteria-title">✅ Criterios de Aceptación</div>
+        <ul class="criteria-list">
+          <li>El botón "Eliminar definitivamente" solo está disponible en la vista de Papelera.</li>
+          <li>El sistema elimina tanto el registro de la base de datos como el archivo físico del disco.</li>
+          <li>La acción es irreversible: el archivo no puede recuperarse una vez eliminado definitivamente.</li>
+          <li>Solo el docente propietario puede eliminar definitivamente sus archivos.</li>
+          <li>El sistema muestra un mensaje de confirmación tras la eliminación.</li>
+        </ul>
+        <div class="story-meta">
+          <span class="meta-tag priority-baja">🟢 Prioridad Baja</span>
+          <span class="meta-tag">📦 Módulo: Portafolio</span>
+          <span class="meta-tag">🔗 RF4.5</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- HU-23 -->
+    <div class="story-card arch" id="hu23">
+      <div class="story-header">
+        <span class="story-id">HU-23</span>
+        <span class="story-title">Supervisar archivos de todos los docentes</span>
+        <span class="story-role-badge">🛡️ Administrador</span>
+      </div>
+      <div class="story-body">
+        <div class="story-narrative orange">
+          <strong>Como</strong> administrador, <strong>quiero</strong> ver y buscar todos los archivos subidos por todos los docentes en un único panel, <strong>para</strong> supervisar el cumplimiento de entrega de materiales educativos.
+        </div>
+        <div class="criteria-title">✅ Criterios de Aceptación</div>
+        <ul class="criteria-list">
+          <li>El panel administrativo lista todos los archivos de todos los docentes con paginación.</li>
+          <li>Se puede filtrar por: docente, año lectivo, bimestre, curso, grado, sección, nivel y rango de fechas.</li>
+          <li>Cada fila muestra: nombre del archivo, docente, curso, grado, sección, bimestre y fecha de subida.</li>
+          <li>El administrador puede descargar o previsualizar cualquier archivo del sistema.</li>
+          <li>La búsqueda es eficiente gracias a los filtros combinados.</li>
+        </ul>
+        <div class="story-meta">
+          <span class="meta-tag priority-alta">🔴 Prioridad Alta</span>
+          <span class="meta-tag">📦 Módulo: Portafolio</span>
+          <span class="meta-tag">🔗 RF4.6, RF4.7, RF4.8</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- HU-24 -->
+    <div class="story-card arch" id="hu24">
+      <div class="story-header">
+        <span class="story-id">HU-24</span>
+        <span class="story-title">Gestionar la papelera administrativa</span>
+        <span class="story-role-badge">🛡️ Administrador</span>
+      </div>
+      <div class="story-body">
+        <div class="story-narrative orange">
+          <strong>Como</strong> administrador, <strong>quiero</strong> ver todos los archivos en papelera de todos los docentes y poder restaurarlos o eliminarlos definitivamente, <strong>para</strong> tener control total sobre el almacenamiento de la institución.
+        </div>
+        <div class="criteria-title">✅ Criterios de Aceptación</div>
+        <ul class="criteria-list">
+          <li>La papelera administrativa muestra todos los archivos eliminados de todos los docentes.</li>
+          <li>Se muestra el nombre del docente propietario, fecha de eliminación y datos del archivo.</li>
+          <li>El administrador puede restaurar cualquier archivo (independientemente del docente).</li>
+          <li>El administrador puede eliminar permanentemente archivos, borrando el registro y el archivo físico.</li>
+          <li>Los resultados están paginados para evitar problemas de rendimiento.</li>
+        </ul>
+        <div class="story-meta">
+          <span class="meta-tag priority-media">🟡 Prioridad Media</span>
+          <span class="meta-tag">📦 Módulo: Portafolio</span>
+          <span class="meta-tag">🔗 RF4.9</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══ MÓDULO 5: CONFIGURACIÓN ═══ -->
+  <div class="section page-break" id="modulo5">
+    <div class="section-header">
+      <div class="section-icon">⚙️</div>
+      <div>
+        <div class="section-title">6. Módulo 5 — Configuración Institucional</div>
+        <div class="section-subtitle">2 historias de usuario · Rol: Administrador</div>
+      </div>
+    </div>
+
+    <!-- HU-25 -->
+    <div class="story-card conf" id="hu25">
+      <div class="story-header">
+        <span class="story-id">HU-25</span>
+        <span class="story-title">Editar los datos de la institución</span>
+        <span class="story-role-badge">🛡️ Administrador</span>
+      </div>
+      <div class="story-body">
+        <div class="story-narrative slate">
+          <strong>Como</strong> administrador, <strong>quiero</strong> actualizar la información de contacto e identificación de la institución, <strong>para</strong> que los datos mostrados en el sistema estén siempre vigentes y correctos.
+        </div>
+        <div class="criteria-title">✅ Criterios de Aceptación</div>
+        <ul class="criteria-list">
+          <li>El formulario permite editar: nombre, dirección, teléfono, correo electrónico y sitio web.</li>
+          <li>Solo el campo "nombre" es obligatorio; los demás son opcionales.</li>
+          <li>El correo debe tener formato de email válido; el sitio web debe ser una URL válida.</li>
+          <li>Los datos se guardan en <code>config/institucion.json</code> para lectura eficiente.</li>
+          <li>Los cambios se reflejan inmediatamente en los layouts de administrador y docente.</li>
+          <li>El sistema muestra un mensaje de éxito al guardar correctamente.</li>
+        </ul>
+        <div class="story-meta">
+          <span class="meta-tag priority-baja">🟢 Prioridad Baja</span>
+          <span class="meta-tag">📦 Módulo: Configuración</span>
+          <span class="meta-tag">🔗 RF5.1, RF5.3</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- HU-26 -->
+    <div class="story-card conf" id="hu26">
+      <div class="story-header">
+        <span class="story-id">HU-26</span>
+        <span class="story-title">Actualizar el logo institucional</span>
+        <span class="story-role-badge">🛡️ Administrador</span>
+      </div>
+      <div class="story-body">
+        <div class="story-narrative slate">
+          <strong>Como</strong> administrador, <strong>quiero</strong> subir o actualizar el logo de la institución, <strong>para</strong> que la imagen corporativa de la escuela esté presente en toda la interfaz del sistema.
+        </div>
+        <div class="criteria-title">✅ Criterios de Aceptación</div>
+        <ul class="criteria-list">
+          <li>El formulario permite subir un archivo de imagen en formato <code>.jpg</code>, <code>.png</code> o <code>.webp</code>.</li>
+          <li>El tamaño máximo del logo es de 2 MB.</li>
+          <li>Si no se sube un nuevo logo, el logo actual se mantiene sin cambios.</li>
+          <li>El logo se guarda en <code>public/images/</code> y su ruta se registra en el JSON de configuración.</li>
+          <li>El nuevo logo se muestra inmediatamente en el header de los paneles de administración y docente.</li>
+        </ul>
+        <div class="story-meta">
+          <span class="meta-tag priority-baja">🟢 Prioridad Baja</span>
+          <span class="meta-tag">📦 Módulo: Configuración</span>
+          <span class="meta-tag">🔗 RF5.2</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══ MÓDULO 6: REPORTES ═══ -->
+  <div class="section page-break" id="modulo6">
+    <div class="section-header">
+      <div class="section-icon">📊</div>
+      <div>
+        <div class="section-title">7. Módulo 6 — Reportes de Cumplimiento</div>
+        <div class="section-subtitle">2 historias de usuario · Rol: Administrador</div>
+      </div>
+    </div>
+
+    <!-- HU-27 -->
+    <div class="story-card rep" id="hu27">
+      <div class="story-header">
+        <span class="story-id">HU-27</span>
+        <span class="story-title">Generar reporte de cumplimiento docente</span>
+        <span class="story-role-badge">🛡️ Administrador</span>
+      </div>
+      <div class="story-body">
+        <div class="story-narrative red">
+          <strong>Como</strong> administrador, <strong>quiero</strong> generar reportes de cumplimiento de entrega de documentos por docente y bimestre, <strong>para</strong> identificar qué profesores han cumplido con sus obligaciones académicas y cuáles tienen documentos pendientes.
+        </div>
+        <div class="criteria-title">✅ Criterios de Aceptación</div>
+        <ul class="criteria-list">
+          <li>El reporte puede generarse filtrando por año lectivo y bimestre (I, II, III, IV o Todos).</li>
+          <li>Por cada docente activo se muestra: total de asignaciones, completadas, pendientes y % de cumplimiento.</li>
+          <li>Si se selecciona "Todos los Bimestres", el reporte desglosa el cumplimiento por cada uno de los 4 bimestres.</li>
+          <li>El porcentaje global de cumplimiento institucional se muestra como indicador principal.</li>
+          <li>Los docentes sin asignaciones activas muestran cumplimiento del 100%.</li>
+          <li>Si no se hace clic en "Generar", el reporte aparece vacío (no muestra datos por defecto).</li>
+        </ul>
+        <div class="story-meta">
+          <span class="meta-tag priority-alta">🔴 Prioridad Alta</span>
+          <span class="meta-tag">📦 Módulo: Reportes</span>
+          <span class="meta-tag">🔗 RF6.1, RF6.2</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- HU-28 -->
+    <div class="story-card rep" id="hu28">
+      <div class="story-header">
+        <span class="story-id">HU-28</span>
+        <span class="story-title">Exportar el reporte en CSV y Word</span>
+        <span class="story-role-badge">🛡️ Administrador</span>
+      </div>
+      <div class="story-body">
+        <div class="story-narrative red">
+          <strong>Como</strong> administrador, <strong>quiero</strong> exportar el reporte de cumplimiento en formato CSV o Word, <strong>para</strong> compartirlo con directivos, archivarlo o importarlo en otras herramientas de análisis.
+        </div>
+        <div class="criteria-title">✅ Criterios de Aceptación</div>
+        <ul class="criteria-list">
+          <li>El botón "Exportar CSV" descarga un archivo <code>.csv</code> con codificación UTF-8 BOM (compatible con Excel).</li>
+          <li>El botón "Exportar Word" descarga un archivo <code>.doc</code> con el reporte formateado.</li>
+          <li>Ambos archivos incluyen: cabecera institucional, nombre del reporte, resumen global y tabla por docente.</li>
+          <li>El Word incluye estilos visuales (colores, tipografía) y secciones separadas por bimestre si aplica.</li>
+          <li>Los archivos exportados se generan por <em>streaming</em>, sin cargar todos los datos en memoria del servidor.</li>
+          <li>El nombre del archivo exportado incluye el año y bimestre seleccionado (Ej: <code>Reporte_2026_Bimestre_1.csv</code>).</li>
+        </ul>
+        <div class="story-meta">
+          <span class="meta-tag priority-media">🟡 Prioridad Media</span>
+          <span class="meta-tag">📦 Módulo: Reportes</span>
+          <span class="meta-tag">🔗 RF6.3, RF6.4, RNF6.1, RNF6.3</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══ RESUMEN ═══ -->
+  <div class="section page-break" id="resumen">
+    <div class="section-header">
+      <div class="section-icon">📋</div>
+      <div>
+        <div class="section-title">8. Tabla Resumen de Historias</div>
+        <div class="section-subtitle">Visión consolidada de las 28 historias de usuario</div>
+      </div>
+    </div>
+
+    <table class="summary-table">
+      <thead><tr><th>ID</th><th>Historia de Usuario</th><th>Rol</th><th>Módulo</th><th>Prioridad</th></tr></thead>
+      <tbody>
+        <tr><td><strong>HU-01</strong></td><td>Iniciar sesión en el sistema</td><td>Admin/Docente</td><td>Autenticación</td><td>🔴 Alta</td></tr>
+        <tr><td><strong>HU-02</strong></td><td>Cerrar sesión</td><td>Admin/Docente</td><td>Autenticación</td><td>🔴 Alta</td></tr>
+        <tr><td><strong>HU-03</strong></td><td>Actualizar perfil de usuario</td><td>Admin/Docente</td><td>Autenticación</td><td>🟡 Media</td></tr>
+        <tr><td><strong>HU-04</strong></td><td>Cambiar contraseña de acceso</td><td>Admin/Docente</td><td>Autenticación</td><td>🔴 Alta</td></tr>
+        <tr><td><strong>HU-05</strong></td><td>Bloquear acceso a usuarios inactivos</td><td>Administrador</td><td>Autenticación</td><td>🔴 Alta</td></tr>
+        <tr><td><strong>HU-06</strong></td><td>Gestionar Niveles Educativos</td><td>Administrador</td><td>Estructura Académica</td><td>🔴 Alta</td></tr>
+        <tr><td><strong>HU-07</strong></td><td>Gestionar Grados</td><td>Administrador</td><td>Estructura Académica</td><td>🔴 Alta</td></tr>
+        <tr><td><strong>HU-08</strong></td><td>Gestionar Secciones</td><td>Administrador</td><td>Estructura Académica</td><td>🔴 Alta</td></tr>
+        <tr><td><strong>HU-09</strong></td><td>Gestionar Cursos / Materias</td><td>Administrador</td><td>Estructura Académica</td><td>🔴 Alta</td></tr>
+        <tr><td><strong>HU-10</strong></td><td>Gestionar Años Lectivos</td><td>Administrador</td><td>Estructura Académica</td><td>🔴 Alta</td></tr>
+        <tr><td><strong>HU-11</strong></td><td>Ver el Mapa Académico institucional</td><td>Administrador</td><td>Estructura Académica</td><td>🟡 Media</td></tr>
+        <tr><td><strong>HU-12</strong></td><td>Registrar un nuevo docente</td><td>Administrador</td><td>Docentes</td><td>🔴 Alta</td></tr>
+        <tr><td><strong>HU-13</strong></td><td>Activar / Desactivar un docente</td><td>Administrador</td><td>Docentes</td><td>🔴 Alta</td></tr>
+        <tr><td><strong>HU-14</strong></td><td>Asignar cursos y aulas a un docente</td><td>Administrador</td><td>Docentes</td><td>🔴 Alta</td></tr>
+        <tr><td><strong>HU-15</strong></td><td>Editar datos y asignaciones del docente</td><td>Administrador</td><td>Docentes</td><td>🟡 Media</td></tr>
+        <tr><td><strong>HU-16</strong></td><td>Subir archivo al portafolio</td><td>Docente</td><td>Portafolio</td><td>🔴 Alta</td></tr>
+        <tr><td><strong>HU-17</strong></td><td>Buscar y filtrar mis archivos</td><td>Docente</td><td>Portafolio</td><td>🔴 Alta</td></tr>
+        <tr><td><strong>HU-18</strong></td><td>Descargar mis archivos</td><td>Docente</td><td>Portafolio</td><td>🔴 Alta</td></tr>
+        <tr><td><strong>HU-19</strong></td><td>Previsualizar archivo en el navegador</td><td>Docente/Admin</td><td>Portafolio</td><td>🟡 Media</td></tr>
+        <tr><td><strong>HU-20</strong></td><td>Mover archivos a la papelera</td><td>Docente</td><td>Portafolio</td><td>🟡 Media</td></tr>
+        <tr><td><strong>HU-21</strong></td><td>Restaurar archivos de la papelera</td><td>Docente</td><td>Portafolio</td><td>🟡 Media</td></tr>
+        <tr><td><strong>HU-22</strong></td><td>Eliminar archivos definitivamente</td><td>Docente</td><td>Portafolio</td><td>🟢 Baja</td></tr>
+        <tr><td><strong>HU-23</strong></td><td>Supervisar archivos de todos los docentes</td><td>Administrador</td><td>Portafolio</td><td>🔴 Alta</td></tr>
+        <tr><td><strong>HU-24</strong></td><td>Gestionar la papelera administrativa</td><td>Administrador</td><td>Portafolio</td><td>🟡 Media</td></tr>
+        <tr><td><strong>HU-25</strong></td><td>Editar los datos de la institución</td><td>Administrador</td><td>Configuración</td><td>🟢 Baja</td></tr>
+        <tr><td><strong>HU-26</strong></td><td>Actualizar el logo institucional</td><td>Administrador</td><td>Configuración</td><td>🟢 Baja</td></tr>
+        <tr><td><strong>HU-27</strong></td><td>Generar reporte de cumplimiento docente</td><td>Administrador</td><td>Reportes</td><td>🔴 Alta</td></tr>
+        <tr><td><strong>HU-28</strong></td><td>Exportar el reporte en CSV y Word</td><td>Administrador</td><td>Reportes</td><td>🟡 Media</td></tr>
+      </tbody>
+    </table>
+
+    <table>
+      <thead><tr><th>Prioridad</th><th>Cantidad</th><th>Porcentaje</th></tr></thead>
+      <tbody>
+        <tr><td>🔴 Alta</td><td>16 historias</td><td>57%</td></tr>
+        <tr><td>🟡 Media</td><td>8 historias</td><td>29%</td></tr>
+        <tr><td>🟢 Baja</td><td>4 historias</td><td>14%</td></tr>
+        <tr style="background:#0f172a;color:#fff"><td><strong style="color:#fff">TOTAL</strong></td><td><strong style="color:#fff">28 historias</strong></td><td><strong style="color:#fff">100%</strong></td></tr>
+      </tbody>
+    </table>
+
+    <div class="alert green">
+      <span class="alert-icon">✅</span>
+      <div><strong>Cobertura completa:</strong> Las 28 historias de usuario cubren la totalidad de los 52 requerimientos funcionales y no funcionales identificados en el sistema, con más de 100 criterios de aceptación verificables distribuidos en 6 módulos.</div>
+    </div>
+  </div>
+
+  <div class="doc-footer">
+    <p><strong>Historias de Usuario — Sistema de Gestión Académica y Portafolio Docente</strong></p>
+    <p>I.E.P. Esther Carson · Desarrollado en PHP / Laravel · Junio 2026</p>
+  </div>
+
+</div>
+</body>
+</html>

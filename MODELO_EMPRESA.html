@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Modelo de Datos de la Empresa</title>
+    <script type="module">
+      import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
+      mermaid.initialize({ startOnLoad: true, theme: 'default' });
+    </script>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 40px; text-align: center; background-color: white;}
+        h3 { color: #1f3864; font-size: 22px; margin-bottom: 20px;}
+        p { text-align: justify; margin-bottom: 40px; color: #333; line-height: 1.5; font-size: 15px;}
+        .mermaid { display: flex; justify-content: center; margin-bottom: 50px;}
+    </style>
+</head>
+<body>
+
+    <h3>3.2.7.3 Modelo de datos de la empresa</h3>
+    <p>Este modelo representa la perspectiva conceptual y lógica del negocio de la Institución Educativa. Se enfoca en las entidades principales y cómo interactúan entre sí dentro de los procesos de gestión escolar, haciendo abstracción de la tecnología de base de datos subyacente.</p>
+    
+    <div class="mermaid">
+        classDiagram
+            %% Relaciones Conceptuales
+            Personal_Docente "1" -- "*" Carga_Academica : Tiene asignada
+            Carga_Academica "*" -- "1" Estructura_Curricular : Corresponde a
+            Personal_Docente "1" -- "*" Evidencia_Digital : Sube / Gestiona
+            Evidencia_Digital "*" -- "1" Carga_Academica : Clasifica en
+            Año_Escolar "1" -- "*" Carga_Academica : Enmarca el periodo
+
+            %% Entidades de Negocio
+            class Personal_Docente {
+                &lt;&lt;Entidad&gt;&gt;
+                Información Personal
+                Rol en la Institución
+                Credenciales de Acceso
+            }
+
+            class Estructura_Curricular {
+                &lt;&lt;Entidad&gt;&gt;
+                Nivel Educativo
+                Grado Escolar
+                Sección
+                Asignatura (Curso)
+            }
+
+            class Carga_Academica {
+                &lt;&lt;Asociación / Proceso&gt;&gt;
+                Distribución de carga
+                Responsabilidad docente
+            }
+
+            class Evidencia_Digital {
+                &lt;&lt;Entidad&gt;&gt;
+                Documento Digital (PDF)
+                Bimestre de Evaluación
+            }
+
+            class Año_Escolar {
+                &lt;&lt;Entidad&gt;&gt;
+                Periodo Lectivo
+                Estado (Activo / Inactivo)
+            }
+    </div>
+
+</body>
+</html>

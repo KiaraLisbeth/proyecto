@@ -27,16 +27,18 @@ class LoginController extends Controller
         return view('auth.login');
     }
 
-    /**
-     * Procesa el intento de inicio de sesión.
-     */
     public function login(Request $request)
     {
         // Validar los datos del formulario
-        $credentials = $request->validate([
-            'email'    => ['required', 'email'],
+        $request->validate([
+            'username' => ['required', 'string'],
             'password' => ['required'],
         ]);
+
+        $credentials = [
+            'username' => $request->username,
+            'password' => $request->password,
+        ];
 
         // Intentar autenticar al usuario con las credenciales
         if (Auth::attempt($credentials, $request->boolean('remember'))) {
@@ -50,7 +52,7 @@ class LoginController extends Controller
                 $request->session()->regenerateToken();
 
                 throw ValidationException::withMessages([
-                    'email' => 'Tu cuenta ha sido desactivada. Contacta al administrador.',
+                    'username' => 'Tu cuenta ha sido desactivada. Contacta al administrador.',
                 ]);
             }
 
@@ -63,7 +65,7 @@ class LoginController extends Controller
 
         // Si las credenciales son incorrectas
         throw ValidationException::withMessages([
-            'email' => 'Las credenciales proporcionadas no son correctas.',
+            'username' => 'Las credenciales proporcionadas no son correctas.',
         ]);
     }
 
