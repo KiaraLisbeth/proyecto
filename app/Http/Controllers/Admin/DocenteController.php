@@ -146,9 +146,6 @@ class DocenteController extends Controller
     public function update(UpdateDocenteRequest $request, User $docente)
     {
         $datos = [
-            'nombre'   => $request->nombre,
-            'apellido' => $request->apellido,
-            'dni'      => $request->dni,
             'username' => $request->username,
             'email'    => $request->username . '@docente.local',
         ];

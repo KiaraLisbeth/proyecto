@@ -34,66 +34,28 @@
         </div>
         <div class="card-body space-y-4">
 
-            {{-- DNI — primero, con verificación de duplicado --}}
+            {{-- DNI — solo lectura --}}
             <div class="form-group mb-0">
-                <label class="form-label" for="dni">DNI *</label>
-                <div class="relative">
-                    <input
-                        id="dni"
-                        type="text"
-                        name="dni"
-                        value="{{ old('dni', $docente->dni) }}"
-                        class="input pr-10 tracking-widest font-mono {{ $errors->has('dni') ? 'input-error' : '' }}"
-                        placeholder="12345678"
-                        maxlength="8"
-                        inputmode="numeric"
-                        autocomplete="off"
-                        required>
-                    {{-- Spinner --}}
-                    <div id="dniSpinner" class="absolute inset-y-0 right-3 flex items-center hidden pointer-events-none">
-                        <svg class="animate-spin w-4 h-4 text-blue-500" fill="none" viewBox="0 0 24 24">
-                            <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-                            <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"></path>
-                        </svg>
-                    </div>
-                    {{-- Check --}}
-                    <div id="dniCheck" class="absolute inset-y-0 right-3 flex items-center {{ $docente->dni ? '' : 'hidden' }} pointer-events-none">
-                        <svg class="w-4 h-4 text-emerald-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"/>
-                        </svg>
-                    </div>
-                    {{-- Error X --}}
-                    <div id="dniError" class="absolute inset-y-0 right-3 flex items-center hidden pointer-events-none">
-                        <svg class="w-4 h-4 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M6 18L18 6M6 6l12 12"/>
-                        </svg>
-                    </div>
+                <label class="form-label">DNI</label>
+                <div class="input bg-slate-100 dark:bg-slate-800/60 text-slate-500 dark:text-slate-400 cursor-not-allowed select-none tracking-widest font-mono">
+                    {{ $docente->dni }}
                 </div>
-                @error('dni')
-                    <p class="error-msg">⚠ {{ $message }}</p>
-                @else
-                    <div id="dniMsg" class="hidden mt-1.5 text-xs px-3 py-2 rounded-lg"></div>
-                @enderror
             </div>
 
-            {{-- Nombre --}}
+            {{-- Nombre — solo lectura --}}
             <div class="form-group mb-0">
-                <label class="form-label" for="nombre">Nombre *</label>
-                <input id="nombre" type="text" name="nombre"
-                       value="{{ old('nombre', $docente->nombre) }}"
-                       class="input {{ $errors->has('nombre') ? 'input-error' : '' }}"
-                       placeholder="Ej: María Elena" required>
-                @error('nombre') <p class="error-msg">⚠ {{ $message }}</p> @enderror
+                <label class="form-label">Nombre</label>
+                <div class="input bg-slate-100 dark:bg-slate-800/60 text-slate-500 dark:text-slate-400 cursor-not-allowed select-none">
+                    {{ $docente->nombre }}
+                </div>
             </div>
 
-            {{-- Apellido --}}
+            {{-- Apellido — solo lectura --}}
             <div class="form-group mb-0">
-                <label class="form-label" for="apellido">Apellido *</label>
-                <input id="apellido" type="text" name="apellido"
-                       value="{{ old('apellido', $docente->apellido) }}"
-                       class="input {{ $errors->has('apellido') ? 'input-error' : '' }}"
-                       placeholder="Ej: García Quispe" required>
-                @error('apellido') <p class="error-msg">⚠ {{ $message }}</p> @enderror
+                <label class="form-label">Apellido</label>
+                <div class="input bg-slate-100 dark:bg-slate-800/60 text-slate-500 dark:text-slate-400 cursor-not-allowed select-none">
+                    {{ $docente->apellido }}
+                </div>
             </div>
 
             {{-- Usuario --}}
@@ -269,72 +231,7 @@ document.getElementById('username').addEventListener('input', function () {
     this.setSelectionRange(pos, pos);
 });
 
-// ─── Verificación de DNI duplicado (ignora el propio docente) ───────────────
-const dniInput   = document.getElementById('dni');
-const spinner    = document.getElementById('dniSpinner');
-const checkIcon  = document.getElementById('dniCheck');
-const errorIcon  = document.getElementById('dniError');
-const dniMsg     = document.getElementById('dniMsg');
-const DNI_URL    = "{{ route('admin.docentes.buscarDni') }}";
-const DNI_ACTUAL = "{{ $docente->dni }}";  // DNI propio — no disparar aviso
-let dniTimer = null;
-
-function resetDniIcons() {
-    spinner.classList.add('hidden');
-    checkIcon.classList.add('hidden');
-    errorIcon.classList.add('hidden');
-    if (dniMsg) {
-        dniMsg.classList.add('hidden');
-        dniMsg.className = 'hidden mt-1.5 text-xs px-3 py-2 rounded-lg';
-        dniMsg.innerHTML = '';
-    }
-    dniInput.classList.remove('input-error');
-}
-
-async function verificarDni(dni) {
-    // Si el DNI no cambió respecto al actual, no verificar
-    if (dni === DNI_ACTUAL) {
-        checkIcon.classList.remove('hidden');
-        return;
-    }
-
-    resetDniIcons();
-    spinner.classList.remove('hidden');
-
-    try {
-        const res  = await fetch(`${DNI_URL}?dni=${encodeURIComponent(dni)}`, {
-            headers: { 'Accept': 'application/json' }
-        });
-        const data = await res.json();
-        spinner.classList.add('hidden');
-
-        if (res.status === 409) {
-            dniInput.classList.add('input-error');
-            errorIcon.classList.remove('hidden');
-            if (dniMsg) {
-                dniMsg.className = 'mt-1.5 text-xs px-3 py-2 rounded-lg bg-red-50 text-red-700 dark:bg-red-500/10 dark:text-red-400 border border-red-200 dark:border-red-500/30';
-                dniMsg.innerHTML = `⚠ ${data.mensaje}`;
-            }
-        } else if (res.ok) {
-            checkIcon.classList.remove('hidden');
-            if (dniMsg) {
-                dniMsg.className = 'mt-1.5 text-xs px-3 py-2 rounded-lg bg-emerald-50 text-emerald-700 dark:bg-emerald-500/10 dark:text-emerald-400 border border-emerald-200 dark:border-emerald-500/30';
-                dniMsg.innerHTML = '✓ DNI disponible.';
-            }
-        }
-    } catch (e) {
-        spinner.classList.add('hidden');
-    }
-}
-
-dniInput.addEventListener('input', function () {
-    this.value = this.value.replace(/\D/g, '').slice(0, 8);
-    resetDniIcons();
-    clearTimeout(dniTimer);
-    if (this.value.length === 8) {
-        dniTimer = setTimeout(() => verificarDni(this.value), 400);
-    }
-});
+// DNI, nombre y apellido son de solo lectura — no hay lógica de verificación de DNI en edición.
 
 // ─── Tabla de asignaciones ───────────────────────────────────────────────────
 const CURSOS = {!! json_encode($cursos->map(fn($c) => ['id' => $c->id, 'nombre' => $c->nombre])) !!};
