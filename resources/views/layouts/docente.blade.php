@@ -157,7 +157,16 @@
                             <span>{{ session('error') }}</span>
                         </div>
                     @endif
-                    @if($errors->any())
+                    @php
+                        // Errores que NO son el de archivo duplicado (esos van solo debajo del input)
+                        $erroresGlobales = collect($errors->toArray())->flatMap(function($msgs, $field) {
+                            if ($field === 'archivo') {
+                                return collect($msgs)->filter(fn($m) => !str_contains($m, 'Ya existe un archivo'))->values();
+                            }
+                            return collect($msgs);
+                        })->values();
+                    @endphp
+                    @if($erroresGlobales->isNotEmpty())
                         <div class="alert alert-error mb-3" id="flashMsg">
                             <svg class="w-4 h-4 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
                                 <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd"/>
@@ -165,7 +174,7 @@
                             <div>
                                 <span class="font-bold block">Por favor corrige los siguientes errores:</span>
                                 <ul class="list-disc list-inside text-xs mt-1 space-y-0.5">
-                                    @foreach($errors->all() as $error)
+                                    @foreach($erroresGlobales as $error)
                                         <li>{{ $error }}</li>
                                     @endforeach
                                 </ul>

@@ -1,0 +1,760 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title>Interfaces del Sistema – I.E.P Esther Carson</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
+
+  :root {
+    --blue:    #1d4ed8;
+    --blue-dk: #1e3a5f;
+    --slate:   #475569;
+    --light:   #f8fafc;
+    --border:  #e2e8f0;
+    --text:    #1e293b;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'Inter', 'Segoe UI', Arial, sans-serif;
+    background: #fff;
+    color: var(--text);
+    font-size: 10.5pt;
+    line-height: 1.65;
+  }
+
+  /* ──────── PORTADA ──────── */
+  .cover {
+    width: 100%;
+    min-height: 100vh;
+    background: linear-gradient(160deg, #0f2957 0%, #1d4ed8 55%, #4338ca 100%);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    padding: 80px 60px;
+    page-break-after: always;
+    color: #fff;
+  }
+  .cover-shield {
+    font-size: 72px;
+    margin-bottom: 24px;
+    filter: drop-shadow(0 4px 16px rgba(0,0,0,.3));
+  }
+  .cover h1 {
+    font-size: 32pt;
+    font-weight: 900;
+    letter-spacing: -1px;
+    line-height: 1.15;
+    margin-bottom: 10px;
+  }
+  .cover .inst {
+    font-size: 13pt;
+    font-weight: 500;
+    opacity: .8;
+    margin-bottom: 32px;
+    letter-spacing: .4px;
+  }
+  .cover-box {
+    background: rgba(255,255,255,.12);
+    border: 1px solid rgba(255,255,255,.25);
+    border-radius: 16px;
+    padding: 22px 40px;
+    max-width: 560px;
+    font-size: 11pt;
+    line-height: 1.7;
+    opacity: .92;
+  }
+  .cover-meta {
+    margin-top: 44px;
+    display: flex;
+    gap: 36px;
+    justify-content: center;
+    font-size: 9.5pt;
+    opacity: .65;
+    flex-wrap: wrap;
+  }
+
+  /* ──────── ÍNDICE ──────── */
+  .toc {
+    padding: 60px 70px;
+    page-break-after: always;
+  }
+  .toc-title {
+    font-size: 20pt;
+    font-weight: 900;
+    color: var(--blue);
+    margin-bottom: 28px;
+    padding-bottom: 12px;
+    border-bottom: 3px solid var(--blue);
+  }
+  .toc-group-label {
+    font-size: 8.5pt;
+    font-weight: 700;
+    color: #94a3b8;
+    text-transform: uppercase;
+    letter-spacing: 1.2px;
+    margin: 22px 0 8px;
+  }
+  .toc-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 9px 12px;
+    border-radius: 8px;
+    margin-bottom: 4px;
+    transition: background .15s;
+  }
+  .toc-row:nth-child(even) { background: #f8fafc; }
+  .toc-n {
+    width: 28px; height: 28px;
+    border-radius: 7px;
+    background: var(--blue);
+    color: #fff;
+    font-size: 8.5pt;
+    font-weight: 800;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+  }
+  .toc-name { flex: 1; font-weight: 600; font-size: 10pt; }
+  .toc-badge {
+    font-size: 8pt;
+    font-weight: 700;
+    padding: 3px 10px;
+    border-radius: 20px;
+  }
+  .badge-admin   { background: #dbeafe; color: #1d4ed8; }
+  .badge-docente { background: #d1fae5; color: #065f46; }
+  .badge-all     { background: #f3e8ff; color: #6b21a8; }
+
+  /* ──────── SECCIÓN DE INTERFAZ ──────── */
+  .iface {
+    padding: 52px 70px 40px;
+    page-break-before: always;
+  }
+
+  /* Encabezado */
+  .iface-header {
+    display: flex;
+    align-items: flex-start;
+    gap: 18px;
+    margin-bottom: 22px;
+    padding-bottom: 18px;
+    border-bottom: 2px solid var(--border);
+  }
+  .iface-num {
+    width: 50px; height: 50px;
+    border-radius: 14px;
+    background: linear-gradient(135deg, var(--blue), #4338ca);
+    color: #fff;
+    font-size: 17pt;
+    font-weight: 900;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+    box-shadow: 0 4px 14px rgba(29,78,216,.3);
+  }
+  .iface-meta { flex: 1; }
+  .iface-meta h2 {
+    font-size: 18pt;
+    font-weight: 900;
+    color: #0f172a;
+    margin-bottom: 6px;
+    line-height: 1.2;
+  }
+  .iface-chips {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+  }
+  .chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    padding: 4px 12px;
+    border-radius: 20px;
+    font-size: 8.5pt;
+    font-weight: 700;
+  }
+  .chip-route { background: #f0fdf4; color: #15803d; border: 1px solid #bbf7d0; font-family: monospace; font-size: 8pt; }
+  .chip-admin   { background: #dbeafe; color: #1d4ed8; border: 1px solid #bfdbfe; }
+  .chip-docente { background: #d1fae5; color: #065f46; border: 1px solid #a7f3d0; }
+  .chip-all     { background: #f3e8ff; color: #6b21a8; border: 1px solid #e9d5ff; }
+
+  /* Descripción principal */
+  .iface-desc {
+    font-size: 10.5pt;
+    line-height: 1.78;
+    color: #334155;
+    text-align: justify;
+    margin-bottom: 22px;
+    hyphens: auto;
+  }
+
+  /* Imagen */
+  .iface-img {
+    width: 100%;
+    border-radius: 12px;
+    border: 1px solid var(--border);
+    box-shadow: 0 4px 20px rgba(0,0,0,.08);
+    display: block;
+    margin-bottom: 20px;
+  }
+  .img-placeholder {
+    width: 100%;
+    height: 180px;
+    background: linear-gradient(135deg, #f1f5f9, #e2e8f0);
+    border-radius: 12px;
+    border: 1px solid var(--border);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    color: #94a3b8;
+    font-size: 10pt;
+    margin-bottom: 20px;
+  }
+  .img-placeholder span { font-size: 32px; margin-bottom: 8px; }
+
+  /* Funciones clave */
+  .funcs-title {
+    font-size: 9pt;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: var(--blue);
+    margin-bottom: 10px;
+  }
+  .funcs-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 8px;
+  }
+  .func-item {
+    background: #f8fafc;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 10px 13px;
+    font-size: 9pt;
+    color: #475569;
+    display: flex;
+    gap: 8px;
+    align-items: flex-start;
+  }
+  .func-item .fi-icon { font-size: 14px; flex-shrink: 0; margin-top: 1px; }
+  .func-item .fi-text { line-height: 1.5; }
+  .func-item .fi-text strong { display: block; font-weight: 700; color: #1e293b; font-size: 9pt; margin-bottom: 1px; }
+
+  /* ──────── PRINT ──────── */
+  @media print {
+    body { background: #fff; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+    .cover { page-break-after: always; min-height: 297mm; }
+    .toc   { page-break-after: always; }
+    .iface { page-break-before: always; page-break-inside: avoid; }
+    .no-break { page-break-inside: avoid; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ════════════════════════  PORTADA  ════════════════════════ -->
+<div class="cover">
+  <div class="cover-shield">🏫</div>
+  <h1>Descripción de Interfaces<br>del Sistema</h1>
+  <p class="inst">I.E.P. Esther Carson — Sistema de Gestión de Aprendizaje</p>
+  <div class="cover-box">
+    Este documento describe de forma clara y detallada cada una de las
+    <strong>16 interfaces</strong> que conforman el sistema, indicando su
+    función, los elementos que la componen y el rol de usuario que tiene acceso a ella.
+  </div>
+  <div class="cover-meta">
+    <span>📅 Junio 2026</span>
+    <span>⚙️ Laravel · PHP</span>
+    <span>👥 2 Roles: Administrador / Docente</span>
+    <span>📄 16 Interfaces documentadas</span>
+  </div>
+</div>
+
+<!-- ════════════════════════  ÍNDICE  ════════════════════════ -->
+<div class="toc">
+  <div class="toc-title">📋 Tabla de Contenidos</div>
+
+  <div class="toc-group-label">Acceso General</div>
+  <div class="toc-row"><div class="toc-n">1</div><div class="toc-name">Inicio de Sesión (Login)</div><span class="toc-badge badge-all">Todos</span></div>
+
+  <div class="toc-group-label">Panel del Administrador</div>
+  <div class="toc-row"><div class="toc-n">2</div><div class="toc-name">Dashboard del Administrador</div><span class="toc-badge badge-admin">Admin</span></div>
+  <div class="toc-row"><div class="toc-n">3</div><div class="toc-name">Listado de Docentes</div><span class="toc-badge badge-admin">Admin</span></div>
+  <div class="toc-row"><div class="toc-n">4</div><div class="toc-name">Crear Nuevo Docente</div><span class="toc-badge badge-admin">Admin</span></div>
+  <div class="toc-row"><div class="toc-n">5</div><div class="toc-name">Detalle del Docente</div><span class="toc-badge badge-admin">Admin</span></div>
+  <div class="toc-row"><div class="toc-n">6</div><div class="toc-name">Editar Docente</div><span class="toc-badge badge-admin">Admin</span></div>
+  <div class="toc-row"><div class="toc-n">7</div><div class="toc-name">Documentos del Sistema</div><span class="toc-badge badge-admin">Admin</span></div>
+  <div class="toc-row"><div class="toc-n">8</div><div class="toc-name">Papelera de Documentos (Admin)</div><span class="toc-badge badge-admin">Admin</span></div>
+  <div class="toc-row"><div class="toc-n">9</div><div class="toc-name">Gestión de Secciones</div><span class="toc-badge badge-admin">Admin</span></div>
+  <div class="toc-row"><div class="toc-n">10</div><div class="toc-name">Años Lectivos</div><span class="toc-badge badge-admin">Admin</span></div>
+  <div class="toc-row"><div class="toc-n">11</div><div class="toc-name">Reportes de Cumplimiento</div><span class="toc-badge badge-admin">Admin</span></div>
+  <div class="toc-row"><div class="toc-n">12</div><div class="toc-name">Configuración del Sistema</div><span class="toc-badge badge-admin">Admin</span></div>
+
+  <div class="toc-group-label">Portal del Docente</div>
+  <div class="toc-row"><div class="toc-n">13</div><div class="toc-name">Dashboard del Docente</div><span class="toc-badge badge-docente">Docente</span></div>
+  <div class="toc-row"><div class="toc-n">14</div><div class="toc-name">Mis Documentos</div><span class="toc-badge badge-docente">Docente</span></div>
+  <div class="toc-row"><div class="toc-n">15</div><div class="toc-name">Subir Archivo</div><span class="toc-badge badge-docente">Docente</span></div>
+  <div class="toc-row"><div class="toc-n">16</div><div class="toc-name">Papelera de Documentos (Docente)</div><span class="toc-badge badge-docente">Docente</span></div>
+</div>
+
+
+<!-- ════════════════  1 · LOGIN  ════════════════ -->
+<div class="iface">
+  <div class="iface-header">
+    <div class="iface-num">1</div>
+    <div class="iface-meta">
+      <h2>Inicio de Sesión (Login)</h2>
+      <div class="iface-chips">
+        <span class="chip chip-route">🌐 /login</span>
+        <span class="chip chip-all">👥 Todos los usuarios</span>
+      </div>
+    </div>
+  </div>
+
+  <p class="iface-desc">
+    La interfaz de inicio de sesión es la puerta de entrada al Sistema de Gestión de Aprendizaje de la I.E.P. Esther Carson. Presenta un diseño visual moderno con fondo azul claro y efectos decorativos de círculos difuminados. En el centro de la pantalla se muestra una tarjeta de color azul oscuro con bordes redondeados que contiene el logo de la institución con una animación de pulsación suave, el nombre del colegio y el subtítulo del sistema. Debajo se encuentran los campos de autenticación: el campo <strong>Usuario</strong>, que acepta el nombre de usuario asignado (por ejemplo "ADMIN" o "KNAMUCHEFL"), y el campo <strong>Contraseña</strong>, que incluye un botón de ojo para mostrar u ocultar los caracteres ingresados. Existe también una casilla de verificación "Mantener sesión iniciada" para que el usuario no tenga que volver a autenticarse en próximas visitas. El botón <strong>Iniciar Sesión</strong> cambia a "Verificando..." y se deshabilita al hacer clic, evitando envíos duplicados. Si las credenciales son incorrectas, aparece un mensaje de error en rojo sobre el formulario. Al pie de la tarjeta se muestra un aviso: "El acceso es solo por invitación del administrador", dejando en claro que no existe registro público. El sistema redirige al administrador al panel de administración y al docente al portal del docente según el tipo de cuenta.
+  </p>
+
+  <div class="funcs-title">✦ Funciones principales</div>
+  <div class="funcs-grid no-break">
+    <div class="func-item"><div class="fi-icon">🔐</div><div class="fi-text"><strong>Autenticación segura</strong>Validación de usuario y contraseña contra la base de datos del sistema.</div></div>
+    <div class="func-item"><div class="fi-icon">👁️</div><div class="fi-text"><strong>Mostrar / ocultar contraseña</strong>Botón de toggle para ver la contraseña mientras se escribe.</div></div>
+    <div class="func-item"><div class="fi-icon">💾</div><div class="fi-text"><strong>Recordar sesión</strong>Checkbox para mantener la sesión activa entre visitas al sistema.</div></div>
+    <div class="func-item"><div class="fi-icon">⚠️</div><div class="fi-text"><strong>Mensajes de error</strong>Alerta visual roja que indica credenciales incorrectas o campos vacíos.</div></div>
+  </div>
+</div>
+
+
+<!-- ════════════════  2 · DASHBOARD ADMIN  ════════════════ -->
+<div class="iface">
+  <div class="iface-header">
+    <div class="iface-num">2</div>
+    <div class="iface-meta">
+      <h2>Dashboard del Administrador</h2>
+      <div class="iface-chips">
+        <span class="chip chip-route">🌐 /admin/dashboard</span>
+        <span class="chip chip-admin">🔑 Administrador</span>
+      </div>
+    </div>
+  </div>
+
+  <p class="iface-desc">
+    El Dashboard del Administrador es la pantalla principal del panel de control. Ofrece una vista rápida y completa del estado general del sistema mediante tarjetas de indicadores clave (KPIs), gráficos estadísticos interactivos y un resumen de la actividad más reciente. En la parte superior se muestran tres tarjetas con los datos más importantes: el número de <strong>Docentes Activos</strong> registrados en el sistema, el <strong>Total de Archivos</strong> subidos en todos los bimestres, y el <strong>Promedio de archivos por docente</strong>. A continuación se presenta un gráfico de barras con la distribución de documentos por bimestre (I, II, III, IV) con colores diferenciados, y un gráfico de dona que muestra la distribución de archivos por nivel educativo (Inicial, Primaria, Secundaria). En la parte inferior izquierda se encuentra el <strong>Feed de Actividad Reciente</strong>, una lista con scroll de los últimos documentos subidos que indica la fecha, nombre del archivo, docente responsable, grado, curso, tipo de extensión y bimestre al que pertenece. A la derecha se ubican dos paneles complementarios: el <strong>Ranking de Top Docentes</strong> por cantidad de archivos subidos (con barra de progreso visual y medalla dorada para el primero), y la distribución de archivos <strong>Por Tipo</strong> (PDF, Word, Excel, PowerPoint, Otro) con su porcentaje del total. Esta interfaz permite al administrador tener una visión global e inmediata del avance académico del colegio.
+  </p>
+
+  <div class="funcs-title">✦ Funciones principales</div>
+  <div class="funcs-grid no-break">
+    <div class="func-item"><div class="fi-icon">📊</div><div class="fi-text"><strong>KPIs del sistema</strong>Docentes activos, total de archivos y promedio por docente en tiempo real.</div></div>
+    <div class="func-item"><div class="fi-icon">📈</div><div class="fi-text"><strong>Gráficos interactivos</strong>Barras por bimestre y dona por nivel educativo usando Chart.js.</div></div>
+    <div class="func-item"><div class="fi-icon">🕐</div><div class="fi-text"><strong>Actividad reciente</strong>Feed de últimos archivos subidos con metadatos completos.</div></div>
+    <div class="func-item"><div class="fi-icon">🏆</div><div class="fi-text"><strong>Ranking de docentes</strong>Top docentes ordenados por cantidad de documentos subidos.</div></div>
+  </div>
+</div>
+
+
+<!-- ════════════════  3 · LISTADO DOCENTES  ════════════════ -->
+<div class="iface">
+  <div class="iface-header">
+    <div class="iface-num">3</div>
+    <div class="iface-meta">
+      <h2>Listado de Docentes</h2>
+      <div class="iface-chips">
+        <span class="chip chip-route">🌐 /admin/docentes</span>
+        <span class="chip chip-admin">🔑 Administrador</span>
+      </div>
+    </div>
+  </div>
+
+  <p class="iface-desc">
+    La interfaz de Gestión de Docentes muestra un listado completo y paginado de todos los docentes registrados en el sistema. En la parte superior hay un buscador con ícono de lupa que filtra instantáneamente la tabla en tiempo real mientras se escribe, buscando por nombre completo o nombre de usuario, sin necesidad de recargar la página. En la esquina superior derecha se encuentra el botón <strong>+ Nuevo Docente</strong> para acceder al formulario de creación. La tabla principal contiene las siguientes columnas: el <strong>Docente</strong> (con un avatar circular de color índigo que muestra la inicial del nombre y el nombre completo), el <strong>Usuario</strong> en formato monoespaciado, el <strong>Estado</strong> (badge verde "● Activo" o rojo "● Inactivo"), el número de <strong>Asignaciones</strong> (cursos asignados), la cantidad de <strong>Archivos</strong> subidos, y la columna de <strong>Acciones</strong>. Esta última columna presenta tres botones por fila: "Ver" (navega al perfil detallado del docente), "Editar" (abre el formulario de edición de datos y asignaciones) y "Activar/Desactivar" (permite cambiar el estado del docente entre activo e inactivo con un clic). Al pie de la tabla se muestra la paginación cuando el número de registros supera el límite por página.
+  </p>
+
+  <div class="funcs-title">✦ Funciones principales</div>
+  <div class="funcs-grid no-break">
+    <div class="func-item"><div class="fi-icon">🔍</div><div class="fi-text"><strong>Buscador en tiempo real</strong>Filtra la tabla al instante sin recargar la página.</div></div>
+    <div class="func-item"><div class="fi-icon">👁️</div><div class="fi-text"><strong>Ver detalle</strong>Navega al perfil completo del docente con sus archivos y asignaciones.</div></div>
+    <div class="func-item"><div class="fi-icon">✏️</div><div class="fi-text"><strong>Editar docente</strong>Accede al formulario de modificación de datos y asignaciones.</div></div>
+    <div class="func-item"><div class="fi-icon">🔄</div><div class="fi-text"><strong>Activar / Desactivar</strong>Cambia el estado del docente sin eliminar sus datos del sistema.</div></div>
+  </div>
+</div>
+
+
+<!-- ════════════════  4 · CREAR DOCENTE  ════════════════ -->
+<div class="iface">
+  <div class="iface-header">
+    <div class="iface-num">4</div>
+    <div class="iface-meta">
+      <h2>Crear Nuevo Docente</h2>
+      <div class="iface-chips">
+        <span class="chip chip-route">🌐 /admin/docentes/create</span>
+        <span class="chip chip-admin">🔑 Administrador</span>
+      </div>
+    </div>
+  </div>
+
+  <p class="iface-desc">
+    El formulario de creación de docentes está organizado en dos columnas. La columna izquierda contiene la tarjeta de <strong>Datos Personales</strong>, mientras que la derecha gestiona las <strong>Asignaciones de Cursos</strong>. El primer campo es el <strong>DNI</strong> (8 dígitos), que cuenta con verificación automática: al completar los 8 dígitos, el sistema consulta la base de datos local y muestra en tiempo real un spinner de carga, un ícono de check verde si el DNI está disponible, o una X roja si ya está registrado. Cuando el DNI es válido y nuevo, los campos de <strong>Nombre</strong> y <strong>Apellido</strong> se autocompletan automáticamente (el docente puede editarlos manualmente). El campo <strong>Usuario</strong> se convierte a mayúsculas automáticamente mientras se escribe. La <strong>Contraseña</strong> debe tener exactamente 8 caracteres e incluye un toggle para mostrarla. En la sección de asignaciones, el administrador selecciona un grado del desplegable: para los niveles Inicial y Primaria, todos los cursos del grado se agregan automáticamente a la tabla; para Secundaria, aparece un selector con checkboxes para elegir cursos específicos. La tabla de asignaciones permite eliminar filas individualmente con el botón ✕. Al final de la columna izquierda se encuentran los botones "Crear Docente" y "Cancelar".
+  </p>
+
+  <div class="funcs-title">✦ Funciones principales</div>
+  <div class="funcs-grid no-break">
+    <div class="func-item"><div class="fi-icon">🪪</div><div class="fi-text"><strong>Verificación de DNI</strong>Comprueba en tiempo real si el DNI ya existe en el sistema.</div></div>
+    <div class="func-item"><div class="fi-icon">✨</div><div class="fi-text"><strong>Autocompletado</strong>Nombre y apellido se completan automáticamente al ingresar el DNI.</div></div>
+    <div class="func-item"><div class="fi-icon">📚</div><div class="fi-text"><strong>Asignación de cursos</strong>Cursos automáticos para Inicial/Primaria, selector manual para Secundaria.</div></div>
+    <div class="func-item"><div class="fi-icon">🔠</div><div class="fi-text"><strong>Usuario en mayúsculas</strong>El campo usuario se convierte a mayúsculas automáticamente.</div></div>
+  </div>
+</div>
+
+
+<!-- ════════════════  5 · DETALLE DOCENTE  ════════════════ -->
+<div class="iface">
+  <div class="iface-header">
+    <div class="iface-num">5</div>
+    <div class="iface-meta">
+      <h2>Detalle del Docente</h2>
+      <div class="iface-chips">
+        <span class="chip chip-route">🌐 /admin/docentes/{id}</span>
+        <span class="chip chip-admin">🔑 Administrador</span>
+      </div>
+    </div>
+  </div>
+
+  <p class="iface-desc">
+    La interfaz de Detalle del Docente muestra el perfil completo de un docente específico con toda la información relevante agrupada de forma clara. En la parte superior se presenta una tarjeta de perfil que incluye un avatar con la inicial del nombre sobre un fondo degradado índigo-azul, el nombre completo, un badge de estado (Activo/Inactivo), el DNI, el nombre de usuario, la contraseña en texto plano (para entregársela al docente), la fecha de registro, y dos contadores destacados con el número de asignaciones y de archivos subidos. Debajo se organiza el contenido en dos paneles. El panel izquierdo lista todas las <strong>Asignaciones</strong> del docente, organizadas por nivel educativo, mostrando el grado, la sección y un botón de curso que, al hacer clic, activa un filtro interactivo en el panel derecho. El panel derecho muestra una tabla de todos los <strong>Archivos Subidos</strong> por el docente, con columnas para el nombre del archivo (con ícono según tipo: PDF, Word, Excel, PowerPoint), el grado y sección, el curso con un chip de filtro, la fecha de subida, el bimestre con color indicativo, la extensión en formato monoespaciado, el tamaño del archivo y botones de acción para previsualizar o descargar. El filtro cruzado entre asignaciones y archivos es en tiempo real y aparece un botón "✕ Mostrar Todos" para limpiar la selección.
+  </p>
+
+  <div class="funcs-title">✦ Funciones principales</div>
+  <div class="funcs-grid no-break">
+    <div class="func-item"><div class="fi-icon">👤</div><div class="fi-text"><strong>Perfil completo</strong>Todos los datos del docente incluyendo credenciales de acceso.</div></div>
+    <div class="func-item"><div class="fi-icon">🔗</div><div class="fi-text"><strong>Filtro cruzado</strong>Al hacer clic en un curso filtra los archivos correspondientes.</div></div>
+    <div class="func-item"><div class="fi-icon">👁️</div><div class="fi-text"><strong>Previsualización</strong>Modal para ver el contenido del archivo sin descargarlo.</div></div>
+    <div class="func-item"><div class="fi-icon">⬇️</div><div class="fi-text"><strong>Descarga directa</strong>Botón para descargar cualquier archivo subido por el docente.</div></div>
+  </div>
+</div>
+
+
+<!-- ════════════════  6 · EDITAR DOCENTE  ════════════════ -->
+<div class="iface">
+  <div class="iface-header">
+    <div class="iface-num">6</div>
+    <div class="iface-meta">
+      <h2>Editar Docente</h2>
+      <div class="iface-chips">
+        <span class="chip chip-route">🌐 /admin/docentes/{id}/edit</span>
+        <span class="chip chip-admin">🔑 Administrador</span>
+      </div>
+    </div>
+  </div>
+
+  <p class="iface-desc">
+    El formulario de edición de docente permite al administrador modificar determinados datos de un docente ya registrado, con ciertas restricciones de seguridad. La estructura es idéntica al formulario de creación (dos columnas), pero con diferencias importantes. Los campos <strong>DNI</strong>, <strong>Nombre</strong> y <strong>Apellido</strong> se muestran como campos de solo lectura con fondo gris y cursor bloqueado, ya que estos datos no deben modificarse una vez creado el docente para mantener la integridad de los registros. En la cabecera de la tarjeta de datos personales se muestra un badge del estado actual del docente (● Activo o ● Inactivo). El campo <strong>Usuario</strong> sí es editable y se sigue convirtiendo a mayúsculas automáticamente. El campo <strong>Contraseña</strong> muestra la contraseña actual en texto plano como referencia y es opcional al editar: si se deja en blanco, la contraseña no cambia. La sección de asignaciones se precarga con las asignaciones actuales del docente en la tabla. Al seleccionar un nuevo grado desde el desplegable, se reemplazan completamente las asignaciones existentes por las del nuevo grado. Al guardar, las asignaciones previas se eliminan y se registran las que aparecen en pantalla. Los botones de acción son "Guardar Cambios" y "Cancelar".
+  </p>
+
+  <div class="funcs-title">✦ Funciones principales</div>
+  <div class="funcs-grid no-break">
+    <div class="func-item"><div class="fi-icon">🔒</div><div class="fi-text"><strong>Campos protegidos</strong>DNI, nombre y apellido son de solo lectura para preservar la integridad.</div></div>
+    <div class="func-item"><div class="fi-icon">🔑</div><div class="fi-text"><strong>Contraseña opcional</strong>Si se deja en blanco, la contraseña actual se conserva sin cambios.</div></div>
+    <div class="func-item"><div class="fi-icon">📋</div><div class="fi-text"><strong>Asignaciones precargadas</strong>La tabla muestra las asignaciones actuales del docente al abrir el formulario.</div></div>
+    <div class="func-item"><div class="fi-icon">🔁</div><div class="fi-text"><strong>Reemplazo de asignaciones</strong>Al guardar, las asignaciones anteriores son reemplazadas completamente.</div></div>
+  </div>
+</div>
+
+
+<!-- ════════════════  7 · DOCUMENTOS ADMIN  ════════════════ -->
+<div class="iface">
+  <div class="iface-header">
+    <div class="iface-num">7</div>
+    <div class="iface-meta">
+      <h2>Documentos del Sistema</h2>
+      <div class="iface-chips">
+        <span class="chip chip-route">🌐 /admin/archivos</span>
+        <span class="chip chip-admin">🔑 Administrador</span>
+      </div>
+    </div>
+  </div>
+
+  <p class="iface-desc">
+    La interfaz de Documentos del Sistema centraliza todos los archivos subidos por todos los docentes del colegio, permitiendo al administrador consultarlos, filtrarlos, previsualizarlos, descargarlos y eliminarlos. En la parte superior se encuentra un potente panel de filtros con: un campo de <strong>Búsqueda Rápida</strong> que filtra las tarjetas visibles en pantalla en tiempo real (por nombre de archivo, descripción, docente o curso), un selector de <strong>Año Lectivo</strong>, uno de <strong>Bimestre</strong>, uno de <strong>Docente</strong>, uno de <strong>Nivel Educativo</strong>, uno de <strong>Grado</strong> y un campo con autocompletado para <strong>Curso</strong>. Los archivos se presentan en un diseño de cuatro columnas, una por cada bimestre (I, II, III, IV), con encabezados coloridos (azul, verde, violeta y rosa respectivamente) que indican cuántas sesiones contiene cada uno. Cada archivo se muestra como una tarjeta individual con: ícono representativo del tipo de archivo, nombre completo, extensión y tamaño en formato compacto, badges de curso, grado y nivel educativo, una franja informativa con el nombre del docente, la descripción del archivo (si existe), la fecha de subida y tres botones de acción: previsualizar (abre un modal), descargar directamente y mover a la papelera. Al filtrar por bimestre, la vista colapsa a una sola columna para mayor legibilidad.
+  </p>
+
+  <div class="funcs-title">✦ Funciones principales</div>
+  <div class="funcs-grid no-break">
+    <div class="func-item"><div class="fi-icon">🔍</div><div class="fi-text"><strong>Filtros combinados</strong>Año, bimestre, docente, nivel, grado y curso, solos o combinados.</div></div>
+    <div class="func-item"><div class="fi-icon">📋</div><div class="fi-text"><strong>Vista por bimestre</strong>4 columnas coloreadas que organizan visualmente los documentos.</div></div>
+    <div class="func-item"><div class="fi-icon">👁️</div><div class="fi-text"><strong>Previsualización</strong>Modal para ver PDFs y documentos sin necesidad de descargarlos.</div></div>
+    <div class="func-item"><div class="fi-icon">🗑️</div><div class="fi-text"><strong>Mover a papelera</strong>Elimina lógicamente el archivo; se puede restaurar desde la papelera.</div></div>
+  </div>
+</div>
+
+
+<!-- ════════════════  8 · PAPELERA ADMIN  ════════════════ -->
+<div class="iface">
+  <div class="iface-header">
+    <div class="iface-num">8</div>
+    <div class="iface-meta">
+      <h2>Papelera de Documentos (Admin)</h2>
+      <div class="iface-chips">
+        <span class="chip chip-route">🌐 /admin/archivos/papelera</span>
+        <span class="chip chip-admin">🔑 Administrador</span>
+      </div>
+    </div>
+  </div>
+
+  <p class="iface-desc">
+    La Papelera del Administrador es la interfaz que gestiona todos los archivos que han sido eliminados lógicamente del sistema, tanto por el administrador como por los docentes. Funciona como una zona de seguridad antes de la eliminación definitiva, permitiendo recuperar documentos que se hayan movido a la papelera por error. La interfaz muestra una lista de los archivos eliminados con información detallada de cada uno: nombre del archivo con su ícono según el tipo, el docente que lo subió originalmente, el curso y grado al que pertenece, la fecha en que fue enviado a la papelera y el tamaño del archivo. Por cada elemento se ofrecen dos acciones: el botón <strong>Restaurar</strong>, que devuelve el archivo al estado activo y lo hace visible nuevamente en la vista de documentos, y el botón <strong>Eliminar definitivamente</strong>, que borra el archivo tanto del servidor como de la base de datos de forma permanente e irreversible, solicitando una confirmación previa mediante un modal de alerta. El administrador es el único usuario con potestad para eliminar archivos de forma permanente del sistema; los docentes solo pueden moverlos a la papelera pero no destruirlos. Si la papelera está vacía, se muestra un estado vacío ilustrativo con un mensaje informativo.
+  </p>
+
+  <div class="funcs-title">✦ Funciones principales</div>
+  <div class="funcs-grid no-break">
+    <div class="func-item"><div class="fi-icon">♻️</div><div class="fi-text"><strong>Restaurar archivo</strong>Devuelve el documento al listado activo de documentos del sistema.</div></div>
+    <div class="func-item"><div class="fi-icon">🗑️</div><div class="fi-text"><strong>Eliminar definitivamente</strong>Borra el archivo del servidor y la base de datos de forma permanente.</div></div>
+    <div class="func-item"><div class="fi-icon">📋</div><div class="fi-text"><strong>Información completa</strong>Muestra docente, curso, grado, fecha de eliminación y tamaño.</div></div>
+    <div class="func-item"><div class="fi-icon">⚠️</div><div class="fi-text"><strong>Confirmación previa</strong>Modal de alerta antes de ejecutar la eliminación definitiva.</div></div>
+  </div>
+</div>
+
+
+<!-- ════════════════  9 · SECCIONES  ════════════════ -->
+<div class="iface">
+  <div class="iface-header">
+    <div class="iface-num">9</div>
+    <div class="iface-meta">
+      <h2>Gestión de Secciones</h2>
+      <div class="iface-chips">
+        <span class="chip chip-route">🌐 /admin/secciones</span>
+        <span class="chip chip-admin">🔑 Administrador</span>
+      </div>
+    </div>
+  </div>
+
+  <p class="iface-desc">
+    La interfaz de Gestión de Secciones permite al administrador administrar los grupos de estudiantes (secciones) que existen dentro de cada grado, como por ejemplo la Sección A, B o C. La pantalla se organiza en dos áreas: a la izquierda, ocupando dos tercios del ancho, se encuentra la tabla principal de secciones, y a la derecha hay un panel lateral con información estadística y accesos rápidos. La tabla muestra cada sección con un avatar cuadrado de color índigo-azul que contiene la letra identificadora, el nombre "Sección X" y su ID, la cantidad de <strong>Asignaciones</strong> vinculadas (badge azul), la cantidad de <strong>Archivos</strong> asociados (badge verde) y los botones de acción: editar y eliminar. El botón de eliminación solo es visible cuando la sección no tiene asignaciones ni archivos vinculados; en caso contrario se muestra un ícono de candado bloqueado con un tooltip explicativo. El panel lateral derecho contiene tres tarjetas: un <strong>Resumen</strong> con el total de secciones, las que tienen asignaciones, las que tienen archivos y las que no tienen datos; una tarjeta de <strong>Información</strong> que explica las reglas del módulo; y una de <strong>Accesos Rápidos</strong> con botones a Docentes, Documentos y Nueva Sección. Los modales de crear y editar sección son ventanas emergentes compactas con un campo de texto para el nombre (se guarda automáticamente en mayúsculas).
+  </p>
+
+  <div class="funcs-title">✦ Funciones principales</div>
+  <div class="funcs-grid no-break">
+    <div class="func-item"><div class="fi-icon">➕</div><div class="fi-text"><strong>Crear sección</strong>Modal compacto para crear una nueva sección con nombre en mayúsculas.</div></div>
+    <div class="func-item"><div class="fi-icon">✏️</div><div class="fi-text"><strong>Editar sección</strong>Modal para modificar el nombre de una sección existente.</div></div>
+    <div class="func-item"><div class="fi-icon">🔒</div><div class="fi-text"><strong>Eliminación protegida</strong>Solo se permite eliminar si la sección no tiene datos vinculados.</div></div>
+    <div class="func-item"><div class="fi-icon">📊</div><div class="fi-text"><strong>Panel de resumen</strong>Estadísticas rápidas de secciones activas, con y sin datos.</div></div>
+  </div>
+</div>
+
+
+<!-- ════════════════  10 · AÑOS LECTIVOS  ════════════════ -->
+<div class="iface">
+  <div class="iface-header">
+    <div class="iface-num">10</div>
+    <div class="iface-meta">
+      <h2>Años Lectivos</h2>
+      <div class="iface-chips">
+        <span class="chip chip-route">🌐 /admin/anios</span>
+        <span class="chip chip-admin">🔑 Administrador</span>
+      </div>
+    </div>
+  </div>
+
+  <p class="iface-desc">
+    La interfaz de Años Lectivos permite gestionar los períodos académicos del colegio y explorar de forma organizada todos los documentos subidos en años anteriores y en el año en curso. En la parte superior se muestra una sección <strong>Hero</strong> con fondo oscuro degradado azul-índigo que destaca el año lectivo activo con un número grande y decorativo, con un botón "+ Nuevo Año Lectivo". Debajo se listan todos los años registrados en tarjetas individuales. Cada tarjeta tiene un encabezado con: un insignia circular con las últimas dos cifras del año (azul si es activo, gris si está archivado), el año completo, la fecha de inicio, el total de documentos, el número de docentes y botones de acción. Al hacer clic en "Ver docentes" se despliega un panel con tarjetas de los docentes que tienen documentos en ese año. Al hacer clic en un docente, se expande otro panel con pestañas de bimestre (I, II, III, IV) donde los bimestres sin documentos aparecen deshabilitados. Dentro de cada bimestre hay filtros combinados de <strong>Nivel</strong>, <strong>Grado</strong> y <strong>Curso</strong> que filtran en tiempo real los documentos con un contador de resultados. El modal de Nuevo Año Lectivo solicita el número de año y la fecha de inicio, y advierte que el año actual quedará archivado (sus documentos se conservan). Los años archivados pueden reactivarse con el botón "✓ Activar".
+  </p>
+
+  <div class="funcs-title">✦ Funciones principales</div>
+  <div class="funcs-grid no-break">
+    <div class="func-item"><div class="fi-icon">📅</div><div class="fi-text"><strong>Crear año lectivo</strong>Registra un nuevo período académico y archiva el anterior automáticamente.</div></div>
+    <div class="func-item"><div class="fi-icon">🔍</div><div class="fi-text"><strong>Explorar por docente</strong>Accede a los documentos de cada docente organizados por bimestre.</div></div>
+    <div class="func-item"><div class="fi-icon">🎯</div><div class="fi-text"><strong>Filtros combinados</strong>Nivel, grado y curso filtran documentos en tiempo real dentro de cada bimestre.</div></div>
+    <div class="func-item"><div class="fi-icon">✓</div><div class="fi-text"><strong>Activar año archivado</strong>Permite reactivar un año anterior como el período lectivo en curso.</div></div>
+  </div>
+</div>
+
+
+<!-- ════════════════  11 · REPORTES  ════════════════ -->
+<div class="iface">
+  <div class="iface-header">
+    <div class="iface-num">11</div>
+    <div class="iface-meta">
+      <h2>Reportes de Cumplimiento</h2>
+      <div class="iface-chips">
+        <span class="chip chip-route">🌐 /admin/reportes</span>
+        <span class="chip chip-admin">🔑 Administrador</span>
+      </div>
+    </div>
+  </div>
+
+  <p class="iface-desc">
+    La interfaz de Reportes de Cumplimiento es una herramienta de análisis que permite al administrador evaluar el grado de cumplimiento de los docentes en la entrega de documentos de sesión de aprendizaje para un año y bimestre específicos. En la parte superior hay un panel de <strong>Parámetros</strong> con selectores de Año Lectivo y Bimestre, y el botón "⚙️ Generar Reporte". Una vez generado, aparecen cuatro tarjetas KPI: el <strong>Porcentaje Global de Cumplimiento</strong> (cambia de color entre verde ≥90%, ámbar ≥50% y rojo para valores críticos, con etiqueta "Excelente / En Proceso / Crítico"), el número de <strong>Docentes Evaluados</strong>, el total de <strong>Asignaciones Escolares</strong> desglosado en completadas (verde) y pendientes (rojo), y la cantidad de <strong>Documentos Subidos</strong> en ese período. Debajo se muestra la tabla principal con el estado por docente: nombre, usuario, cursos dictados, completados, pendientes, una barra de progreso visual con porcentaje coloreado según el nivel de cumplimiento y el botón "👁️ Ver Detalle". Este botón abre un modal con la lista completa de asignaciones del docente, indicando para cada una el curso, el grado, el nivel educativo y el estado: ✔️ COMPLETADO con el número de archivos subidos, o ❌ PENDIENTE. El reporte se puede exportar en tres formatos: PDF (impresión del navegador), Excel/CSV y Word .doc.
+  </p>
+
+  <div class="funcs-title">✦ Funciones principales</div>
+  <div class="funcs-grid no-break">
+    <div class="func-item"><div class="fi-icon">📊</div><div class="fi-text"><strong>Porcentaje global</strong>Indicador de cumplimiento con código de colores (verde/ámbar/rojo).</div></div>
+    <div class="func-item"><div class="fi-icon">📋</div><div class="fi-text"><strong>Tabla por docente</strong>Estado de completados, pendientes y barra de progreso por cada docente.</div></div>
+    <div class="func-item"><div class="fi-icon">🔎</div><div class="fi-text"><strong>Detalle por asignatura</strong>Modal con el estado de cada curso del docente (completado / pendiente).</div></div>
+    <div class="func-item"><div class="fi-icon">📤</div><div class="fi-text"><strong>Exportar</strong>Descarga el reporte en formato PDF, Excel (CSV) o Word (.doc).</div></div>
+  </div>
+</div>
+
+
+<!-- ════════════════  12 · CONFIGURACIÓN  ════════════════ -->
+<div class="iface">
+  <div class="iface-header">
+    <div class="iface-num">12</div>
+    <div class="iface-meta">
+      <h2>Configuración del Sistema</h2>
+      <div class="iface-chips">
+        <span class="chip chip-route">🌐 /admin/configuracion</span>
+        <span class="chip chip-admin">🔑 Administrador</span>
+      </div>
+    </div>
+  </div>
+
+  <p class="iface-desc">
+    La pantalla de Configuración del Sistema centraliza todos los ajustes del sistema en un diseño de tres columnas. La <strong>primera columna</strong> contiene dos tarjetas: el <strong>Perfil del Administrador</strong>, que muestra de forma estática el avatar inicial, el nombre completo, el usuario, el badge de rol "Administrador" y la fecha de registro; y el formulario de <strong>Cambiar Contraseña</strong>, con campos para la contraseña actual, la nueva contraseña y su confirmación, con un botón de guardar en color ámbar. La <strong>segunda columna</strong> presenta la tarjeta de <strong>Información de la Institución</strong>, con un formulario editable que incluye el nombre del colegio, la dirección, un selector de logo con previsualización instantánea en círculo (acepta JPG, PNG y WebP), el teléfono, el correo electrónico y el sitio web; y la tarjeta de <strong>Configuración Académica</strong> (solo lectura) que muestra el año lectivo activo, la cantidad de bimestres, los niveles educativos y el total de grados, con un enlace directo a "Gestionar →". La <strong>tercera columna</strong> muestra la tarjeta de <strong>Información del Sistema</strong> con la versión del sistema (v1.0.0), la versión de Laravel, la versión de PHP, el servidor web y el almacenamiento en uso; y finalmente la tarjeta de <strong>Gestión del Sistema</strong> con accesos rápidos a Docentes, Documentos, Años Lectivos y Papelera.
+  </p>
+
+  <div class="funcs-title">✦ Funciones principales</div>
+  <div class="funcs-grid no-break">
+    <div class="func-item"><div class="fi-icon">🔑</div><div class="fi-text"><strong>Cambio de contraseña</strong>Actualiza la contraseña del administrador con verificación de la actual.</div></div>
+    <div class="func-item"><div class="fi-icon">🏫</div><div class="fi-text"><strong>Datos institucionales</strong>Nombre, dirección, logo, teléfono, correo y web del colegio.</div></div>
+    <div class="func-item"><div class="fi-icon">🖼️</div><div class="fi-text"><strong>Cambiar logo</strong>Sube una nueva imagen y previsualiza en tiempo real antes de guardar.</div></div>
+    <div class="func-item"><div class="fi-icon">⚙️</div><div class="fi-text"><strong>Info del sistema</strong>Versiones de Laravel, PHP, servidor y uso de almacenamiento.</div></div>
+  </div>
+</div>
+
+
+<!-- ════════════════  13 · DASHBOARD DOCENTE  ════════════════ -->
+<div class="iface">
+  <div class="iface-header">
+    <div class="iface-num">13</div>
+    <div class="iface-meta">
+      <h2>Dashboard del Docente</h2>
+      <div class="iface-chips">
+        <span class="chip chip-route">🌐 /docente/dashboard</span>
+        <span class="chip chip-docente">👩‍🏫 Docente</span>
+      </div>
+    </div>
+  </div>
+
+  <p class="iface-desc">
+    El Dashboard del Docente es la pantalla de inicio del portal que ve cada docente al autenticarse en el sistema. Presenta un diseño de modo oscuro con acentos en color verde esmeralda. En la parte superior aparece una <strong>Tarjeta de Bienvenida</strong> con el avatar del docente (su inicial sobre un gradiente verde-teal), su nombre completo, un mensaje de bienvenida personalizado que indica cuántas asignaciones activas tiene y cuántos archivos ha subido en total, y un botón de acción rápida "Subir Archivo" en la esquina derecha. Debajo de la tarjeta de bienvenida se muestran dos tarjetas de estadísticas: la de <strong>Mis Asignaciones</strong> con un número grande en verde esmeralda indicando los cursos asignados, y la de <strong>Mis Archivos</strong> con un número en índigo indicando el total de documentos subidos. A continuación se divide la pantalla en dos paneles: el de <strong>Mis Asignaciones</strong> lista cada asignación con un ícono de libro, el nombre del curso, el nivel/grado/sección y un badge del nivel educativo; si no hay asignaciones, muestra un mensaje para contactar al administrador. El panel de <strong>Mis Últimos Archivos</strong> presenta los 5 documentos más recientes con su ícono de tipo, nombre truncado, curso, tiempo relativo de subida (ej: "hace 2 días") y el tamaño del archivo, con un enlace "Ver todos →" al listado completo.
+  </p>
+
+  <div class="funcs-title">✦ Funciones principales</div>
+  <div class="funcs-grid no-break">
+    <div class="func-item"><div class="fi-icon">📊</div><div class="fi-text"><strong>Mis estadísticas</strong>Total de asignaciones activas y archivos subidos en un vistazo.</div></div>
+    <div class="func-item"><div class="fi-icon">📚</div><div class="fi-text"><strong>Mis asignaciones</strong>Lista completa de cursos, grados y secciones del docente.</div></div>
+    <div class="func-item"><div class="fi-icon">🕐</div><div class="fi-text"><strong>Últimos archivos</strong>Los 5 documentos más recientes con tiempo relativo de subida.</div></div>
+    <div class="func-item"><div class="fi-icon">⬆️</div><div class="fi-text"><strong>Acceso rápido</strong>Botón "Subir Archivo" desde la pantalla de inicio del portal.</div></div>
+  </div>
+</div>
+
+
+<!-- ════════════════  14 · MIS DOCUMENTOS  ════════════════ -->
+<div class="iface">
+  <div class="iface-header">
+    <div class="iface-num">14</div>
+    <div class="iface-meta">
+      <h2>Mis Documentos (Docente)</h2>
+      <div class="iface-chips">
+        <span class="chip chip-route">🌐 /docente/archivos</span>
+        <span class="chip chip-docente">👩‍🏫 Docente</span>
+      </div>
+    </div>
+  </div>
+
+  <p class="iface-desc">
+    La interfaz de Mis Documentos permite al docente visualizar, filtrar, buscar, previsualizar y gestionar todos los archivos que ha subido al sistema. En la parte superior hay un panel de filtros con un campo de <strong>Búsqueda Rápida</strong> (filtra en tiempo real las tarjetas visibles por nombre de archivo o descripción), un selector de <strong>Año Lectivo</strong>, un selector de <strong>Bimestre</strong>, un campo con autocompletado para <strong>Curso</strong> (mostrando solo los cursos del docente), y campos de <strong>Fecha Desde</strong> y <strong>Fecha Hasta</strong> para acotar por rango de fechas. Los documentos se organizan visualmente en cuatro columnas, una por bimestre (I azul, II verde, III violeta, IV rosa), con encabezados que muestran el número de sesiones de cada período. Si el docente filtra por un bimestre específico, la vista colapsa a una sola columna. Cada archivo aparece como una tarjeta con: ícono representativo según el tipo de archivo (PDF, Word, Excel, PowerPoint), nombre del archivo, extensión y tamaño, badges del curso y grado, la descripción breve si fue agregada al subir, la fecha de subida y tres botones de acción: <strong>Previsualizar</strong> (abre un modal de vista previa), <strong>Descargar</strong> (descarga directa) y <strong>Mover a Papelera</strong> (solicita confirmación antes de ejecutar). En la barra superior hay accesos a la Papelera y al formulario de Subir Archivo.
+  </p>
+
+  <div class="funcs-title">✦ Funciones principales</div>
+  <div class="funcs-grid no-break">
+    <div class="func-item"><div class="fi-icon">🔍</div><div class="fi-text"><strong>Búsqueda y filtros</strong>Año, bimestre, curso, rango de fechas y búsqueda por texto.</div></div>
+    <div class="func-item"><div class="fi-icon">📋</div><div class="fi-text"><strong>Organización por bimestre</strong>4 columnas visuales con colores distintos por período académico.</div></div>
+    <div class="func-item"><div class="fi-icon">👁️</div><div class="fi-text"><strong>Previsualización</strong>Modal para ver el contenido del archivo sin necesidad de descargarlo.</div></div>
+    <div class="func-item"><div class="fi-icon">🗑️</div><div class="fi-text"><strong>Mover a papelera</strong>Elimina el archivo de forma segura con posibilidad de restaurarlo.</div></div>
+  </div>
+</div>
+
+
+<!-- ════════════════  15 · SUBIR ARCHIVO  ════════════════ -->
+<div class="iface">
+  <div class="iface-header">
+    <div class="iface-num">15</div>
+    <div class="iface-meta">
+      <h2>Subir Archivo</h2>
+      <div class="iface-chips">
+        <span class="chip chip-route">🌐 /docente/archivos/create</span>
+        <span class="chip chip-docente">👩‍🏫 Docente</span>
+      </div>
+    </div>
+  </div>
+
+  <p class="iface-desc">
+    La interfaz de Subir Archivo es el formulario principal que usa el docente para cargar sus sesiones de aprendizaje al sistema. Se presenta en un diseño oscuro con acentos en verde esmeralda, con todos los controles agrupados en una tarjeta central de ancho máximo. El primer campo es el selector de <strong>Asignación</strong>, un desplegable con todas las asignaciones del docente listadas en el formato "Curso · Nivel Grado · Sección". Si el docente no tiene asignaciones registradas, se muestra una alerta en ámbar para contactar al administrador. El segundo control es la selección de <strong>Bimestre</strong>, representada con cuatro botones de radio estilizados (I, II, III, IV Bimestre) que al seleccionarse se vuelven de color verde brillante. El tercero es la <strong>Zona de Carga</strong> con soporte de arrastrar y soltar (drag & drop): el área punteada muestra un ícono de carpeta, texto de instrucción y el límite de 50 MB. Al arrastrar un archivo sobre la zona, el borde cambia a verde; al soltarlo o seleccionarlo con el explorador de archivos, la zona se transforma en una previsualización con el ícono del tipo de archivo, el nombre y el tamaño, con un botón "Quitar archivo" para cancelar. La validación del tamaño (máx. 50 MB) se realiza en el navegador antes de enviar. El campo <strong>Descripción</strong> es opcional (textarea de 3 filas). Al enviar, el botón cambia a "Subiendo..." con spinner y aparece una barra de progreso animada.
+  </p>
+
+  <div class="funcs-title">✦ Funciones principales</div>
+  <div class="funcs-grid no-break">
+    <div class="func-item"><div class="fi-icon">📤</div><div class="fi-text"><strong>Drag & Drop</strong>Arrastra el archivo directamente a la zona o selecciónalo con el explorador.</div></div>
+    <div class="func-item"><div class="fi-icon">🎯</div><div class="fi-text"><strong>Selector de bimestre</strong>Botones visuales para elegir a qué bimestre pertenece el documento.</div></div>
+    <div class="func-item"><div class="fi-icon">✅</div><div class="fi-text"><strong>Validación en frontend</strong>Comprueba el tamaño del archivo (máx. 50 MB) antes de enviarlo.</div></div>
+    <div class="func-item"><div class="fi-icon">📊</div><div class="fi-text"><strong>Barra de progreso</strong>Indica visualmente el avance de la carga del archivo al servidor.</div></div>
+  </div>
+</div>
+
+
+<!-- ════════════════  16 · PAPELERA DOCENTE  ════════════════ -->
+<div class="iface">
+  <div class="iface-header">
+    <div class="iface-num">16</div>
+    <div class="iface-meta">
+      <h2>Papelera de Documentos (Docente)</h2>
+      <div class="iface-chips">
+        <span class="chip chip-route">🌐 /docente/archivos/papelera</span>
+        <span class="chip chip-docente">👩‍🏫 Docente</span>
+      </div>
+    </div>
+  </div>
+
+  <p class="iface-desc">
+    La Papelera del Docente es la interfaz donde se guardan temporalmente los archivos que el docente ha decidido eliminar de su listado de documentos activos. Funciona como una medida de seguridad que evita la pérdida accidental de documentos, dando la posibilidad de recuperarlos si fueron eliminados por error. La pantalla muestra la lista de archivos que el docente ha movido a la papelera, presentando para cada uno: el ícono representativo según el tipo de archivo, el nombre completo del documento, el curso y grado al que pertenece, el bimestre al que corresponde, la fecha en que fue movido a la papelera y el tamaño del archivo. Por cada elemento se ofrece el botón <strong>Restaurar</strong>, que devuelve el archivo al estado activo y lo hace visible nuevamente en la interfaz de "Mis Documentos" sin perder ningún dato. La eliminación permanente de estos archivos no está disponible para el docente: esa acción es exclusiva del administrador, quien puede acceder a la papelera global del sistema y decidir si borrar definitivamente el archivo del servidor. Si la papelera del docente está vacía, se muestra un estado ilustrativo con un ícono y un mensaje informativo que indica que no hay documentos eliminados. Esta separación de responsabilidades entre roles garantiza que ningún documento se pierda de forma accidental por parte de los docentes.
+  </p>
+
+  <div class="funcs-title">✦ Funciones principales</div>
+  <div class="funcs-grid no-break">
+    <div class="func-item"><div class="fi-icon">♻️</div><div class="fi-text"><strong>Restaurar archivo</strong>Devuelve el documento a "Mis Documentos" sin perder ningún dato.</div></div>
+    <div class="func-item"><div class="fi-icon">📋</div><div class="fi-text"><strong>Información completa</strong>Muestra curso, grado, bimestre y fecha de eliminación de cada archivo.</div></div>
+    <div class="func-item"><div class="fi-icon">🔒</div><div class="fi-text"><strong>Sin eliminación definitiva</strong>El docente no puede borrar archivos permanentemente; solo el admin puede.</div></div>
+    <div class="func-item"><div class="fi-icon">📭</div><div class="fi-text"><strong>Estado vacío</strong>Ilustración y mensaje cuando no hay archivos en la papelera.</div></div>
+  </div>
+
+  <!-- Cierre / resumen final -->
+  <div style="margin-top: 48px; padding: 28px 32px; background: linear-gradient(135deg,#0f2957,#1d4ed8); border-radius: 16px; color: #fff;">
+    <div style="font-size: 10pt; font-weight: 800; text-transform: uppercase; letter-spacing: 1px; opacity: .7; margin-bottom: 14px;">Resumen del Sistema</div>
+    <div style="display: grid; grid-template-columns: repeat(3,1fr); gap: 20px; text-align: center;">
+      <div>
+        <div style="font-size: 26pt; font-weight: 900;">16</div>
+        <div style="font-size: 9pt; opacity: .75; margin-top: 2px;">Interfaces documentadas</div>
+      </div>
+      <div>
+        <div style="font-size: 26pt; font-weight: 900;">2</div>
+        <div style="font-size: 9pt; opacity: .75; margin-top: 2px;">Roles de usuario</div>
+      </div>
+      <div>
+        <div style="font-size: 26pt; font-weight: 900;">4</div>
+        <div style="font-size: 9pt; opacity: .75; margin-top: 2px;">Bimestres académicos</div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+</body>
+</html>

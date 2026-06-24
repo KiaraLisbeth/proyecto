@@ -116,6 +116,22 @@ class ArchivoController extends Controller
 
         // Obtener los detalles del archivo subido
         $file = $request->file('archivo');
+        $nombreOriginal = $file->getClientOriginalName();
+
+        // Segunda verificación de duplicado (defensa en profundidad, por si la validación
+        // del FormRequest fue eludida directamente contra el endpoint)
+        $yaExiste = Archivo::withTrashed()
+            ->where('user_id', $docente->id)
+            ->whereRaw('LOWER(nombre_original) = LOWER(?)', [$nombreOriginal])
+            ->exists();
+
+        if ($yaExiste) {
+            return redirect()->back()
+                             ->withInput()
+                             ->withErrors([
+                                 'archivo' => "Ya existe un archivo con el nombre \"{$nombreOriginal}\".",
+                             ]);
+        }
 
         // Generar nombre único preservando la extensión original
         $extension    = $file->getClientOriginalExtension();
@@ -135,7 +151,7 @@ class ArchivoController extends Controller
         // Crear el registro en la base de datos
         Archivo::create([
             'user_id'         => $docente->id,
-            'nombre_original' => $file->getClientOriginalName(),
+            'nombre_original' => $nombreOriginal,
             'nombre_archivo'  => $nombreUnico,
             'ruta'            => $ruta,
             'tipo_archivo'    => $file->getMimeType(),
@@ -149,7 +165,7 @@ class ArchivoController extends Controller
         ]);
 
         return redirect()->route('docente.archivos.index')
-                         ->with('success', "Archivo \"{$file->getClientOriginalName()}\" subido exitosamente.");
+                         ->with('success', "Archivo \"{$nombreOriginal}\" subido exitosamente.");
     }
 
     /**

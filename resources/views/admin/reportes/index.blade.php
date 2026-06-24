@@ -20,9 +20,9 @@
             </button>
         </div>
         <div id="downloadDropdownMenu" class="hidden absolute right-0 mt-2 w-48 rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-xl z-50 py-1.5">
-            <button onclick="window.print(); closeDownloadDropdown();" class="w-full text-left px-4 py-2.5 text-xs font-bold text-slate-700 dark:text-slate-300 hover:bg-slate-500/10 flex items-center gap-2 transition-colors">
+            <a href="{{ route('admin.reportes.exportarPdf', request()->all()) }}" onclick="closeDownloadDropdown();" class="w-full text-left px-4 py-2.5 text-xs font-bold text-slate-700 dark:text-slate-300 hover:bg-slate-500/10 flex items-center gap-2 transition-colors">
                 📄 Formato PDF
-            </button>
+            </a>
             <a href="{{ route('admin.reportes.exportar', request()->all()) }}" onclick="closeDownloadDropdown();" class="w-full text-left px-4 py-2.5 text-xs font-bold text-slate-700 dark:text-slate-300 hover:bg-slate-500/10 flex items-center gap-2 transition-colors">
                 📊 Formato Excel (CSV)
             </a>
