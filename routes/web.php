@@ -82,6 +82,7 @@ Route::prefix('admin')
 
     // ── Reportes de Cumplimiento ───────────────────────────────────────────
     Route::get('/reportes', [ReporteController::class, 'index'])->name('reportes.index');
+    Route::get('/reportes/exportar-pdf', [ReporteController::class, 'exportarPdf'])->name('reportes.exportarPdf');
     Route::get('/reportes/exportar', [ReporteController::class, 'exportarCsv'])->name('reportes.exportar');
     Route::get('/reportes/exportar-word', [ReporteController::class, 'exportarWord'])->name('reportes.exportarWord');
 

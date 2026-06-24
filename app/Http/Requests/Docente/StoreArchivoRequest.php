@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests\Docente;
 
+use App\Models\Archivo;
 use Illuminate\Foundation\Http\FormRequest;
 
 /**
@@ -24,6 +25,20 @@ class StoreArchivoRequest extends FormRequest
                 'file',
                 'max:51200', // 50 MB en kilobytes (50 * 1024)
                 'mimes:pdf,doc,docx,xls,xlsx,ppt,pptx',
+                // Verificar que el docente no haya subido ya un archivo con el mismo nombre
+                function ($attribute, $value, $fail) {
+                    if ($value && $value->isValid()) {
+                        $nombreOriginal = $value->getClientOriginalName();
+                        $yaExiste = Archivo::withTrashed()
+                            ->where('user_id', $this->user()->id)
+                            ->whereRaw('LOWER(nombre_original) = LOWER(?)', [$nombreOriginal])
+                            ->exists();
+
+                        if ($yaExiste) {
+                            $fail("Ya existe un archivo con el nombre \"{$nombreOriginal}\".");
+                        }
+                    }
+                },
             ],
 
             // El bimestre es obligatorio (1=I, 2=II, 3=III, 4=IV)
@@ -54,11 +69,11 @@ class StoreArchivoRequest extends FormRequest
     public function messages(): array
     {
         return [
-            'archivo.required'  => 'Debes seleccionar un archivo.',
-            'archivo.max'       => 'El archivo no puede superar los 50 MB.',
-            'archivo.mimes'     => 'Solo se permiten archivos PDF, Word, Excel o PowerPoint.',
-            'bimestre.required' => 'Debes seleccionar el bimestre.',
-            'bimestre.between'  => 'El bimestre debe ser I, II, III o IV.',
+            'archivo.required'       => 'Debes seleccionar un archivo.',
+            'archivo.max'            => 'El archivo no puede superar los 50 MB.',
+            'archivo.mimes'          => 'Solo se permiten archivos PDF, Word, Excel o PowerPoint.',
+            'bimestre.required'      => 'Debes seleccionar el bimestre.',
+            'bimestre.between'       => 'El bimestre debe ser I, II, III o IV.',
             'asignacion_id.required' => 'Debes seleccionar una asignación.',
         ];
     }

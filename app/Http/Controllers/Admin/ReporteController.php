@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\User;
 use App\Models\Archivo;
 use Illuminate\Http\Request;
+use Barryvdh\DomPDF\Facade\Pdf;
 
 /**
  * Controlador para generar reportes del estado de cumplimiento
@@ -68,20 +69,25 @@ class ReporteController extends Controller
 
         foreach ($docentes as $docente) {
             $asignaciones        = $docente->asignaciones;
-            $totalAsig           = $asignaciones->count() * count($bimestresEvaluar);
+            // «Cursos dictados» = número real de asignaciones (nunca se multiplica por bimestres)
+            $totalAsig           = $asignaciones->count();
             $completadas         = 0;
             $detalleAsignaciones = [];
 
             foreach ($asignaciones as $asig) {
+                // En modo anual: el curso se cuenta como completado solo si tiene
+                // archivo en TODOS los bimestres evaluados.
+                $bimestresConArchivo = 0;
+
                 foreach ($bimestresEvaluar as $bim) {
                     $key = $todosBimestres
                         ? $docente->id . '-' . $asig->curso_id . '-' . $asig->grado_id . '-' . $asig->seccion_id . '-' . $bim
                         : $docente->id . '-' . $asig->curso_id . '-' . $asig->grado_id . '-' . $asig->seccion_id;
 
                     $archivosSubidos = $archivos->get($key) ?? collect();
-                    $cumple          = $archivosSubidos->isNotEmpty();
+                    $cumpleBim       = $archivosSubidos->isNotEmpty();
 
-                    if ($cumple) $completadas++;
+                    if ($cumpleBim) $bimestresConArchivo++;
 
                     $detalleAsignaciones[] = [
                         'curso'          => $asig->curso->nombre ?? '—',
@@ -89,10 +95,18 @@ class ReporteController extends Controller
                         'nivel'          => $asig->grado->nivel->nombre ?? '—',
                         'bimestre'       => $todosBimestres ? ($bimestres[$bim] ?? $bim) : null,
                         'archivos_count' => $archivosSubidos->count(),
-                        'cumplido'       => $cumple,
+                        'cumplido'       => $cumpleBim,
                         'archivos'       => $archivosSubidos,
                     ];
                 }
+
+                // En modo un solo bimestre: completado = tiene al menos 1 archivo.
+                // En modo anual: completado = tiene archivo en todos los bimestres.
+                $cumpleAsig = $todosBimestres
+                    ? ($bimestresConArchivo === count($bimestresEvaluar))
+                    : ($bimestresConArchivo > 0);
+
+                if ($cumpleAsig) $completadas++;
             }
 
             $totalAsignacionesGlobal += $totalAsig;
@@ -121,6 +135,112 @@ class ReporteController extends Controller
             'porcentajeGlobal', 'totalArchivosSubidos', 'docentes',
             'anio', 'bimestre', 'anios', 'bimestres', 'generado'
         ));
+    }
+
+    /**
+     * Exporta el reporte a PDF descargable.
+     * Usa barryvdh/laravel-dompdf para generar el archivo.
+     */
+    public function exportarPdf(Request $request)
+    {
+        $anio     = $request->filled('anio')     ? (int)$request->anio     : now()->year;
+        $bimestre = $request->filled('bimestre') ? (int)$request->bimestre : 1;
+
+        $todosBimestres   = ($bimestre === 0);
+        $bimestresEvaluar = $todosBimestres ? [1, 2, 3, 4] : [$bimestre];
+        $bimestres        = Archivo::bimestres();
+
+        $tituloReporte = $todosBimestres
+            ? "Reporte Anual Consolidado — Todos los Bimestres ({$anio})"
+            : 'Reporte de Cumplimiento — ' . ($bimestres[$bimestre] ?? $bimestre) . " ({$anio})";
+
+        $nombreArchivo = $todosBimestres
+            ? "Reporte_Cumplimiento_{$anio}_Todos_Bimestres.pdf"
+            : "Reporte_Cumplimiento_{$anio}_Bimestre_{$bimestre}.pdf";
+
+        $docentes = User::where('rol', 'docente')
+                        ->where('activo', 1)
+                        ->with(['asignaciones.curso', 'asignaciones.grado.nivel', 'asignaciones.seccion'])
+                        ->get();
+
+        $queryArchivos = Archivo::where('anio', $anio);
+        if (!$todosBimestres) {
+            $queryArchivos->where('bimestre', $bimestre);
+        }
+
+        $archivos = $queryArchivos->get()->groupBy(function ($item) use ($todosBimestres) {
+            $base = $item->user_id . '-' . $item->curso_id . '-' . $item->grado_id . '-' . $item->seccion_id;
+            return $todosBimestres ? $base . '-' . $item->bimestre : $base;
+        });
+
+        $reporte                 = [];
+        $totalAsignacionesGlobal = 0;
+        $totalCompletadasGlobal  = 0;
+
+        foreach ($docentes as $docente) {
+            $asignaciones        = $docente->asignaciones;
+            // «Cursos dictados» = número real de asignaciones (nunca se multiplica por bimestres)
+            $totalAsig           = $asignaciones->count();
+            $completadas         = 0;
+            $detalleAsignaciones = [];
+
+            foreach ($asignaciones as $asig) {
+                $bimestresConArchivo = 0;
+
+                foreach ($bimestresEvaluar as $bim) {
+                    $key = $todosBimestres
+                        ? $docente->id . '-' . $asig->curso_id . '-' . $asig->grado_id . '-' . $asig->seccion_id . '-' . $bim
+                        : $docente->id . '-' . $asig->curso_id . '-' . $asig->grado_id . '-' . $asig->seccion_id;
+
+                    $archivosSubidos = $archivos->get($key) ?? collect();
+                    $cumpleBim       = $archivosSubidos->isNotEmpty();
+
+                    if ($cumpleBim) $bimestresConArchivo++;
+
+                    $detalleAsignaciones[] = [
+                        'curso'          => $asig->curso->nombre ?? '—',
+                        'grado'          => ($asig->grado->nombre ?? '—') . ' Sec. ' . ($asig->seccion->nombre ?? '—'),
+                        'nivel'          => $asig->grado->nivel->nombre ?? '—',
+                        'bimestre'       => $todosBimestres ? ($bimestres[$bim] ?? $bim) : null,
+                        'archivos_count' => $archivosSubidos->count(),
+                        'cumplido'       => $cumpleBim,
+                    ];
+                }
+
+                $cumpleAsig = $todosBimestres
+                    ? ($bimestresConArchivo === count($bimestresEvaluar))
+                    : ($bimestresConArchivo > 0);
+
+                if ($cumpleAsig) $completadas++;
+            }
+
+            $totalAsignacionesGlobal += $totalAsig;
+            $totalCompletadasGlobal  += $completadas;
+
+            $reporte[] = [
+                'docente'            => $docente,
+                'total_asignaciones' => $totalAsig,
+                'completadas'        => $completadas,
+                'pendientes'         => $totalAsig - $completadas,
+                'porcentaje'         => $totalAsig > 0 ? round(($completadas / $totalAsig) * 100) : 100,
+            ];
+        }
+
+        $porcentajeGlobal     = $totalAsignacionesGlobal > 0
+            ? round(($totalCompletadasGlobal / $totalAsignacionesGlobal) * 100)
+            : 100;
+
+        $totalArchivosSubidos = $todosBimestres
+            ? Archivo::where('anio', $anio)->count()
+            : Archivo::where('anio', $anio)->where('bimestre', $bimestre)->count();
+
+        $pdf = Pdf::loadView('admin.reportes.pdf', compact(
+            'reporte', 'totalAsignacionesGlobal', 'totalCompletadasGlobal',
+            'porcentajeGlobal', 'totalArchivosSubidos', 'docentes',
+            'anio', 'bimestre', 'bimestres', 'tituloReporte'
+        ))->setPaper('a4', 'portrait');
+
+        return $pdf->download($nombreArchivo);
     }
 
     /**
