@@ -239,6 +239,25 @@
 
 </form>
 
+{{-- ── Modal: curso duplicado ──────────────────────────────────── --}}
+<div class="modal-overlay" id="cursoDuplicadoModal">
+    <div class="modal-box">
+        <div class="flex items-center gap-3 mb-4">
+            <div class="w-10 h-10 rounded-full bg-amber-500/10 flex items-center justify-center flex-shrink-0">
+                <svg class="w-5 h-5 text-amber-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                          d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/>
+                </svg>
+            </div>
+            <h3 class="text-base font-bold text-gray-800 dark:text-slate-100">Curso ya asignado</h3>
+        </div>
+        <p class="text-sm text-gray-600 dark:text-slate-400 mb-6 leading-relaxed" id="cursoDuplicadoMsg"></p>
+        <div class="flex justify-end">
+            <button type="button" class="btn btn-primary btn-sm" onclick="cerrarAvisoDuplicado()">Entendido</button>
+        </div>
+    </div>
+</div>
+
 @endsection
 
 @section('scripts')
@@ -515,8 +534,27 @@ document.getElementById('btnAgregarSeleccionados').addEventListener('click', () 
 
     if (duplicados.length) {
         const plural = duplicados.length > 1;
-        alert(`El curso${plural ? 's' : ''} "${duplicados.join('", "')}" ya ${plural ? 'están' : 'está'} agregado${plural ? 's' : ''} para ${gradoNombre}.`);
+        mostrarAvisoDuplicado(
+            `No se ${plural ? 'pueden agregar los cursos' : 'puede agregar el curso'} "${duplicados.join('", "')}" porque ya ${plural ? 'están asignados' : 'está asignado'} para ${gradoNombre}.`
+        );
     }
+});
+
+// ─── Modal de aviso: curso duplicado ─────────────────────────────────────────
+const cursoDuplicadoModal = document.getElementById('cursoDuplicadoModal');
+const cursoDuplicadoMsg   = document.getElementById('cursoDuplicadoMsg');
+
+function mostrarAvisoDuplicado(mensaje) {
+    cursoDuplicadoMsg.textContent = mensaje;
+    cursoDuplicadoModal.classList.add('show');
+}
+
+function cerrarAvisoDuplicado() {
+    cursoDuplicadoModal.classList.remove('show');
+}
+
+cursoDuplicadoModal.addEventListener('click', function (e) {
+    if (e.target === cursoDuplicadoModal) cerrarAvisoDuplicado();
 });
 
 // Al elegir un grado: Secundaria muestra el selector de cursos, los demás niveles autocompletan
