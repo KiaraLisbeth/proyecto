@@ -498,17 +498,25 @@ document.getElementById('btnAgregarSeleccionados').addEventListener('click', () 
     if (!secundariaActual) return;
     const { gradoId, gradoNombre } = secundariaActual;
     const empty = document.getElementById('emptyRow');
+    const duplicados = [];
 
     document.querySelectorAll('.chk-curso-sec:checked').forEach(chk => {
         if (!existeAsignacion(gradoId, chk.value)) {
             const tr = crearFila(gradoId, gradoNombre, chk.value);
             empty.insertAdjacentElement('beforebegin', tr);
+        } else {
+            duplicados.push(chk.value);
         }
     });
 
     checkEmpty();
     cursosSecundariaBox.classList.add('hidden');
     document.getElementById('selectGradoAgregar').value = '';
+
+    if (duplicados.length) {
+        const plural = duplicados.length > 1;
+        alert(`El curso${plural ? 's' : ''} "${duplicados.join('", "')}" ya ${plural ? 'están' : 'está'} agregado${plural ? 's' : ''} para ${gradoNombre}.`);
+    }
 });
 
 // Al elegir un grado: Secundaria muestra el selector de cursos, los demás niveles autocompletan
