@@ -1,0 +1,761 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Product Backlog — Sistema de Gestión de Aprendizaje | I.E.P. Esther Carson</title>
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+    font-family: 'Segoe UI', Arial, sans-serif;
+    font-size: 11px;
+    color: #111827;
+    background: #fff;
+    padding: 24px 32px;
+}
+
+/* ── ENCABEZADO ─────────────────────────────────────── */
+.encabezado {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: #1e3a8a;
+    color: #fff;
+    padding: 14px 20px;
+    border-radius: 8px;
+    margin-bottom: 16px;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+}
+.encabezado h1 { font-size: 16px; font-weight: 900; }
+.encabezado p  { font-size: 10px; opacity: 0.75; margin-top: 2px; }
+.encabezado .meta { text-align: right; font-size: 10px; opacity: 0.8; }
+
+/* ── LEYENDA ─────────────────────────────────────────── */
+.leyenda {
+    display: flex;
+    gap: 20px;
+    margin-bottom: 14px;
+    padding: 10px 16px;
+    background: #f8faff;
+    border: 1px solid #dbeafe;
+    border-radius: 8px;
+    flex-wrap: wrap;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+}
+.leyenda-item {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 10px;
+    font-weight: 600;
+    color: #374151;
+}
+.dot {
+    width: 12px; height: 12px;
+    border-radius: 3px;
+    flex-shrink: 0;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+}
+
+/* ── TABLA PRINCIPAL ─────────────────────────────────── */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 10.5px;
+}
+thead tr {
+    background: #1e3a8a;
+    color: #fff;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+}
+thead th {
+    padding: 8px 7px;
+    text-align: center;
+    font-size: 9.5px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.3px;
+    border: 1px solid #1e40af;
+}
+thead tr.sub-header {
+    background: #1d4ed8;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+}
+thead tr.sub-header th {
+    font-size: 9px;
+    font-weight: 600;
+    text-transform: none;
+    letter-spacing: 0;
+    background: #1d4ed8;
+}
+
+tbody td {
+    padding: 7px 7px;
+    border: 1px solid #d1d5db;
+    vertical-align: top;
+    line-height: 1.4;
+    color: #1f2937;
+}
+tbody tr:hover td { background: rgba(0,0,0,0.015); }
+
+/* ── ÉPICA CELDAS ────────────────────────────────────── */
+.epica-ep01 { background: #dbeafe; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+.epica-ep02 { background: #fce7f3; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+.epica-ep03 { background: #d1fae5; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+.epica-ep04 { background: #fef3c7; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+.epica-ep05 { background: #ede9fe; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+
+.epica-id {
+    font-size: 12px;
+    font-weight: 900;
+    text-align: center;
+    display: block;
+    margin-bottom: 3px;
+}
+.epica-rol  { font-weight: 700; font-size: 10px; }
+.epica-desc { font-size: 9.5px; color: #374151; margin-top: 2px; }
+
+/* ── HU ID ───────────────────────────────────────────── */
+.hu-id {
+    font-weight: 900;
+    font-size: 11px;
+    text-align: center;
+    white-space: nowrap;
+}
+.hu-nuevo {
+    font-weight: 900;
+    font-size: 11px;
+    text-align: center;
+    white-space: nowrap;
+    color: #7c3aed;
+}
+
+/* ── BADGES ESTADO ───────────────────────────────────── */
+.badge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 3px 8px;
+    border-radius: 99px;
+    font-size: 9px;
+    font-weight: 800;
+    white-space: nowrap;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+}
+.badge-hecho      { background: #dcfce7; color: #14532d; border: 1px solid #86efac; }
+.badge-proceso    { background: #fef3c7; color: #78350f; border: 1px solid #fcd34d; }
+.badge-porhacer   { background: #fee2e2; color: #7f1d1d; border: 1px solid #fca5a5; }
+.badge-nuevo      { background: #ede9fe; color: #4c1d95; border: 1px solid #c4b5fd; }
+
+/* ── BADGES PRIORIDAD ────────────────────────────────── */
+.prior-alta   { background: #fee2e2; color: #991b1b; border: 1px solid #fca5a5; }
+.prior-media  { background: #fef3c7; color: #92400e; border: 1px solid #fcd34d; }
+.prior-baja   { background: #f0fdf4; color: #14532d; border: 1px solid #86efac; }
+
+/* ── SPRINT BADGE ────────────────────────────────────── */
+.sprint-badge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 22px; height: 22px;
+    border-radius: 6px;
+    font-size: 10px;
+    font-weight: 900;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+}
+.sp1 { background: #dbeafe; color: #1e3a8a; }
+.sp2 { background: #d1fae5; color: #065f46; }
+.sp3 { background: #fef3c7; color: #78350f; }
+.sp4 { background: #ede9fe; color: #4c1d95; }
+
+/* ── CRITERIOS ───────────────────────────────────────── */
+.criterio {
+    display: inline-block;
+    background: #f1f5f9;
+    border: 1px solid #e2e8f0;
+    border-radius: 4px;
+    padding: 1px 5px;
+    font-size: 9px;
+    font-family: monospace;
+    margin: 1px;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+}
+.criterio.nuevo { background: #ede9fe; border-color: #c4b5fd; color: #5b21b6; }
+
+/* ── NOTA NUEVO ──────────────────────────────────────── */
+.nota-nuevo {
+    font-size: 8px;
+    color: #7c3aed;
+    font-weight: 700;
+    display: block;
+    margin-top: 2px;
+}
+
+/* ── STORY POINTS ────────────────────────────────────── */
+.sp-num {
+    font-weight: 900;
+    font-size: 13px;
+    text-align: center;
+    color: #1e3a8a;
+    display: block;
+}
+
+/* ── COMENTARIO NUEVO ────────────────────────────────── */
+.comentario-nuevo {
+    color: #7c3aed;
+    font-weight: 700;
+    font-size: 9px;
+}
+
+/* ── TOTALES ─────────────────────────────────────────── */
+.fila-total td {
+    background: #1e3a8a;
+    color: #fff;
+    font-weight: 700;
+    font-size: 10px;
+    padding: 8px 7px;
+    border: 1px solid #1e40af;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+}
+
+/* ── BOTÓN PDF ───────────────────────────────────────── */
+.btn-pdf {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    z-index: 9999;
+    background: #1e3a8a;
+    color: #fff;
+    border: none;
+    border-radius: 10px;
+    padding: 11px 18px;
+    font-size: 12px;
+    font-weight: 800;
+    cursor: pointer;
+    box-shadow: 0 4px 20px rgba(30,58,138,0.4);
+    font-family: inherit;
+    display: flex;
+    align-items: center;
+    gap: 7px;
+}
+.btn-pdf:hover { transform: translateY(-2px); }
+
+/* ── PIE ─────────────────────────────────────────────── */
+.pie {
+    margin-top: 16px;
+    padding-top: 12px;
+    border-top: 2px solid #e5e7eb;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 9.5px;
+    color: #6b7280;
+}
+
+/* ── PRINT ───────────────────────────────────────────── */
+@media print {
+    body { padding: 8px 12px; }
+    .btn-pdf { display: none !important; }
+    body { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+    table { page-break-inside: auto; }
+    tr { page-break-inside: avoid; }
+}
+@page { size: A4 landscape; margin: 10mm 12mm; }
+</style>
+</head>
+<body>
+
+<!-- BOTÓN PDF -->
+<button class="btn-pdf" onclick="window.print()">⬇ Descargar PDF</button>
+
+<!-- ENCABEZADO -->
+<div class="encabezado">
+    <div>
+        <h1>📋 Product Backlog — Historias de Usuario</h1>
+        <p>Sistema de Gestión de Aprendizaje · I.E.P. Esther Carson</p>
+    </div>
+    <div class="meta">
+        <div>Versión: 2.0 (Actualizado)</div>
+        <div>Fecha: Junio 2026</div>
+        <div>Total HU: 21 · Total SP: 98</div>
+    </div>
+</div>
+
+<!-- LEYENDA -->
+<div class="leyenda">
+    <div class="leyenda-item"><div class="dot" style="background:#dcfce7;border:1px solid #86efac;"></div> Hecho</div>
+    <div class="leyenda-item"><div class="dot" style="background:#fef3c7;border:1px solid #fcd34d;"></div> En proceso</div>
+    <div class="leyenda-item"><div class="dot" style="background:#fee2e2;border:1px solid #fca5a5;"></div> Por hacer</div>
+    <div class="leyenda-item"><div class="dot" style="background:#ede9fe;border:1px solid #c4b5fd;"></div> ★ HU nueva agregada</div>
+    <div class="leyenda-item"><div class="dot" style="background:#dbeafe;border:1px solid #93c5fd;"></div> EP-01 Autenticación</div>
+    <div class="leyenda-item"><div class="dot" style="background:#fce7f3;border:1px solid #f9a8d4;"></div> EP-02 Gestión Académica</div>
+    <div class="leyenda-item"><div class="dot" style="background:#d1fae5;border:1px solid #6ee7b7;"></div> EP-03 Archivos Docente</div>
+    <div class="leyenda-item"><div class="dot" style="background:#fef3c7;border:1px solid #fcd34d;"></div> EP-04 Auditoría Admin</div>
+    <div class="leyenda-item"><div class="dot" style="background:#ede9fe;border:1px solid #c4b5fd;"></div> EP-05 Config. Sistema</div>
+</div>
+
+<!-- TABLA -->
+<table>
+<thead>
+    <tr>
+        <th colspan="4" style="background:#1e3a8a;">ÉPICA</th>
+        <th colspan="4" style="background:#1d4ed8;">HISTORIA DE USUARIO</th>
+        <th colspan="7" style="background:#1e40af;">OTROS DATOS</th>
+    </tr>
+    <tr class="sub-header">
+        <th style="width:42px;">ID Épica</th>
+        <th style="width:72px;">Como (Rol)</th>
+        <th style="width:80px;">Deseo...</th>
+        <th style="width:80px;">Para...</th>
+        <th style="width:42px;">ID HU</th>
+        <th style="width:72px;">Como (Rol)</th>
+        <th style="width:110px;">Deseo...</th>
+        <th style="width:110px;">Para...</th>
+        <th style="width:70px;">Criterios de Aceptación</th>
+        <th style="width:48px;">Prioridad</th>
+        <th style="width:38px;">Story Points</th>
+        <th style="width:72px;">Dependencias</th>
+        <th style="width:38px;">Sprint</th>
+        <th style="width:54px;">Estado</th>
+        <th>Comentarios</th>
+    </tr>
+</thead>
+<tbody>
+
+<!-- ══════════ EP-01 ══════════ -->
+<!-- HU-01 -->
+<tr>
+    <td class="epica-ep01" rowspan="3" style="text-align:center; vertical-align:middle;">
+        <span class="epica-id">EP-01</span>
+        <span class="epica-rol">Usuario registrado</span>
+        <div class="epica-desc">gestionar mi sesión y acceder al sistema</div>
+    </td>
+    <td class="epica-ep01" rowspan="3">proteger la información y acceder a las funciones de mi rol</td>
+    <td class="epica-ep01" rowspan="3">asegurar el acceso seguro y diferenciado según el tipo de usuario</td>
+    <td class="epica-ep01" rowspan="3"></td>
+    <td class="hu-id">HU-01</td>
+    <td>Usuario registrado (Admin o Docente)</td>
+    <td>iniciar sesión en el sistema usando mi usuario y contraseña</td>
+    <td>poder acceder a las funcionalidades correspondientes a mi rol de forma segura</td>
+    <td>
+        <span class="criterio">RNF1.1</span>
+        <span class="criterio">RNF2.2</span>
+        <span class="criterio">RF-01.4</span>
+    </td>
+    <td style="text-align:center;"><span class="badge prior-alta">Alta</span></td>
+    <td style="text-align:center;"><span class="sp-num">3</span></td>
+    <td>Ninguna</td>
+    <td style="text-align:center;"><span class="sprint-badge sp1">1</span></td>
+    <td style="text-align:center;"><span class="badge badge-hecho">✔ Hecho</span></td>
+    <td>Manejo de encriptación y estado de actividad</td>
+</tr>
+<!-- HU-02 -->
+<tr>
+    <td class="hu-id">HU-02</td>
+    <td>Administrador del sistema</td>
+    <td>que el sistema restrinja las vistas según los roles definidos</td>
+    <td>asegurar que cada usuario solo acceda a la información y opciones permitidas para su perfil</td>
+    <td>
+        <span class="criterio">CA-01</span>
+        <span class="criterio">CA-02</span>
+    </td>
+    <td style="text-align:center;"><span class="badge prior-alta">Alta</span></td>
+    <td style="text-align:center;"><span class="sp-num">5</span></td>
+    <td>HU-01</td>
+    <td style="text-align:center;"><span class="sprint-badge sp1">1</span></td>
+    <td style="text-align:center;"><span class="badge badge-hecho">✔ Hecho</span></td>
+    <td>Middlewares y redirecciones por rol</td>
+</tr>
+<!-- HU-03 -->
+<tr>
+    <td class="hu-id">HU-03</td>
+    <td>Usuario logueado</td>
+    <td>poder cerrar sesión de forma segura</td>
+    <td>proteger mis datos cuando termine de usar el sistema</td>
+    <td>
+        <span class="criterio">RF-01.3</span>
+        <span class="criterio">RF-01.4</span>
+    </td>
+    <td style="text-align:center;"><span class="badge prior-alta">Alta</span></td>
+    <td style="text-align:center;"><span class="sp-num">2</span></td>
+    <td>HU-01</td>
+    <td style="text-align:center;"><span class="sprint-badge sp1">1</span></td>
+    <td style="text-align:center;"><span class="badge badge-hecho">✔ Hecho</span></td>
+    <td>Invalidación de sesión en servidor</td>
+</tr>
+
+<!-- ══════════ EP-02 ══════════ -->
+<!-- HU-04 -->
+<tr>
+    <td class="epica-ep02" rowspan="5" style="text-align:center; vertical-align:middle;">
+        <span class="epica-id">EP-02</span>
+        <span class="epica-rol">Administrador</span>
+        <div class="epica-desc">gestionar la estructura académica (docentes, años lectivos, asignaciones)</div>
+    </td>
+    <td class="epica-ep02" rowspan="5">mantener la organización institucional y permitir el correcto registro de archivos</td>
+    <td class="epica-ep02" rowspan="5">tener siempre actualizada la planta docente y los períodos académicos activos</td>
+    <td class="epica-ep02" rowspan="5"></td>
+    <td class="hu-id">HU-04</td>
+    <td>Administrador</td>
+    <td>registrar, modificar y cambiar el estado (activo/inactivo) de los docentes</td>
+    <td>mantener actualizada la plantilla de personal sin perder su historial de archivos</td>
+    <td>
+        <span class="criterio">RNF3.2</span>
+        <span class="criterio">RNF2.3</span>
+        <span class="criterio">RNF3.1</span>
+    </td>
+    <td style="text-align:center;"><span class="badge prior-alta">Alta</span></td>
+    <td style="text-align:center;"><span class="sp-num">5</span></td>
+    <td>HU-01, HU-02</td>
+    <td style="text-align:center;"><span class="sprint-badge sp1">1</span></td>
+    <td style="text-align:center;"><span class="badge badge-hecho">✔ Hecho</span></td>
+    <td>Soft deletes para docentes</td>
+</tr>
+<!-- HU-05 -->
+<tr>
+    <td class="hu-id">HU-05</td>
+    <td>Administrador</td>
+    <td>poder activar un año lectivo</td>
+    <td>que las operaciones del sistema se registren en el período correcto</td>
+    <td>
+        <span class="criterio">RF-02.2</span>
+    </td>
+    <td style="text-align:center;"><span class="badge prior-alta">Alta</span></td>
+    <td style="text-align:center;"><span class="sp-num">3</span></td>
+    <td>Ninguna</td>
+    <td style="text-align:center;"><span class="sprint-badge sp1">1</span></td>
+    <td style="text-align:center;"><span class="badge badge-hecho">✔ Hecho</span></td>
+    <td>Validar año único activo</td>
+</tr>
+<!-- HU-06 -->
+<tr>
+    <td class="hu-id">HU-06</td>
+    <td>Administrador</td>
+    <td>asociar a cada docente los cursos, grados y secciones que le corresponde dictar</td>
+    <td>organizar la carga de trabajo y permitir que los docentes suban archivos en sus áreas correspondientes</td>
+    <td>
+        <span class="criterio">CA-01</span>
+        <span class="criterio">CA-02</span>
+    </td>
+    <td style="text-align:center;"><span class="badge prior-alta">Alta</span></td>
+    <td style="text-align:center;"><span class="sp-num">5</span></td>
+    <td>HU-04, HU-05</td>
+    <td style="text-align:center;"><span class="sprint-badge sp2">2</span></td>
+    <td style="text-align:center;"><span class="badge badge-hecho">✔ Hecho</span></td>
+    <td>Relación M:N (docente-curso-grado-sección)</td>
+</tr>
+<!-- HU-07 -->
+<tr>
+    <td class="hu-id">HU-07</td>
+    <td>Administrador</td>
+    <td>visualizar un dashboard general</td>
+    <td>obtener una vista rápida del estado del sistema y accesos directos a las funciones principales</td>
+    <td>
+        <span class="criterio">RNF2.1</span>
+    </td>
+    <td style="text-align:center;"><span class="badge prior-media">Media</span></td>
+    <td style="text-align:center;"><span class="sp-num">3</span></td>
+    <td>HU-01, HU-02</td>
+    <td style="text-align:center;"><span class="sprint-badge sp1">1</span></td>
+    <td style="text-align:center;"><span class="badge badge-hecho">✔ Hecho</span></td>
+    <td>Diseño responsivo, gráficos Chart.js</td>
+</tr>
+<!-- HU-15 NUEVA -->
+<tr>
+    <td class="hu-nuevo">HU-15 <span class="nota-nuevo">★ Nueva</span></td>
+    <td>Administrador</td>
+    <td>buscar datos de un docente ingresando su DNI</td>
+    <td>registrar al docente rápidamente sin errores de digitación, consultando el padrón nacional (RENIEC)</td>
+    <td>
+        <span class="criterio nuevo">RF-02.1</span>
+        <span class="criterio nuevo">RNF1.2</span>
+    </td>
+    <td style="text-align:center;"><span class="badge prior-media">Media</span></td>
+    <td style="text-align:center;"><span class="sp-num">3</span></td>
+    <td>HU-04</td>
+    <td style="text-align:center;"><span class="sprint-badge sp1">1</span></td>
+    <td style="text-align:center;"><span class="badge badge-hecho">✔ Hecho</span></td>
+    <td class="comentario-nuevo">★ Agregada — API RENIEC via decolecta.com (throttle 30/min)</td>
+</tr>
+
+<!-- ══════════ EP-03 ══════════ -->
+<!-- HU-08 -->
+<tr>
+    <td class="epica-ep03" rowspan="6" style="text-align:center; vertical-align:middle;">
+        <span class="epica-id">EP-03</span>
+        <span class="epica-rol">Docente</span>
+        <div class="epica-desc">gestionar mis archivos y evidencias de trabajo</div>
+    </td>
+    <td class="epica-ep03" rowspan="6">cumplir con mis entregas durante el año escolar activo de forma organizada</td>
+    <td class="epica-ep03" rowspan="6">mantener un registro completo y ordenado de mis sesiones de aprendizaje</td>
+    <td class="epica-ep03" rowspan="6"></td>
+    <td class="hu-id">HU-08</td>
+    <td>Docente</td>
+    <td>subir archivos digitales asociados a mis asignaciones vigentes</td>
+    <td>mantener un registro de mis evidencias de trabajo durante el año escolar activo</td>
+    <td>
+        <span class="criterio">RNF2.2</span>
+        <span class="criterio">RNF2.3</span>
+    </td>
+    <td style="text-align:center;"><span class="badge prior-alta">Alta</span></td>
+    <td style="text-align:center;"><span class="sp-num">8</span></td>
+    <td>HU-01, HU-05, HU-06</td>
+    <td style="text-align:center;"><span class="sprint-badge sp2">2</span></td>
+    <td style="text-align:center;"><span class="badge badge-hecho">✔ Hecho</span></td>
+    <td>Validación tipos: PDF, DOC, XLS, PPT. Máx 50 MB</td>
+</tr>
+<!-- HU-09 -->
+<tr>
+    <td class="hu-id">HU-09</td>
+    <td>Docente</td>
+    <td>ver la lista de todos mis archivos cargados durante el año escolar activo</td>
+    <td>llevar un control de lo que he reportado en el sistema</td>
+    <td>
+        <span class="criterio">RNF3.1</span>
+    </td>
+    <td style="text-align:center;"><span class="badge prior-alta">Alta</span></td>
+    <td style="text-align:center;"><span class="sp-num">5</span></td>
+    <td>HU-08</td>
+    <td style="text-align:center;"><span class="sprint-badge sp2">2</span></td>
+    <td style="text-align:center;"><span class="badge badge-hecho">✔ Hecho</span></td>
+    <td>Filtrado por bimestre, tipo y asignación</td>
+</tr>
+<!-- HU-10 -->
+<tr>
+    <td class="hu-id">HU-10</td>
+    <td>Docente</td>
+    <td>previsualizar mis documentos subidos en línea</td>
+    <td>verificar su contenido sin necesidad de descargarlos en mi dispositivo</td>
+    <td>
+        <span class="criterio">CA-01</span>
+        <span class="criterio">CA-02</span>
+    </td>
+    <td style="text-align:center;"><span class="badge prior-media">Media</span></td>
+    <td style="text-align:center;"><span class="sp-num">5</span></td>
+    <td>HU-08</td>
+    <td style="text-align:center;"><span class="sprint-badge sp2">2</span></td>
+    <td style="text-align:center;"><span class="badge badge-hecho">✔ Hecho</span></td>
+    <td>Visor Google Docs (URL firmada, válida 10 min)</td>
+</tr>
+<!-- HU-11 -->
+<tr>
+    <td class="hu-id">HU-11</td>
+    <td>Docente</td>
+    <td>poder enviar mis archivos a una Papelera de Reciclaje temporal y restaurarlos</td>
+    <td>corregir errores de subida sin perder la información de forma permanente</td>
+    <td>
+        <span class="criterio">RNF3.1</span>
+        <span class="criterio">RNF2.3</span>
+    </td>
+    <td style="text-align:center;"><span class="badge prior-media">Media</span></td>
+    <td style="text-align:center;"><span class="sp-num">5</span></td>
+    <td>HU-08</td>
+    <td style="text-align:center;"><span class="sprint-badge sp3">3</span></td>
+    <td style="text-align:center;"><span class="badge badge-hecho">✔ Hecho</span></td>
+    <td>Soft Deletes en archivos + restaurar</td>
+</tr>
+<!-- HU-16 NUEVA -->
+<tr>
+    <td class="hu-nuevo">HU-16 <span class="nota-nuevo">★ Nueva</span></td>
+    <td>Docente</td>
+    <td>descargar mis propios archivos subidos al sistema</td>
+    <td>tener una copia local de mis evidencias cuando lo necesite</td>
+    <td>
+        <span class="criterio nuevo">RF-03.3</span>
+        <span class="criterio nuevo">CA-01</span>
+    </td>
+    <td style="text-align:center;"><span class="badge prior-media">Media</span></td>
+    <td style="text-align:center;"><span class="sp-num">2</span></td>
+    <td>HU-08, HU-09</td>
+    <td style="text-align:center;"><span class="sprint-badge sp2">2</span></td>
+    <td style="text-align:center;"><span class="badge badge-hecho">✔ Hecho</span></td>
+    <td class="comentario-nuevo">★ Agregada — Descarga directa del Storage</td>
+</tr>
+<!-- HU-17 NUEVA -->
+<tr>
+    <td class="hu-nuevo">HU-17 <span class="nota-nuevo">★ Nueva</span></td>
+    <td>Docente</td>
+    <td>eliminar definitivamente archivos desde mi papelera</td>
+    <td>liberar espacio y mantener limpio mi historial de archivos</td>
+    <td>
+        <span class="criterio nuevo">RF-03.4</span>
+        <span class="criterio nuevo">RNF2.3</span>
+    </td>
+    <td style="text-align:center;"><span class="badge prior-media">Media</span></td>
+    <td style="text-align:center;"><span class="sp-num">2</span></td>
+    <td>HU-11</td>
+    <td style="text-align:center;"><span class="sprint-badge sp3">3</span></td>
+    <td style="text-align:center;"><span class="badge badge-hecho">✔ Hecho</span></td>
+    <td class="comentario-nuevo">★ Agregada — forceDelete con confirmación</td>
+</tr>
+
+<!-- ══════════ EP-04 ══════════ -->
+<!-- HU-12 -->
+<tr>
+    <td class="epica-ep04" rowspan="5" style="text-align:center; vertical-align:middle;">
+        <span class="epica-id">EP-04</span>
+        <span class="epica-rol">Administrador</span>
+        <div class="epica-desc">auditar y generar reportes del cumplimiento de las evidencias de toda la institución</div>
+    </td>
+    <td class="epica-ep04" rowspan="5">controlar y documentar el estado de las evidencias de toda la institución</td>
+    <td class="epica-ep04" rowspan="5">verificar que todos los docentes cumplan con sus obligaciones de entrega</td>
+    <td class="epica-ep04" rowspan="5"></td>
+    <td class="hu-id">HU-12</td>
+    <td>Administrador</td>
+    <td>visualizar y buscar todos los archivos subidos por todos los docentes de la institución</td>
+    <td>realizar auditorías y controlar el cumplimiento de las entregas</td>
+    <td>
+        <span class="criterio">RNF3.1</span>
+    </td>
+    <td style="text-align:center;"><span class="badge prior-alta">Alta</span></td>
+    <td style="text-align:center;"><span class="sp-num">5</span></td>
+    <td>HU-08</td>
+    <td style="text-align:center;"><span class="sprint-badge sp3">3</span></td>
+    <td style="text-align:center;"><span class="badge badge-hecho">✔ Hecho</span></td>
+    <td>Múltiples filtros: docente, bimestre, año, tipo</td>
+</tr>
+<!-- HU-13 -->
+<tr>
+    <td class="hu-id">HU-13</td>
+    <td>Administrador</td>
+    <td>descargar o previsualizar en el navegador cualquier archivo del sistema</td>
+    <td>revisar a detalle las evidencias subidas por los docentes</td>
+    <td>
+        <span class="criterio">RF-04.3</span>
+        <span class="criterio">RNF1.2</span>
+    </td>
+    <td style="text-align:center;"><span class="badge prior-media">Media</span></td>
+    <td style="text-align:center;"><span class="sp-num">5</span></td>
+    <td>HU-12</td>
+    <td style="text-align:center;"><span class="sprint-badge sp3">3</span></td>
+    <td style="text-align:center;"><span class="badge badge-hecho">✔ Hecho</span></td>
+    <td>URLs temporales firmadas (10 min)</td>
+</tr>
+<!-- HU-14 -->
+<tr>
+    <td class="hu-id">HU-14</td>
+    <td>Administrador</td>
+    <td>generar reportes de cumplimiento filtrando por año lectivo y bimestre, y descargarlos</td>
+    <td>documentar y presentar el estado de entrega de evidencias de la institución</td>
+    <td>
+        <span class="criterio">RF-04.6</span>
+    </td>
+    <td style="text-align:center;"><span class="badge prior-alta">Alta</span></td>
+    <td style="text-align:center;"><span class="sp-num">8</span></td>
+    <td>HU-12</td>
+    <td style="text-align:center;"><span class="sprint-badge sp3">3</span></td>
+    <td style="text-align:center;"><span class="badge badge-hecho">✔ Hecho</span></td>
+    <td>Exportación PDF, Word y Excel (CSV)</td>
+</tr>
+<!-- HU-18 NUEVA -->
+<tr>
+    <td class="hu-nuevo">HU-18 <span class="nota-nuevo">★ Nueva</span></td>
+    <td>Administrador</td>
+    <td>gestionar la papelera global de archivos (restaurar o eliminar definitivamente)</td>
+    <td>tener control total sobre los archivos eliminados de cualquier docente</td>
+    <td>
+        <span class="criterio nuevo">RF-04.4</span>
+        <span class="criterio nuevo">RF-04.5</span>
+    </td>
+    <td style="text-align:center;"><span class="badge prior-media">Media</span></td>
+    <td style="text-align:center;"><span class="sp-num">3</span></td>
+    <td>HU-12</td>
+    <td style="text-align:center;"><span class="sprint-badge sp3">3</span></td>
+    <td style="text-align:center;"><span class="badge badge-hecho">✔ Hecho</span></td>
+    <td class="comentario-nuevo">★ Agregada — Papelera global Admin con restaurar y forceDelete</td>
+</tr>
+<!-- HU-19 NUEVA -->
+<tr>
+    <td class="hu-nuevo">HU-19 <span class="nota-nuevo">★ Nueva</span></td>
+    <td>Administrador</td>
+    <td>ver el detalle de cumplimiento por asignación de cada docente en el reporte</td>
+    <td>identificar exactamente qué cursos o secciones están incompletos</td>
+    <td>
+        <span class="criterio nuevo">RF-04.7</span>
+        <span class="criterio nuevo">CA-01</span>
+    </td>
+    <td style="text-align:center;"><span class="badge prior-media">Media</span></td>
+    <td style="text-align:center;"><span class="sp-num">3</span></td>
+    <td>HU-14</td>
+    <td style="text-align:center;"><span class="sprint-badge sp3">3</span></td>
+    <td style="text-align:center;"><span class="badge badge-hecho">✔ Hecho</span></td>
+    <td class="comentario-nuevo">★ Agregada — Modal de detalle por docente en reporte</td>
+</tr>
+
+<!-- ══════════ EP-05 ══════════ -->
+<!-- HU-20 NUEVA -->
+<tr>
+    <td class="epica-ep05" rowspan="2" style="text-align:center; vertical-align:middle;">
+        <span class="epica-id">EP-05</span>
+        <span class="epica-rol">Administrador</span>
+        <div class="epica-desc">configurar el sistema y el perfil institucional</div>
+    </td>
+    <td class="epica-ep05" rowspan="2">personalizar los datos de la institución y mi cuenta en el sistema</td>
+    <td class="epica-ep05" rowspan="2">que el sistema refleje correctamente la identidad de la institución en reportes y pantallas</td>
+    <td class="epica-ep05" rowspan="2"></td>
+    <td class="hu-nuevo">HU-20 <span class="nota-nuevo">★ Nueva</span></td>
+    <td>Administrador</td>
+    <td>configurar los datos de la institución (nombre, logo) y mi perfil de administrador</td>
+    <td>que el sistema muestre la información correcta de la institución en reportes y pantallas</td>
+    <td>
+        <span class="criterio nuevo">RF-05.1</span>
+        <span class="criterio nuevo">RF-05.2</span>
+    </td>
+    <td style="text-align:center;"><span class="badge prior-media">Media</span></td>
+    <td style="text-align:center;"><span class="sp-num">3</span></td>
+    <td>HU-01, HU-02</td>
+    <td style="text-align:center;"><span class="sprint-badge sp3">3</span></td>
+    <td style="text-align:center;"><span class="badge badge-hecho">✔ Hecho</span></td>
+    <td class="comentario-nuevo">★ Agregada — ConfiguracionController: perfil, contraseña, institución</td>
+</tr>
+<!-- HU-21 NUEVA -->
+<tr>
+    <td class="hu-nuevo">HU-21 <span class="nota-nuevo">★ Nueva</span></td>
+    <td>Administrador</td>
+    <td>cambiar mi contraseña de acceso al sistema</td>
+    <td>mantener la seguridad de mi cuenta de administrador actualizada</td>
+    <td>
+        <span class="criterio nuevo">RF-05.3</span>
+        <span class="criterio nuevo">RNF1.1</span>
+    </td>
+    <td style="text-align:center;"><span class="badge prior-media">Media</span></td>
+    <td style="text-align:center;"><span class="sp-num">2</span></td>
+    <td>HU-01</td>
+    <td style="text-align:center;"><span class="sprint-badge sp3">3</span></td>
+    <td style="text-align:center;"><span class="badge badge-hecho">✔ Hecho</span></td>
+    <td class="comentario-nuevo">★ Agregada — Hash bcrypt, validación contraseña actual</td>
+</tr>
+
+<!-- FILA TOTALES -->
+<tr class="fila-total">
+    <td colspan="4" style="text-align:center;">TOTALES DEL PRODUCT BACKLOG</td>
+    <td colspan="4" style="text-align:center;">21 Historias de Usuario (14 originales + 7 nuevas ★)</td>
+    <td style="text-align:center; font-size:9px;">—</td>
+    <td style="text-align:center;">Alta: 10<br>Media: 11</td>
+    <td style="text-align:center; font-size:14px; font-weight:900;">98 SP</td>
+    <td colspan="2" style="text-align:center;">Sprint 1: 7 HU · Sprint 2: 6 HU · Sprint 3: 8 HU</td>
+    <td colspan="2" style="text-align:center;">✔ Hecho: 21 · En proceso: 0 · Por hacer: 0</td>
+</tr>
+
+</tbody>
+</table>
+
+<!-- PIE -->
+<div class="pie">
+    <div><strong>I.E.P. Esther Carson</strong> — Sistema de Gestión de Aprendizaje · Product Backlog v2.0</div>
+    <div>★ 7 historias nuevas agregadas en esta revisión · Todos los estados actualizados a <strong>"Hecho"</strong></div>
+    <div>Junio 2026</div>
+</div>
+
+</body>
+</html>

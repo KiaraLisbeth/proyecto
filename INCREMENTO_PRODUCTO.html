@@ -1,0 +1,969 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Incremento del Producto — Sistema de Gestión de Aprendizaje | I.E.P. Esther Carson</title>
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+    font-family: 'Segoe UI', Arial, sans-serif;
+    font-size: 11.5px;
+    color: #111827;
+    background: #f8faff;
+    padding: 0;
+}
+
+/* ── PORTADA ──────────────────────────────────────── */
+.portada {
+    background: linear-gradient(135deg, #1e3a8a 0%, #1d4ed8 70%, #2563eb 100%);
+    color: #fff;
+    padding: 40px 50px 36px;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+    page-break-after: always;
+}
+.portada-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 32px;
+}
+.portada-logo { font-size: 14px; font-weight: 700; opacity: 0.8; }
+.portada-fecha { font-size: 10px; opacity: 0.6; text-align: right; }
+.portada h1 { font-size: 28px; font-weight: 900; margin-bottom: 6px; line-height: 1.2; }
+.portada h2 { font-size: 14px; font-weight: 400; opacity: 0.75; margin-bottom: 28px; }
+.portada-chips {
+    display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 30px;
+}
+.chip {
+    background: rgba(255,255,255,0.15);
+    border: 1px solid rgba(255,255,255,0.25);
+    border-radius: 99px;
+    padding: 4px 14px;
+    font-size: 10px;
+    font-weight: 700;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+}
+.portada-stats {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 14px;
+}
+.stat-card {
+    background: rgba(255,255,255,0.1);
+    border: 1px solid rgba(255,255,255,0.18);
+    border-radius: 10px;
+    padding: 14px 12px;
+    text-align: center;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+}
+.stat-num { font-size: 26px; font-weight: 900; line-height: 1; }
+.stat-label { font-size: 9px; opacity: 0.65; margin-top: 4px; text-transform: uppercase; letter-spacing: 0.5px; }
+
+/* ── CONTENEDOR ───────────────────────────────────── */
+.page {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 30px 40px;
+}
+
+/* ── TÍTULO DE SECCIÓN ────────────────────────────── */
+.section-title {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 18px;
+    padding-bottom: 10px;
+    border-bottom: 3px solid #1e3a8a;
+}
+.section-title h2 { font-size: 15px; font-weight: 900; color: #1e3a8a; }
+
+/* ── INTRODUCCIÓN ─────────────────────────────────── */
+.intro-box {
+    background: #eff6ff;
+    border-left: 4px solid #2563eb;
+    border-radius: 0 8px 8px 0;
+    padding: 14px 18px;
+    margin-bottom: 24px;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+}
+.intro-box p { font-size: 11.5px; color: #1e3a8a; line-height: 1.6; }
+.intro-box strong { color: #1e3a8a; }
+
+/* ── SPRINT CARD ──────────────────────────────────── */
+.sprint-block {
+    margin-bottom: 28px;
+    page-break-inside: avoid;
+}
+.sprint-header {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 12px 18px;
+    border-radius: 10px 10px 0 0;
+    color: #fff;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+}
+.sprint-header.s1 { background: #1e3a8a; }
+.sprint-header.s2 { background: #065f46; }
+.sprint-header.s3 { background: #78350f; }
+.sprint-header.s4 { background: #4c1d95; }
+
+.sprint-icon { font-size: 22px; }
+.sprint-info h3 { font-size: 14px; font-weight: 900; }
+.sprint-info p  { font-size: 10px; opacity: 0.8; margin-top: 1px; }
+.sprint-meta {
+    margin-left: auto;
+    text-align: right;
+    font-size: 10px;
+    opacity: 0.85;
+}
+
+.sprint-body {
+    background: #fff;
+    border: 1px solid #e5e7eb;
+    border-top: none;
+    border-radius: 0 0 10px 10px;
+    padding: 18px 20px;
+}
+
+/* ── OBJETIVO BOX ─────────────────────────────────── */
+.objetivo {
+    background: #f8faff;
+    border: 1px solid #dbeafe;
+    border-radius: 8px;
+    padding: 10px 14px;
+    margin-bottom: 14px;
+    font-size: 11px;
+    color: #1e3a8a;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+}
+.objetivo strong { font-weight: 800; }
+
+/* ── HU GRID ──────────────────────────────────────── */
+.hu-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+    margin-bottom: 14px;
+}
+.hu-item {
+    display: flex;
+    gap: 10px;
+    align-items: flex-start;
+    padding: 9px 12px;
+    background: #f9fafb;
+    border: 1px solid #e5e7eb;
+    border-radius: 8px;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+}
+.hu-item.nueva {
+    background: #f5f3ff;
+    border-color: #c4b5fd;
+}
+.hu-badge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 44px;
+    height: 22px;
+    border-radius: 5px;
+    font-size: 9px;
+    font-weight: 900;
+    flex-shrink: 0;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+}
+.hb-s1 { background: #dbeafe; color: #1e3a8a; }
+.hb-s2 { background: #d1fae5; color: #065f46; }
+.hb-s3 { background: #fef3c7; color: #78350f; }
+.hb-s4 { background: #ede9fe; color: #4c1d95; }
+.hb-nueva { background: #ede9fe; color: #5b21b6; }
+
+.hu-content { flex: 1; min-width: 0; }
+.hu-title { font-weight: 700; font-size: 11px; color: #111827; margin-bottom: 2px; }
+.hu-title .nueva-tag { font-size: 8.5px; color: #7c3aed; font-weight: 700; margin-left: 4px; }
+.hu-desc { font-size: 10px; color: #4b5563; line-height: 1.4; }
+.hu-sp { 
+    display: flex; 
+    align-items: center; 
+    gap: 4px; 
+    margin-top: 4px;
+    font-size: 9.5px; 
+    color: #6b7280; 
+}
+.sp-dot {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 18px; height: 18px;
+    background: #e5e7eb;
+    border-radius: 4px;
+    font-size: 9px;
+    font-weight: 900;
+    color: #374151;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+}
+
+/* ── ENTREGABLES ──────────────────────────────────── */
+.entregables-title {
+    font-size: 10px;
+    font-weight: 800;
+    color: #374151;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 8px;
+    margin-top: 12px;
+}
+.entregables-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 6px;
+}
+.entregable {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 7px 10px;
+    border-radius: 6px;
+    font-size: 10px;
+    font-weight: 600;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+}
+.entregable.s1 { background: #eff6ff; color: #1e3a8a; border: 1px solid #bfdbfe; }
+.entregable.s2 { background: #f0fdf4; color: #065f46; border: 1px solid #a7f3d0; }
+.entregable.s3 { background: #fffbeb; color: #78350f; border: 1px solid #fde68a; }
+.entregable.s4 { background: #f5f3ff; color: #4c1d95; border: 1px solid #ddd6fe; }
+
+/* ── ESTADO SPRINT ────────────────────────────────── */
+.sprint-footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-top: 14px;
+    padding-top: 12px;
+    border-top: 1px solid #f3f4f6;
+}
+.estado-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    padding: 4px 12px;
+    border-radius: 99px;
+    font-size: 10px;
+    font-weight: 800;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+}
+.estado-hecho   { background: #dcfce7; color: #14532d; border: 1px solid #86efac; }
+.estado-proceso { background: #fef3c7; color: #78350f; border: 1px solid #fcd34d; }
+.estado-futuro  { background: #f3f4f6; color: #374151; border: 1px solid #d1d5db; }
+
+.sprint-sp-total {
+    font-size: 10px;
+    color: #6b7280;
+}
+.sprint-sp-total strong { color: #1e3a8a; font-size: 13px; }
+
+/* ── PROGRESO ACUMULADO ───────────────────────────── */
+.progreso-section {
+    background: #fff;
+    border: 1px solid #e5e7eb;
+    border-radius: 10px;
+    padding: 20px 24px;
+    margin-bottom: 24px;
+}
+.progreso-title {
+    font-size: 13px;
+    font-weight: 800;
+    color: #1e3a8a;
+    margin-bottom: 16px;
+}
+.progreso-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 10px;
+}
+.progreso-label {
+    width: 70px;
+    font-size: 10px;
+    font-weight: 700;
+    color: #374151;
+    flex-shrink: 0;
+}
+.progreso-bar-wrap {
+    flex: 1;
+    height: 14px;
+    background: #f3f4f6;
+    border-radius: 99px;
+    overflow: hidden;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+}
+.progreso-bar {
+    height: 100%;
+    border-radius: 99px;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+}
+.bar-s1 { background: linear-gradient(90deg, #1e3a8a, #2563eb); width: 33%; }
+.bar-s2 { background: linear-gradient(90deg, #065f46, #059669); width: 62%; }
+.bar-s3 { background: linear-gradient(90deg, #78350f, #d97706); width: 90%; }
+.bar-s4 { background: linear-gradient(90deg, #4c1d95, #7c3aed); width: 100%; }
+.progreso-pct {
+    width: 40px;
+    font-size: 11px;
+    font-weight: 800;
+    text-align: right;
+}
+.progreso-sp {
+    width: 60px;
+    font-size: 9.5px;
+    color: #6b7280;
+    text-align: right;
+}
+
+/* ── TABLA RESUMEN FINAL ──────────────────────────── */
+.tabla-resumen {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 10.5px;
+    margin-bottom: 20px;
+}
+.tabla-resumen th {
+    background: #1e3a8a;
+    color: #fff;
+    padding: 8px 10px;
+    font-size: 9.5px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.3px;
+    border: 1px solid #1e40af;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+}
+.tabla-resumen td {
+    padding: 8px 10px;
+    border: 1px solid #e5e7eb;
+    color: #1f2937;
+    vertical-align: middle;
+}
+.tabla-resumen tr:nth-child(even) td {
+    background: #f9fafb;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+}
+.tabla-resumen .total-row td {
+    background: #1e3a8a;
+    color: #fff;
+    font-weight: 800;
+    border-color: #1e40af;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+}
+
+/* ── VALOR ACUMULADO ──────────────────────────────── */
+.valor-section {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 14px;
+    margin-bottom: 24px;
+}
+.valor-card {
+    background: #fff;
+    border: 1px solid #e5e7eb;
+    border-radius: 10px;
+    padding: 16px;
+    text-align: center;
+}
+.valor-card .num { font-size: 28px; font-weight: 900; color: #1e3a8a; }
+.valor-card .label { font-size: 10px; color: #6b7280; margin-top: 4px; }
+
+/* ── BOTÓN PDF ────────────────────────────────────── */
+.btn-pdf {
+    position: fixed;
+    bottom: 20px; right: 20px;
+    z-index: 9999;
+    background: #1e3a8a;
+    color: #fff;
+    border: none;
+    border-radius: 10px;
+    padding: 11px 18px;
+    font-size: 12px;
+    font-weight: 800;
+    cursor: pointer;
+    box-shadow: 0 4px 20px rgba(30,58,138,0.4);
+    font-family: inherit;
+    display: flex;
+    align-items: center;
+    gap: 7px;
+}
+
+/* ── PIE ──────────────────────────────────────────── */
+.pie {
+    margin-top: 20px;
+    padding-top: 14px;
+    border-top: 2px solid #e5e7eb;
+    display: flex;
+    justify-content: space-between;
+    font-size: 9.5px;
+    color: #6b7280;
+}
+
+/* ── PRINT ────────────────────────────────────────── */
+@media print {
+    body { background: #fff; }
+    .btn-pdf { display: none !important; }
+    body { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+    .sprint-block { page-break-inside: avoid; }
+    .portada { page-break-after: always; }
+}
+@page { size: A4; margin: 12mm 14mm; }
+</style>
+</head>
+<body>
+
+<!-- BOTÓN PDF -->
+<button class="btn-pdf" onclick="window.print()">⬇ Descargar PDF</button>
+
+<!-- ════ PORTADA ════ -->
+<div class="portada">
+    <div class="portada-top">
+        <div class="portada-logo">🎓 I.E.P. Esther Carson</div>
+        <div class="portada-fecha">
+            Elaborado: Junio 2026<br>
+            Metodología: SCRUM<br>
+            Curso: Desarrollo de Software
+        </div>
+    </div>
+    <h1>Incremento del Producto</h1>
+    <h2>Sistema de Gestión de Aprendizaje — Entregables por Sprint</h2>
+    <div class="portada-chips">
+        <span class="chip">📦 4 Sprints</span>
+        <span class="chip">📋 21 Historias de Usuario</span>
+        <span class="chip">⚡ 98 Story Points</span>
+        <span class="chip">🏫 I.E.P. Esther Carson</span>
+        <span class="chip">🛠️ Laravel 11 + PHP 8.2</span>
+    </div>
+    <div class="portada-stats">
+        <div class="stat-card">
+            <div class="stat-num">4</div>
+            <div class="stat-label">Sprints totales</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-num">21</div>
+            <div class="stat-label">Historias de usuario</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-num">98</div>
+            <div class="stat-label">Story Points</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-num">75%</div>
+            <div class="stat-label">Completado (S1-S3)</div>
+        </div>
+    </div>
+</div>
+
+<!-- ════ CONTENIDO ════ -->
+<div class="page">
+
+<!-- INTRODUCCIÓN -->
+<div class="section-title">
+    <h2>📌 ¿Qué es el Incremento del Producto?</h2>
+</div>
+<div class="intro-box">
+    <p>El <strong>Incremento del Producto</strong> en Scrum es la suma de todos los ítems del Product Backlog completados durante un Sprint, más el valor de todos los incrementos anteriores. Cada incremento debe ser funcional, integrado y potencialmente entregable. Este documento detalla las funcionalidades entregadas por sprint y el valor acumulado al final de cada iteración.</p>
+</div>
+
+<!-- VALOR ACUMULADO -->
+<div class="section-title">
+    <h2>📊 Valor Entregado Acumulado</h2>
+</div>
+<div class="valor-section">
+    <div class="valor-card">
+        <div class="num">S1–S3</div>
+        <div class="label">Sprints finalizados</div>
+    </div>
+    <div class="valor-card">
+        <div class="num">17 HU</div>
+        <div class="label">Historias completadas</div>
+    </div>
+    <div class="valor-card">
+        <div class="num">81 SP</div>
+        <div class="label">Story Points entregados</div>
+    </div>
+</div>
+
+<!-- PROGRESO POR SPRINT -->
+<div class="progreso-section">
+    <div class="progreso-title">📈 Progreso Acumulado por Sprint (Story Points)</div>
+
+    <div class="progreso-row">
+        <div class="progreso-label">Sprint 1</div>
+        <div class="progreso-bar-wrap"><div class="progreso-bar bar-s1"></div></div>
+        <div class="progreso-pct" style="color:#1e3a8a;">33%</div>
+        <div class="progreso-sp">28 / 98 SP</div>
+    </div>
+    <div class="progreso-row">
+        <div class="progreso-label">Sprint 2</div>
+        <div class="progreso-bar-wrap"><div class="progreso-bar bar-s2"></div></div>
+        <div class="progreso-pct" style="color:#065f46;">61%</div>
+        <div class="progreso-sp">60 / 98 SP</div>
+    </div>
+    <div class="progreso-row">
+        <div class="progreso-label">Sprint 3</div>
+        <div class="progreso-bar-wrap"><div class="progreso-bar bar-s3"></div></div>
+        <div class="progreso-pct" style="color:#78350f;">83%</div>
+        <div class="progreso-sp">81 / 98 SP</div>
+    </div>
+    <div class="progreso-row">
+        <div class="progreso-label">Sprint 4</div>
+        <div class="progreso-bar-wrap"><div class="progreso-bar bar-s4"></div></div>
+        <div class="progreso-pct" style="color:#4c1d95;">100%</div>
+        <div class="progreso-sp">98 / 98 SP</div>
+    </div>
+</div>
+
+<!-- ════════════════════════════
+     SPRINT 1
+════════════════════════════ -->
+<div class="section-title">
+    <h2>🏃 Detalle por Sprint</h2>
+</div>
+
+<div class="sprint-block">
+    <div class="sprint-header s1">
+        <div class="sprint-icon">🔵</div>
+        <div class="sprint-info">
+            <h3>Sprint 1 — Autenticación y Gestión Académica Base</h3>
+            <p>06 de abril 2026 → 01 de mayo 2026 &nbsp;·&nbsp; 26 días</p>
+        </div>
+        <div class="sprint-meta">
+            <div>7 Historias · <strong>28 SP</strong></div>
+            <div style="margin-top:4px;"><span class="estado-badge estado-hecho">✔ Finalizado</span></div>
+        </div>
+    </div>
+    <div class="sprint-body">
+        <div class="objetivo">
+            <strong>🎯 Objetivo del Sprint:</strong> Implementar el sistema de autenticación segura con control de acceso por roles, registrar la gestión de docentes con integración a RENIEC, configurar los años lectivos y disponibilizar el panel de control administrativo.
+        </div>
+
+        <div class="hu-grid">
+            <div class="hu-item">
+                <span class="hu-badge hb-s1">HU-01</span>
+                <div class="hu-content">
+                    <div class="hu-title">Iniciar Sesión</div>
+                    <div class="hu-desc">Login con usuario/contraseña, encriptación bcrypt, recordar sesión.</div>
+                    <div class="hu-sp"><span class="sp-dot">3</span> Story Points</div>
+                </div>
+            </div>
+            <div class="hu-item">
+                <span class="hu-badge hb-s1">HU-02</span>
+                <div class="hu-content">
+                    <div class="hu-title">Control de Acceso por Roles</div>
+                    <div class="hu-desc">Middlewares que restringen vistas y acciones según rol admin/docente.</div>
+                    <div class="hu-sp"><span class="sp-dot">5</span> Story Points</div>
+                </div>
+            </div>
+            <div class="hu-item">
+                <span class="hu-badge hb-s1">HU-03</span>
+                <div class="hu-content">
+                    <div class="hu-title">Cerrar Sesión</div>
+                    <div class="hu-desc">Cierre seguro con invalidación de sesión en servidor.</div>
+                    <div class="hu-sp"><span class="sp-dot">2</span> Story Points</div>
+                </div>
+            </div>
+            <div class="hu-item">
+                <span class="hu-badge hb-s1">HU-04</span>
+                <div class="hu-content">
+                    <div class="hu-title">Gestionar Docentes (CRUD)</div>
+                    <div class="hu-desc">Registrar, editar, activar/desactivar docentes con soft delete.</div>
+                    <div class="hu-sp"><span class="sp-dot">5</span> Story Points</div>
+                </div>
+            </div>
+            <div class="hu-item">
+                <span class="hu-badge hb-s1">HU-05</span>
+                <div class="hu-content">
+                    <div class="hu-title">Activar Año Lectivo</div>
+                    <div class="hu-desc">Crear años lectivos y activar uno único como período vigente.</div>
+                    <div class="hu-sp"><span class="sp-dot">3</span> Story Points</div>
+                </div>
+            </div>
+            <div class="hu-item">
+                <span class="hu-badge hb-s1">HU-07</span>
+                <div class="hu-content">
+                    <div class="hu-title">Dashboard Administrador</div>
+                    <div class="hu-desc">Panel con KPIs, gráficos Chart.js, actividad reciente y top docentes.</div>
+                    <div class="hu-sp"><span class="sp-dot">3</span> Story Points</div>
+                </div>
+            </div>
+            <div class="hu-item nueva">
+                <span class="hu-badge hb-nueva">HU-15</span>
+                <div class="hu-content">
+                    <div class="hu-title">Búsqueda DNI — RENIEC <span class="nueva-tag">★ Nueva</span></div>
+                    <div class="hu-desc">Autocompletar datos del docente consultando API RENIEC (throttle 30/min).</div>
+                    <div class="hu-sp"><span class="sp-dot">3</span> Story Points</div>
+                </div>
+            </div>
+            <div class="hu-item" style="background:#f1f5f9; border-style:dashed;">
+                <div class="hu-content" style="text-align:center; width:100%; padding: 10px 0;">
+                    <div style="font-size:10px; color:#9ca3af; font-weight:600;">Dashboard Docente incluido como parte de HU-07</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="entregables-title">📦 Entregables / Módulos funcionando al cierre del Sprint</div>
+        <div class="entregables-grid">
+            <div class="entregable s1">🔐 Módulo de Autenticación</div>
+            <div class="entregable s1">👥 CRUD Docentes completo</div>
+            <div class="entregable s1">📅 Gestión de Años Lectivos</div>
+            <div class="entregable s1">📊 Dashboard Admin</div>
+            <div class="entregable s1">🔎 Consulta DNI / RENIEC</div>
+            <div class="entregable s1">🛡️ Middlewares de roles</div>
+        </div>
+
+        <div class="sprint-footer">
+            <span class="estado-badge estado-hecho">✔ Sprint Finalizado</span>
+            <div class="sprint-sp-total">Story Points entregados: <strong>28 SP</strong> &nbsp;|&nbsp; Acumulado: <strong>28 / 98 SP</strong></div>
+        </div>
+    </div>
+</div>
+
+<!-- ════════════════════════════
+     SPRINT 2
+════════════════════════════ -->
+<div class="sprint-block">
+    <div class="sprint-header s2">
+        <div class="sprint-icon">🟢</div>
+        <div class="sprint-info">
+            <h3>Sprint 2 — Carga Académica y Gestión de Archivos del Docente</h3>
+            <p>02 de mayo 2026 → 27 de mayo 2026 &nbsp;·&nbsp; 26 días</p>
+        </div>
+        <div class="sprint-meta">
+            <div>6 Historias · <strong>32 SP</strong></div>
+            <div style="margin-top:4px;"><span class="estado-badge estado-hecho">✔ Finalizado</span></div>
+        </div>
+    </div>
+    <div class="sprint-body">
+        <div class="objetivo">
+            <strong>🎯 Objetivo del Sprint:</strong> Implementar el módulo de asignaciones de carga académica y el sistema completo de gestión de archivos del docente: subida con drag&drop, listado, previsualización con Google Docs Viewer y descarga de evidencias.
+        </div>
+
+        <div class="hu-grid">
+            <div class="hu-item">
+                <span class="hu-badge hb-s2">HU-06</span>
+                <div class="hu-content">
+                    <div class="hu-title">Asignar Cursos y Grados a Docentes</div>
+                    <div class="hu-desc">Relación M:N entre docentes, cursos, grados y secciones para carga académica.</div>
+                    <div class="hu-sp"><span class="sp-dot">5</span> Story Points</div>
+                </div>
+            </div>
+            <div class="hu-item">
+                <span class="hu-badge hb-s2">HU-08</span>
+                <div class="hu-content">
+                    <div class="hu-title">Subir Archivos / Sesiones</div>
+                    <div class="hu-desc">Formulario con drag&drop, validación de tipos y tamaño (máx 50 MB), barra de progreso.</div>
+                    <div class="hu-sp"><span class="sp-dot">8</span> Story Points</div>
+                </div>
+            </div>
+            <div class="hu-item">
+                <span class="hu-badge hb-s2">HU-09</span>
+                <div class="hu-content">
+                    <div class="hu-title">Ver Mis Archivos</div>
+                    <div class="hu-desc">Listado personal con filtros por bimestre, tipo de archivo y asignación.</div>
+                    <div class="hu-sp"><span class="sp-dot">5</span> Story Points</div>
+                </div>
+            </div>
+            <div class="hu-item">
+                <span class="hu-badge hb-s2">HU-10</span>
+                <div class="hu-content">
+                    <div class="hu-title">Previsualizar Archivos</div>
+                    <div class="hu-desc">Visor embebido Google Docs Viewer con URL firmada válida por 10 minutos.</div>
+                    <div class="hu-sp"><span class="sp-dot">5</span> Story Points</div>
+                </div>
+            </div>
+            <div class="hu-item nueva">
+                <span class="hu-badge hb-nueva">HU-16</span>
+                <div class="hu-content">
+                    <div class="hu-title">Descargar Archivos (Docente) <span class="nueva-tag">★ Nueva</span></div>
+                    <div class="hu-desc">Descarga directa del Storage de los propios archivos del docente.</div>
+                    <div class="hu-sp"><span class="sp-dot">2</span> Story Points</div>
+                </div>
+            </div>
+            <div class="hu-item" style="background:#f0fdf4; border-color:#a7f3d0;">
+                <div class="hu-content" style="text-align:center; width:100%; padding: 10px 0;">
+                    <div style="font-size:10px; color:#065f46; font-weight:700;">✅ Dashboard Docente también entregado en este Sprint</div>
+                    <div style="font-size:9.5px; color:#6b7280; margin-top:2px;">Resumen de archivos, estado de asignaciones, últimos documentos</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="entregables-title">📦 Entregables / Módulos funcionando al cierre del Sprint</div>
+        <div class="entregables-grid">
+            <div class="entregable s2">📚 Módulo de Asignaciones</div>
+            <div class="entregable s2">⬆️ Subida de Archivos</div>
+            <div class="entregable s2">📋 Listado de Archivos</div>
+            <div class="entregable s2">👁️ Previsualización</div>
+            <div class="entregable s2">⬇️ Descarga de Archivos</div>
+            <div class="entregable s2">🏠 Dashboard Docente</div>
+        </div>
+
+        <div class="sprint-footer">
+            <span class="estado-badge estado-hecho">✔ Sprint Finalizado</span>
+            <div class="sprint-sp-total">Story Points entregados: <strong>32 SP</strong> &nbsp;|&nbsp; Acumulado: <strong>60 / 98 SP</strong></div>
+        </div>
+    </div>
+</div>
+
+<!-- ════════════════════════════
+     SPRINT 3
+════════════════════════════ -->
+<div class="sprint-block">
+    <div class="sprint-header s3">
+        <div class="sprint-icon">🟡</div>
+        <div class="sprint-info">
+            <h3>Sprint 3 — Control Administrativo Global, Auditoría y Reportes</h3>
+            <p>28 de mayo 2026 → 22 de junio 2026 &nbsp;·&nbsp; 26 días</p>
+        </div>
+        <div class="sprint-meta">
+            <div>10 Historias · <strong>38 SP</strong></div>
+            <div style="margin-top:4px;"><span class="estado-badge estado-proceso">⚙ Finalizado</span></div>
+        </div>
+    </div>
+    <div class="sprint-body">
+        <div class="objetivo">
+            <strong>🎯 Objetivo del Sprint:</strong> Implementar el control y auditoría global de archivos para el Administrador con búsqueda avanzada, papelera global, generación y exportación de reportes de cumplimiento en PDF/CSV/Word, y configuración institucional del sistema.
+        </div>
+
+        <div class="hu-grid">
+            <div class="hu-item">
+                <span class="hu-badge hb-s3">HU-11</span>
+                <div class="hu-content">
+                    <div class="hu-title">Papelera de Archivos (Docente)</div>
+                    <div class="hu-desc">Soft deletes en archivos, vista papelera, restaurar archivos eliminados.</div>
+                    <div class="hu-sp"><span class="sp-dot">5</span> Story Points</div>
+                </div>
+            </div>
+            <div class="hu-item">
+                <span class="hu-badge hb-s3">HU-12</span>
+                <div class="hu-content">
+                    <div class="hu-title">Visualizar Todos los Archivos (Admin)</div>
+                    <div class="hu-desc">Vista global de archivos de todos los docentes con filtros avanzados.</div>
+                    <div class="hu-sp"><span class="sp-dot">5</span> Story Points</div>
+                </div>
+            </div>
+            <div class="hu-item">
+                <span class="hu-badge hb-s3">HU-13</span>
+                <div class="hu-content">
+                    <div class="hu-title">Descargar / Previsualizar Global</div>
+                    <div class="hu-desc">El admin puede ver o descargar cualquier archivo del sistema.</div>
+                    <div class="hu-sp"><span class="sp-dot">5</span> Story Points</div>
+                </div>
+            </div>
+            <div class="hu-item">
+                <span class="hu-badge hb-s3">HU-14</span>
+                <div class="hu-content">
+                    <div class="hu-title">Reportes de Cumplimiento</div>
+                    <div class="hu-desc">Reporte por bimestre/año con porcentaje de cumplimiento por docente. Exporta PDF, Word y CSV.</div>
+                    <div class="hu-sp"><span class="sp-dot">8</span> Story Points</div>
+                </div>
+            </div>
+            <div class="hu-item nueva">
+                <span class="hu-badge hb-nueva">HU-17</span>
+                <div class="hu-content">
+                    <div class="hu-title">Eliminar Definitivamente (Docente) <span class="nueva-tag">★ Nueva</span></div>
+                    <div class="hu-desc">Borrado permanente desde la papelera del docente con confirmación.</div>
+                    <div class="hu-sp"><span class="sp-dot">2</span> Story Points</div>
+                </div>
+            </div>
+            <div class="hu-item nueva">
+                <span class="hu-badge hb-nueva">HU-18</span>
+                <div class="hu-content">
+                    <div class="hu-title">Papelera Global (Admin) <span class="nueva-tag">★ Nueva</span></div>
+                    <div class="hu-desc">Gestión de papelera global: restaurar o eliminar definitivamente cualquier archivo.</div>
+                    <div class="hu-sp"><span class="sp-dot">3</span> Story Points</div>
+                </div>
+            </div>
+            <div class="hu-item nueva">
+                <span class="hu-badge hb-nueva">HU-19</span>
+                <div class="hu-content">
+                    <div class="hu-title">Detalle por Docente en Reporte <span class="nueva-tag">★ Nueva</span></div>
+                    <div class="hu-desc">Modal con detalle de cumplimiento por asignación individual de cada docente.</div>
+                    <div class="hu-sp"><span class="sp-dot">3</span> Story Points</div>
+                </div>
+            </div>
+            <div class="hu-item nueva">
+                <span class="hu-badge hb-nueva">HU-20</span>
+                <div class="hu-content">
+                    <div class="hu-title">Configurar Perfil e Institución <span class="nueva-tag">★ Nueva</span></div>
+                    <div class="hu-desc">Actualizar nombre, logo y datos de la institución que aparecen en reportes.</div>
+                    <div class="hu-sp"><span class="sp-dot">3</span> Story Points</div>
+                </div>
+            </div>
+            <div class="hu-item nueva">
+                <span class="hu-badge hb-nueva">HU-21</span>
+                <div class="hu-content">
+                    <div class="hu-title">Cambiar Contraseña (Admin) <span class="nueva-tag">★ Nueva</span></div>
+                    <div class="hu-desc">Actualización segura de contraseña con validación de la contraseña actual.</div>
+                    <div class="hu-sp"><span class="sp-dot">2</span> Story Points</div>
+                </div>
+            </div>
+            <div class="hu-item" style="background:#fffbeb; border-color:#fde68a;">
+                <div class="hu-content" style="text-align:center; width:100%; padding: 10px 0;">
+                    <div style="font-size:10px; color:#78350f; font-weight:700;">⚙️ Validación DNI con regla personalizada también entregada</div>
+                    <div style="font-size:9.5px; color:#6b7280; margin-top:2px;">Rule DniValido.php — migración add_dni_to_users_table</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="entregables-title">📦 Entregables / Módulos funcionando al cierre del Sprint</div>
+        <div class="entregables-grid">
+            <div class="entregable s3">🗑️ Papelera Docente</div>
+            <div class="entregable s3">🔍 Auditoría Global Admin</div>
+            <div class="entregable s3">📄 Reportes PDF/CSV/Word</div>
+            <div class="entregable s3">🗑️ Papelera Global Admin</div>
+            <div class="entregable s3">📊 Modal Detalle Docente</div>
+            <div class="entregable s3">⚙️ Configuración Sistema</div>
+        </div>
+
+        <div class="sprint-footer">
+            <span class="estado-badge estado-hecho">✔ Sprint Finalizado</span>
+            <div class="sprint-sp-total">Story Points entregados: <strong>38 SP</strong> &nbsp;|&nbsp; Acumulado: <strong>98 / 98 SP (funcionalidades completadas)</strong></div>
+        </div>
+    </div>
+</div>
+
+<!-- ════════════════════════════
+     SPRINT 4
+════════════════════════════ -->
+<div class="sprint-block">
+    <div class="sprint-header s4">
+        <div class="sprint-icon">🟣</div>
+        <div class="sprint-info">
+            <h3>Sprint 4 — Pruebas Integrales, Optimización y Despliegue</h3>
+            <p>23 de junio 2026 → 05 de julio 2026 &nbsp;·&nbsp; 13 días</p>
+        </div>
+        <div class="sprint-meta">
+            <div>Actividades no funcionales</div>
+            <div style="margin-top:4px;"><span class="estado-badge estado-proceso">⏳ En curso</span></div>
+        </div>
+    </div>
+    <div class="sprint-body">
+        <div class="objetivo">
+            <strong>🎯 Objetivo del Sprint:</strong> Realizar pruebas integrales del sistema con usuarios reales (docentes y directivos de la institución), corregir defectos detectados, optimizar el rendimiento y ejecutar el despliegue oficial del Sistema de Gestión Escolar.
+        </div>
+
+        <div class="entregables-title">🗂️ Actividades planificadas para este Sprint</div>
+        <div class="entregables-grid">
+            <div class="entregable s4">🧪 Pruebas de aceptación UAT</div>
+            <div class="entregable s4">👩‍🏫 Validación con docentes</div>
+            <div class="entregable s4">📋 Validación con directivos</div>
+            <div class="entregable s4">⚡ Optimización de rendimiento</div>
+            <div class="entregable s4">📖 Entrega de manual de usuario</div>
+            <div class="entregable s4">🚀 Despliegue oficial</div>
+        </div>
+
+        <div class="sprint-footer">
+            <span class="estado-badge estado-proceso">⏳ En Curso</span>
+            <div class="sprint-sp-total">Inicio: 23/06/2026 &nbsp;|&nbsp; Cierre estimado: <strong>05/07/2026</strong></div>
+        </div>
+    </div>
+</div>
+
+<!-- ════ TABLA RESUMEN ════ -->
+<div class="section-title">
+    <h2>📋 Tabla Resumen de Incrementos por Sprint</h2>
+</div>
+
+<table class="tabla-resumen">
+    <thead>
+        <tr>
+            <th>Sprint</th>
+            <th>Período</th>
+            <th>HU Entregadas</th>
+            <th>Story Points</th>
+            <th>SP Acumulados</th>
+            <th>% Completado</th>
+            <th>Estado</th>
+            <th>Incremento Principal</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td><strong>Sprint 1</strong></td>
+            <td>06/04 → 01/05/26</td>
+            <td style="text-align:center;">7 HU</td>
+            <td style="text-align:center;"><strong>28 SP</strong></td>
+            <td style="text-align:center;">28 SP</td>
+            <td style="text-align:center; color:#1e3a8a; font-weight:800;">33%</td>
+            <td style="text-align:center;"><span style="background:#dcfce7;color:#14532d;padding:2px 8px;border-radius:99px;font-size:9px;font-weight:800;">✔ Hecho</span></td>
+            <td>Autenticación · Docentes · Años Lectivos · Dashboard</td>
+        </tr>
+        <tr>
+            <td><strong>Sprint 2</strong></td>
+            <td>02/05 → 27/05/26</td>
+            <td style="text-align:center;">6 HU</td>
+            <td style="text-align:center;"><strong>32 SP</strong></td>
+            <td style="text-align:center;">60 SP</td>
+            <td style="text-align:center; color:#065f46; font-weight:800;">61%</td>
+            <td style="text-align:center;"><span style="background:#dcfce7;color:#14532d;padding:2px 8px;border-radius:99px;font-size:9px;font-weight:800;">✔ Hecho</span></td>
+            <td>Asignaciones · Subida Archivos · Previsualización · Descarga</td>
+        </tr>
+        <tr>
+            <td><strong>Sprint 3</strong></td>
+            <td>28/05 → 22/06/26</td>
+            <td style="text-align:center;">10 HU</td>
+            <td style="text-align:center;"><strong>38 SP</strong></td>
+            <td style="text-align:center;">98 SP*</td>
+            <td style="text-align:center; color:#78350f; font-weight:800;">100%*</td>
+            <td style="text-align:center;"><span style="background:#dcfce7;color:#14532d;padding:2px 8px;border-radius:99px;font-size:9px;font-weight:800;">✔ Hecho</span></td>
+            <td>Auditoría Global · Papeleras · Reportes · Configuración</td>
+        </tr>
+        <tr>
+            <td><strong>Sprint 4</strong></td>
+            <td>23/06 → 05/07/26</td>
+            <td style="text-align:center;">—</td>
+            <td style="text-align:center;">—</td>
+            <td style="text-align:center;">—</td>
+            <td style="text-align:center; color:#4c1d95; font-weight:800;">—</td>
+            <td style="text-align:center;"><span style="background:#fef3c7;color:#78350f;padding:2px 8px;border-radius:99px;font-size:9px;font-weight:800;">⏳ En curso</span></td>
+            <td>Pruebas UAT · Optimización · Despliegue oficial</td>
+        </tr>
+        <tr class="total-row">
+            <td><strong>TOTAL</strong></td>
+            <td><strong>06/04 → 05/07/26</strong></td>
+            <td style="text-align:center;"><strong>21 HU</strong></td>
+            <td style="text-align:center;"><strong>98 SP</strong></td>
+            <td style="text-align:center;"><strong>98 SP</strong></td>
+            <td style="text-align:center;"><strong>100%</strong></td>
+            <td style="text-align:center;">4 Sprints</td>
+            <td><strong>Sistema de Gestión de Aprendizaje completo</strong></td>
+        </tr>
+    </tbody>
+</table>
+
+<p style="font-size:9px; color:#6b7280; margin-top:-12px; margin-bottom:20px;">
+    * Sprint 3 completó todas las funcionalidades del sistema. Sprint 4 se dedica a pruebas y despliegue (sin nuevas HU funcionales).
+</p>
+
+<!-- PIE -->
+<div class="pie">
+    <div><strong>I.E.P. Esther Carson</strong> — Incremento del Producto · Sistema de Gestión de Aprendizaje</div>
+    <div>Scrum · 4 Sprints · 21 HU · 98 SP &nbsp;|&nbsp; Junio 2026</div>
+</div>
+
+</div><!-- /page -->
+</body>
+</html>

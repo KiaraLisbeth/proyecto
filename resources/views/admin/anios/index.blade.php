@@ -385,8 +385,8 @@
                 </svg>
             </div>
             <div>
-                <h3 class="text-base font-bold text-slate-100">Nuevo Año Lectivo</h3>
-                <p class="text-xs text-slate-500">El año actual quedará archivado.</p>
+                <h3 class="text-base font-bold text-gray-800 dark:text-slate-100">Nuevo Año Lectivo</h3>
+                <p class="text-xs text-gray-500 dark:text-slate-500">El año actual quedará archivado.</p>
             </div>
         </div>
         <form method="POST" action="{{ route('admin.anios.store') }}">

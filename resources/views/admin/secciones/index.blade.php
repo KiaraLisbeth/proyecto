@@ -183,7 +183,7 @@
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
                 </svg>
             </div>
-            <h3 class="text-base font-bold text-slate-100">Nueva Sección</h3>
+            <h3 class="text-base font-bold text-gray-800 dark:text-slate-100">Nueva Sección</h3>
         </div>
         <form method="POST" action="{{ route('admin.secciones.store') }}">
             @csrf
@@ -197,7 +197,7 @@
                 @error('nombre')
                     <p class="text-xs text-red-400 mt-1">{{ $message }}</p>
                 @enderror
-                <p class="text-xs text-slate-500 mt-1.5">Se guardará en mayúsculas automáticamente.</p>
+                <p class="text-xs text-gray-500 dark:text-slate-500 mt-1.5">Se guardará en mayúsculas automáticamente.</p>
             </div>
             <div class="flex gap-3 justify-end">
                 <button type="button" onclick="closeCreateModal()" class="btn btn-ghost btn-sm">Cancelar</button>
@@ -217,7 +217,7 @@
                           d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/>
                 </svg>
             </div>
-            <h3 class="text-base font-bold text-slate-100">Editar Sección</h3>
+            <h3 class="text-base font-bold text-gray-800 dark:text-slate-100">Editar Sección</h3>
         </div>
         <form method="POST" id="editForm" action="">
             @csrf @method('PUT')
@@ -226,7 +226,7 @@
                 <input type="text" name="nombre" id="editNombre"
                        class="input"
                        maxlength="10">
-                <p class="text-xs text-slate-500 mt-1.5">Se guardará en mayúsculas automáticamente.</p>
+                <p class="text-xs text-gray-500 dark:text-slate-500 mt-1.5">Se guardará en mayúsculas automáticamente.</p>
             </div>
             <div class="flex gap-3 justify-end">
                 <button type="button" onclick="closeEditModal()" class="btn btn-ghost btn-sm">Cancelar</button>

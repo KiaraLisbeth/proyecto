@@ -1,0 +1,1120 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Manual de Usuario — I.E.P. Esther Carson</title>
+<style>
+/* ── RESET ────────────────────────────────────────── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+    font-family: 'Segoe UI', Arial, sans-serif;
+    font-size: 13px;
+    color: #1a1a2e;
+    background: #fff;
+    line-height: 1.6;
+}
+
+/* ── PORTADA ──────────────────────────────────────── */
+.portada {
+    width: 100%;
+    padding: 60px 50px 50px;
+    background: #1e3a8a;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+    color: #fff;
+    text-align: center;
+    page-break-after: always;
+}
+.portada-logo {
+    font-size: 60px;
+    margin-bottom: 20px;
+    display: block;
+}
+.portada h1 {
+    font-size: 32px;
+    font-weight: 900;
+    color: #fff;
+    margin-bottom: 8px;
+    letter-spacing: -0.5px;
+}
+.portada h2 {
+    font-size: 16px;
+    font-weight: 400;
+    color: rgba(255,255,255,0.8);
+    margin-bottom: 40px;
+}
+.portada-linea {
+    width: 60px;
+    height: 3px;
+    background: rgba(255,255,255,0.4);
+    margin: 0 auto 40px;
+    border-radius: 3px;
+}
+.portada-datos {
+    display: flex;
+    justify-content: center;
+    gap: 40px;
+    margin-bottom: 40px;
+}
+.portada-dato {
+    background: rgba(255,255,255,0.12);
+    border: 1px solid rgba(255,255,255,0.2);
+    border-radius: 10px;
+    padding: 14px 24px;
+    min-width: 130px;
+}
+.portada-dato .etiqueta {
+    font-size: 9px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    color: rgba(255,255,255,0.6);
+    margin-bottom: 4px;
+}
+.portada-dato .valor {
+    font-size: 13px;
+    font-weight: 700;
+    color: #fff;
+}
+.portada-pie {
+    font-size: 10px;
+    color: rgba(255,255,255,0.4);
+    margin-top: 30px;
+}
+
+/* ── CONTENEDOR PRINCIPAL ────────────────────────── */
+.contenido {
+    max-width: 780px;
+    margin: 0 auto;
+    padding: 30px 40px;
+}
+
+/* ── TABLA DE CONTENIDOS ─────────────────────────── */
+.toc {
+    background: #f0f4ff;
+    border: 2px solid #1e3a8a;
+    border-radius: 10px;
+    padding: 24px 28px;
+    margin-bottom: 30px;
+    page-break-after: always;
+}
+.toc-titulo {
+    font-size: 15px;
+    font-weight: 900;
+    color: #1e3a8a;
+    margin-bottom: 16px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+.toc ol {
+    padding-left: 0;
+    list-style: none;
+}
+.toc > ol > li {
+    counter-increment: none;
+    margin-bottom: 4px;
+}
+.toc a {
+    text-decoration: none;
+    color: #1e3a8a;
+    font-size: 12.5px;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 3px 0;
+    border-bottom: 1px dashed #b8c9f0;
+}
+.toc a:hover { color: #2563eb; }
+.toc .num {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 22px; height: 22px;
+    background: #1e3a8a;
+    color: #fff;
+    border-radius: 5px;
+    font-size: 10px;
+    font-weight: 900;
+    flex-shrink: 0;
+}
+.toc ol ol {
+    padding-left: 30px;
+    margin-top: 2px;
+}
+.toc ol ol li a {
+    color: #374151;
+    font-weight: 500;
+    font-size: 11.5px;
+    border-bottom: none;
+}
+.toc ol ol li a::before { content: "› "; color: #2563eb; }
+
+/* ── SECCIÓN ─────────────────────────────────────── */
+.seccion {
+    margin-bottom: 28px;
+}
+.seccion-cabecera {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    background: #1e3a8a;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+    color: #fff;
+    padding: 10px 16px;
+    border-radius: 8px;
+    margin-bottom: 16px;
+}
+.seccion-num {
+    font-size: 18px;
+    font-weight: 900;
+    background: rgba(255,255,255,0.2);
+    border-radius: 6px;
+    width: 32px; height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+.seccion-titulo {
+    font-size: 15px;
+    font-weight: 800;
+    color: #fff;
+}
+.seccion h3 {
+    font-size: 12.5px;
+    font-weight: 800;
+    color: #1e3a8a;
+    margin: 16px 0 8px;
+    padding-left: 10px;
+    border-left: 4px solid #2563eb;
+}
+.seccion p {
+    font-size: 12.5px;
+    color: #1f2937;
+    margin-bottom: 10px;
+    line-height: 1.65;
+}
+
+/* ── PASOS ───────────────────────────────────────── */
+.pasos {
+    list-style: none;
+    counter-reset: paso;
+    margin: 10px 0 14px;
+}
+.pasos li {
+    counter-increment: paso;
+    display: flex;
+    gap: 10px;
+    align-items: flex-start;
+    background: #f8faff;
+    border: 1px solid #dbeafe;
+    border-radius: 8px;
+    padding: 9px 13px;
+    margin-bottom: 6px;
+    font-size: 12px;
+    color: #1f2937;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+}
+.pasos li::before {
+    content: counter(paso);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 24px; height: 24px;
+    background: #1e3a8a;
+    color: #fff;
+    border-radius: 6px;
+    font-size: 10px;
+    font-weight: 900;
+    flex-shrink: 0;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+}
+.pasos li strong { color: #111827; }
+
+/* ── ALERTAS ─────────────────────────────────────── */
+.alerta {
+    display: flex;
+    gap: 10px;
+    align-items: flex-start;
+    padding: 10px 14px;
+    border-radius: 8px;
+    margin: 10px 0;
+    font-size: 12px;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+}
+.alerta-icono { font-size: 14px; flex-shrink: 0; }
+.alerta.info  { background: #eff6ff; border-left: 4px solid #2563eb; color: #1e3a8a; }
+.alerta.ok    { background: #f0fdf4; border-left: 4px solid #16a34a; color: #14532d; }
+.alerta.warn  { background: #fffbeb; border-left: 4px solid #d97706; color: #78350f; }
+.alerta.peligro { background: #fef2f2; border-left: 4px solid #dc2626; color: #7f1d1d; }
+
+/* ── TABLA ───────────────────────────────────────── */
+.tabla {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 12px 0;
+    font-size: 11.5px;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+}
+.tabla th {
+    background: #1e3a8a;
+    color: #fff;
+    padding: 8px 12px;
+    text-align: left;
+    font-size: 10px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+.tabla td {
+    padding: 8px 12px;
+    border-bottom: 1px solid #e5e7eb;
+    color: #1f2937;
+    vertical-align: top;
+}
+.tabla tr:nth-child(even) td { background: #f9fafb; }
+.tabla td strong { color: #111827; }
+
+/* ── ROLES ───────────────────────────────────────── */
+.roles-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 14px;
+    margin: 12px 0;
+}
+.rol-card {
+    border-radius: 10px;
+    padding: 16px;
+    border: 2px solid;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+}
+.rol-card.admin  { background: #eff6ff; border-color: #2563eb; }
+.rol-card.docente { background: #f0fdf4; border-color: #16a34a; }
+.rol-card h4 {
+    font-size: 12px;
+    font-weight: 800;
+    margin-bottom: 10px;
+}
+.rol-card.admin h4  { color: #1e3a8a; }
+.rol-card.docente h4 { color: #14532d; }
+.rol-card ul { list-style: none; }
+.rol-card ul li {
+    font-size: 11.5px;
+    color: #1f2937;
+    padding: 2px 0;
+    display: flex;
+    align-items: flex-start;
+    gap: 6px;
+}
+.rol-card.admin ul li::before  { content: "✓"; color: #2563eb; font-weight: 900; flex-shrink:0; }
+.rol-card.docente ul li::before { content: "✓"; color: #16a34a; font-weight: 900; flex-shrink:0; }
+
+/* ── DEMO LOGIN ──────────────────────────────────── */
+.demo-login {
+    background: #1d4ed8;
+    border-radius: 16px;
+    padding: 24px 20px;
+    max-width: 340px;
+    margin: 14px auto;
+    text-align: center;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+}
+.demo-login .logo { font-size: 28px; margin-bottom: 6px; }
+.demo-login .nombre { font-size: 13px; font-weight: 800; color: #fff; margin-bottom: 2px; }
+.demo-login .subtitulo { font-size: 10px; color: rgba(255,255,255,0.65); margin-bottom: 18px; }
+.demo-campo { margin-bottom: 10px; text-align: left; }
+.demo-campo .etiq {
+    font-size: 9px;
+    font-weight: 700;
+    color: rgba(255,255,255,0.7);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 3px;
+    display: block;
+}
+.demo-input {
+    width: 100%;
+    background: rgba(255,255,255,0.95);
+    border-radius: 8px;
+    padding: 8px 12px;
+    font-size: 12px;
+    color: #374151;
+    display: block;
+}
+.demo-boton {
+    width: 100%;
+    background: #3b82f6;
+    color: #fff;
+    font-weight: 700;
+    font-size: 12px;
+    padding: 10px;
+    border-radius: 8px;
+    margin-top: 6px;
+    text-align: center;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+}
+.demo-nota { font-size: 9px; color: rgba(255,255,255,0.4); margin-top: 14px; }
+
+/* ── DEMO FORMULARIO ─────────────────────────────── */
+.demo-form {
+    background: #f8faff;
+    border: 1px solid #dbeafe;
+    border-radius: 10px;
+    padding: 16px 20px;
+    margin: 12px 0;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+}
+.demo-form .campo { margin-bottom: 10px; }
+.demo-form .campo label {
+    display: block;
+    font-size: 9.5px;
+    font-weight: 700;
+    color: #374151;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 3px;
+}
+.demo-form .campo .valor {
+    background: #fff;
+    border: 1px solid #d1d5db;
+    border-radius: 6px;
+    padding: 7px 10px;
+    font-size: 11.5px;
+    color: #374151;
+    width: 100%;
+    display: block;
+}
+.bimestres-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 8px;
+    margin-top: 4px;
+}
+.bim-btn {
+    border: 2px solid #e5e7eb;
+    border-radius: 8px;
+    padding: 8px 4px;
+    text-align: center;
+    font-size: 11px;
+    color: #9ca3af;
+}
+.bim-btn.activo {
+    border-color: #16a34a;
+    background: #f0fdf4;
+    color: #15803d;
+    font-weight: 800;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+}
+.drop-zone {
+    border: 2px dashed #d1d5db;
+    border-radius: 8px;
+    padding: 16px;
+    text-align: center;
+    font-size: 11.5px;
+    color: #6b7280;
+    margin-top: 4px;
+}
+.drop-zone span { color: #16a34a; text-decoration: underline; }
+.btn-subir {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: #16a34a;
+    color: #fff;
+    font-weight: 700;
+    font-size: 11.5px;
+    padding: 8px 16px;
+    border-radius: 8px;
+    margin-top: 10px;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+}
+
+/* ── BADGE ───────────────────────────────────────── */
+.badge {
+    display: inline-flex;
+    padding: 2px 8px;
+    border-radius: 99px;
+    font-size: 10px;
+    font-weight: 700;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+}
+.badge.azul   { background: #dbeafe; color: #1e3a8a; }
+.badge.verde  { background: #dcfce7; color: #14532d; }
+.badge.ambar  { background: #fef3c7; color: #78350f; }
+.badge.rojo   { background: #fee2e2; color: #7f1d1d; }
+
+/* ── SUBSECCIÓN ──────────────────────────────────── */
+.subseccion {
+    background: #f0f4ff;
+    border-left: 4px solid #2563eb;
+    border-radius: 0 8px 8px 0;
+    padding: 10px 14px;
+    margin: 14px 0 8px;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+}
+.subseccion-titulo {
+    font-size: 12px;
+    font-weight: 800;
+    color: #1e3a8a;
+}
+
+/* ── PIE ─────────────────────────────────────────── */
+.pie-pagina {
+    margin-top: 30px;
+    padding-top: 16px;
+    border-top: 2px solid #e5e7eb;
+    text-align: center;
+    font-size: 10.5px;
+    color: #6b7280;
+}
+.pie-pagina strong { color: #374151; }
+
+/* ── SEPARADOR ───────────────────────────────────── */
+.separador {
+    border: none;
+    border-top: 1px solid #e5e7eb;
+    margin: 20px 0;
+}
+
+/* ── BOTÓN PDF FLOTANTE ──────────────────────────── */
+.btn-pdf {
+    position: fixed;
+    bottom: 24px;
+    right: 24px;
+    z-index: 9999;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background: #1e3a8a;
+    color: #fff;
+    border: none;
+    border-radius: 12px;
+    padding: 12px 20px;
+    font-size: 13px;
+    font-weight: 800;
+    cursor: pointer;
+    box-shadow: 0 6px 24px rgba(30,58,138,0.4);
+    transition: all 0.15s;
+    font-family: inherit;
+}
+.btn-pdf:hover { transform: translateY(-2px); box-shadow: 0 10px 32px rgba(30,58,138,0.5); }
+
+/* ── PRINT ───────────────────────────────────────── */
+@media print {
+    .btn-pdf { display: none !important; }
+    body { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+    .portada { page-break-after: always; min-height: auto; }
+    .toc { page-break-after: always; }
+    .seccion { page-break-inside: avoid; }
+}
+@page { size: A4; margin: 15mm 18mm; }
+</style>
+</head>
+<body>
+
+<!-- ════ BOTÓN PDF FLOTANTE ════ -->
+<button class="btn-pdf" onclick="window.print()">
+    ⬇ Descargar PDF
+</button>
+
+<!-- ════════════════════════════════════════════════════
+     PORTADA
+════════════════════════════════════════════════════ -->
+<div class="portada">
+    <span class="portada-logo">🎓</span>
+    <h1>Manual de Usuario</h1>
+    <h2>Sistema de Gestión de Aprendizaje</h2>
+    <div class="portada-linea"></div>
+    <div class="portada-datos">
+        <div class="portada-dato">
+            <div class="etiqueta">Institución</div>
+            <div class="valor">I.E.P. Esther Carson</div>
+        </div>
+        <div class="portada-dato">
+            <div class="etiqueta">Versión</div>
+            <div class="valor">1.0 — 2026</div>
+        </div>
+        <div class="portada-dato">
+            <div class="etiqueta">Dirigido a</div>
+            <div class="valor">Admin · Docente</div>
+        </div>
+    </div>
+    <div class="portada-pie">Documento oficial de uso interno · I.E.P. Esther Carson · 2026</div>
+</div>
+
+<!-- ════════════════════════════════════════════════════
+     CONTENIDO
+════════════════════════════════════════════════════ -->
+<div class="contenido">
+
+<!-- ════ TABLA DE CONTENIDOS ════ -->
+<div class="toc">
+    <div class="toc-titulo">📋 Tabla de Contenidos</div>
+    <ol>
+        <li>
+            <a href="#s1"><span class="num">1</span> Introducción al Sistema</a>
+            <ol>
+                <li><a href="#s1-1">¿Qué es el sistema?</a></li>
+                <li><a href="#s1-2">Roles de usuario</a></li>
+                <li><a href="#s1-3">Requisitos de acceso</a></li>
+            </ol>
+        </li>
+        <li>
+            <a href="#s2"><span class="num">2</span> Inicio de Sesión</a>
+            <ol>
+                <li><a href="#s2-1">Cómo ingresar</a></li>
+                <li><a href="#s2-2">Cerrar sesión</a></li>
+            </ol>
+        </li>
+        <li>
+            <a href="#s3"><span class="num">3</span> Panel del Administrador</a>
+            <ol>
+                <li><a href="#s3-1">Dashboard / Panel de inicio</a></li>
+                <li><a href="#s3-2">Gestión de Docentes</a></li>
+                <li><a href="#s3-3">Gestión de Años Lectivos</a></li>
+                <li><a href="#s3-4">Control Global de Archivos</a></li>
+                <li><a href="#s3-5">Reportes de Cumplimiento</a></li>
+                <li><a href="#s3-6">Configuración y Perfil</a></li>
+            </ol>
+        </li>
+        <li>
+            <a href="#s4"><span class="num">4</span> Panel del Docente</a>
+            <ol>
+                <li><a href="#s4-1">Dashboard del Docente</a></li>
+                <li><a href="#s4-2">Subir un Archivo</a></li>
+                <li><a href="#s4-3">Ver mis Archivos</a></li>
+                <li><a href="#s4-4">Previsualizar Archivos</a></li>
+                <li><a href="#s4-5">Papelera de Archivos</a></li>
+            </ol>
+        </li>
+        <li><a href="#s5"><span class="num">5</span> Preguntas Frecuentes</a></li>
+        <li><a href="#s6"><span class="num">6</span> Glosario de Términos</a></li>
+    </ol>
+</div>
+
+<!-- ════════════════════════════════════════════════════
+     SECCIÓN 1 — INTRODUCCIÓN
+════════════════════════════════════════════════════ -->
+<div class="seccion" id="s1">
+    <div class="seccion-cabecera">
+        <div class="seccion-num">1</div>
+        <div class="seccion-titulo">Introducción al Sistema</div>
+    </div>
+
+    <h3 id="s1-1">¿Qué es el Sistema de Gestión de Aprendizaje?</h3>
+    <p>El <strong>Sistema de Gestión de Aprendizaje de la I.E.P. Esther Carson</strong> es una plataforma web institucional que permite gestionar, organizar y dar seguimiento a las evidencias académicas entregadas por los docentes en cada bimestre escolar.</p>
+    <p>Los docentes pueden subir sus sesiones de aprendizaje en formato digital, y el administrador tiene visión global del cumplimiento de la institución con reportes exportables en PDF, Excel y Word.</p>
+
+    <div class="alerta info">
+        <span class="alerta-icono">ℹ️</span>
+        <div>El sistema funciona directamente en el navegador web, sin instalar programas adicionales. Se recomienda usar <strong>Google Chrome</strong> o <strong>Microsoft Edge</strong>.</div>
+    </div>
+
+    <h3 id="s1-2">Roles de Usuario</h3>
+    <p>El sistema cuenta con dos tipos de usuario con accesos y funciones diferentes:</p>
+    <div class="roles-grid">
+        <div class="rol-card admin">
+            <h4>🔵 Administrador</h4>
+            <ul>
+                <li>Ver panel de estadísticas global</li>
+                <li>Registrar y gestionar docentes</li>
+                <li>Crear y activar años lectivos</li>
+                <li>Ver todos los archivos del sistema</li>
+                <li>Generar reportes de cumplimiento</li>
+                <li>Exportar reportes en PDF, CSV y Word</li>
+                <li>Configurar datos de la institución</li>
+            </ul>
+        </div>
+        <div class="rol-card docente">
+            <h4>🟢 Docente</h4>
+            <ul>
+                <li>Ver su panel personal</li>
+                <li>Subir sesiones de aprendizaje</li>
+                <li>Organizar por bimestre y asignación</li>
+                <li>Previsualizar sus archivos</li>
+                <li>Descargar sus propios archivos</li>
+                <li>Gestionar su papelera de archivos</li>
+            </ul>
+        </div>
+    </div>
+
+    <h3 id="s1-3">Requisitos de Acceso</h3>
+    <table class="tabla">
+        <thead>
+            <tr><th>Requisito</th><th>Detalle</th></tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td><strong>Cuenta de usuario</strong></td>
+                <td>Creada exclusivamente por el Administrador. No existe registro público.</td>
+            </tr>
+            <tr>
+                <td><strong>Usuario y contraseña</strong></td>
+                <td>Proporcionados por el administrador al momento del registro.</td>
+            </tr>
+            <tr>
+                <td><strong>Navegador web</strong></td>
+                <td>Google Chrome, Microsoft Edge o Firefox (versión reciente).</td>
+            </tr>
+            <tr>
+                <td><strong>Conexión a internet</strong></td>
+                <td>Necesaria para acceder al sistema y previsualizar archivos.</td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+
+<hr class="separador">
+
+<!-- ════════════════════════════════════════════════════
+     SECCIÓN 2 — INICIO DE SESIÓN
+════════════════════════════════════════════════════ -->
+<div class="seccion" id="s2">
+    <div class="seccion-cabecera">
+        <div class="seccion-num">2</div>
+        <div class="seccion-titulo">Inicio de Sesión</div>
+    </div>
+
+    <h3 id="s2-1">Cómo Ingresar al Sistema</h3>
+    <p>Al abrir la dirección del sistema en su navegador, verá la siguiente pantalla de acceso:</p>
+
+    <div class="demo-login">
+        <div class="logo">🎓</div>
+        <div class="nombre">I.E.P Esther Carson</div>
+        <div class="subtitulo">Sistema de Gestión de Aprendizaje</div>
+        <div class="demo-campo">
+            <span class="etiq">👤 Usuario</span>
+            <div class="demo-input">knamuchefl</div>
+        </div>
+        <div class="demo-campo">
+            <span class="etiq">🔒 Contraseña</span>
+            <div class="demo-input">••••••••</div>
+        </div>
+        <div class="demo-boton">➜ Iniciar Sesión</div>
+        <div class="demo-nota">El acceso es solo por invitación del administrador.</div>
+    </div>
+
+    <ol class="pasos">
+        <li>Abra su navegador web (Chrome, Edge o Firefox).</li>
+        <li>Ingrese la dirección del sistema y presione <strong>Enter</strong>.</li>
+        <li>Escriba su <strong>nombre de usuario</strong> (Ej: <code>knamuchefl</code> o <code>ADMIN</code>).</li>
+        <li>Escriba su <strong>contraseña</strong>. Puede tocar el ícono del ojo 👁️ para verla.</li>
+        <li>Opcionalmente marque <strong>"Mantener sesión iniciada"</strong> si usa equipo personal.</li>
+        <li>Haga clic en <strong>"Iniciar Sesión"</strong>.</li>
+        <li>El sistema lo llevará a su panel según su rol: Administrador o Docente.</li>
+    </ol>
+
+    <div class="alerta warn">
+        <span class="alerta-icono">⚠️</span>
+        <div>Si aparece un error de <strong>"Credenciales incorrectas"</strong>, verifique mayúsculas y minúsculas en su usuario o contraseña. Si persiste, contacte al administrador.</div>
+    </div>
+    <div class="alerta info">
+        <span class="alerta-icono">ℹ️</span>
+        <div><strong>No marque</strong> "Mantener sesión iniciada" en computadoras compartidas o de la institución.</div>
+    </div>
+
+    <h3 id="s2-2">Cerrar Sesión</h3>
+    <p>Para salir del sistema de forma segura:</p>
+    <ol class="pasos">
+        <li>Haga clic en su nombre de usuario en la barra superior.</li>
+        <li>Seleccione la opción <strong>"Cerrar Sesión"</strong>.</li>
+        <li>El sistema lo llevará de regreso al inicio de sesión.</li>
+    </ol>
+    <div class="alerta peligro">
+        <span class="alerta-icono">🔴</span>
+        <div>Siempre cierre sesión al terminar, especialmente en equipos compartidos de la institución.</div>
+    </div>
+</div>
+
+<hr class="separador">
+
+<!-- ════════════════════════════════════════════════════
+     SECCIÓN 3 — ADMINISTRADOR
+════════════════════════════════════════════════════ -->
+<div class="seccion" id="s3">
+    <div class="seccion-cabecera">
+        <div class="seccion-num">3</div>
+        <div class="seccion-titulo">Panel del Administrador</div>
+    </div>
+
+    <p>El administrador tiene acceso completo. Su menú lateral incluye: <strong>Dashboard, Docentes, Años Lectivos, Archivos, Reportes</strong> y <strong>Configuración</strong>.</p>
+
+    <!-- 3.1 Dashboard -->
+    <div class="subseccion" id="s3-1">
+        <div class="subseccion-titulo">3.1 &nbsp; Dashboard / Panel de Inicio</div>
+    </div>
+    <p>Al iniciar sesión, el administrador verá el panel de estadísticas en tiempo real:</p>
+    <table class="tabla">
+        <thead><tr><th>Elemento</th><th>Descripción</th></tr></thead>
+        <tbody>
+            <tr><td><span class="badge azul">Docentes Activos</span></td><td>Total de docentes registrados y activos.</td></tr>
+            <tr><td><span class="badge verde">Total Archivos</span></td><td>Cantidad total de archivos en todos los bimestres.</td></tr>
+            <tr><td><span class="badge ambar">Promedio / Docente</span></td><td>Promedio de archivos por cada docente.</td></tr>
+            <tr><td>📊 Gráfico de Barras</td><td>Archivos subidos por bimestre (I, II, III, IV).</td></tr>
+            <tr><td>🍩 Gráfico de Dona</td><td>Distribución de archivos por nivel educativo.</td></tr>
+            <tr><td>📋 Actividad Reciente</td><td>Últimos archivos subidos con fecha, docente y curso.</td></tr>
+            <tr><td>🏆 Top Docentes</td><td>Ranking de docentes con más archivos subidos.</td></tr>
+            <tr><td>📁 Por Tipo</td><td>Cantidad de archivos según formato: PDF, Word, Excel, PPT.</td></tr>
+        </tbody>
+    </table>
+
+    <!-- 3.2 Docentes -->
+    <div class="subseccion" id="s3-2">
+        <div class="subseccion-titulo">3.2 &nbsp; Gestión de Docentes</div>
+    </div>
+    <p>En el menú <strong>Docentes</strong>, el administrador crea, edita y gestiona el acceso de los docentes.</p>
+
+    <h3>➕ Registrar Nuevo Docente</h3>
+    <ol class="pasos">
+        <li>Haga clic en <strong>Docentes</strong> en el menú lateral.</li>
+        <li>Haga clic en el botón <strong>"+ Nuevo Docente"</strong>.</li>
+        <li>Ingrese el <strong>DNI</strong> del docente — el sistema buscará automáticamente el nombre en RENIEC.</li>
+        <li>Verifique y complete los campos: nombre, usuario, contraseña, nivel y asignaciones.</li>
+        <li>Haga clic en <strong>"Guardar Docente"</strong>.</li>
+    </ol>
+    <div class="alerta ok">
+        <span class="alerta-icono">✅</span>
+        <div>Al ingresar el DNI, el nombre y apellidos se completan automáticamente desde el registro nacional. Espere unos segundos.</div>
+    </div>
+
+    <h3>✏️ Editar Docente</h3>
+    <ol class="pasos">
+        <li>Ubique al docente en la lista y haga clic en <strong>"Editar"</strong> (ícono de lápiz).</li>
+        <li>Modifique los datos necesarios.</li>
+        <li>Haga clic en <strong>"Guardar Cambios"</strong>.</li>
+    </ol>
+
+    <h3>🔄 Activar / Desactivar Docente</h3>
+    <ol class="pasos">
+        <li>Ubique al docente en la lista.</li>
+        <li>Haga clic en el interruptor <strong>"Activo / Inactivo"</strong>.</li>
+        <li>Un docente inactivo <strong>no podrá iniciar sesión</strong>.</li>
+    </ol>
+    <div class="alerta warn">
+        <span class="alerta-icono">⚠️</span>
+        <div>Los docentes <strong>no se eliminan</strong> del sistema, solo se desactivan para preservar el historial de archivos ya subidos.</div>
+    </div>
+
+    <!-- 3.3 Años -->
+    <div class="subseccion" id="s3-3">
+        <div class="subseccion-titulo">3.3 &nbsp; Gestión de Años Lectivos</div>
+    </div>
+    <p>Permite organizar los archivos por año escolar. Solo puede haber <strong>un año lectivo activo</strong> a la vez.</p>
+    <ol class="pasos">
+        <li>Haga clic en <strong>Años Lectivos</strong> en el menú lateral.</li>
+        <li>Ingrese el año (Ej: <strong>2026</strong>) y haga clic en <strong>"Crear"</strong>.</li>
+        <li>Para activar un año, haga clic en el botón <strong>"Activar"</strong> junto al año.</li>
+        <li>El año activo es el que usan los docentes al subir archivos.</li>
+    </ol>
+
+    <!-- 3.4 Archivos -->
+    <div class="subseccion" id="s3-4">
+        <div class="subseccion-titulo">3.4 &nbsp; Control Global de Archivos</div>
+    </div>
+    <p>El administrador puede ver <strong>todos los archivos</strong> de todos los docentes con filtros avanzados:</p>
+    <table class="tabla">
+        <thead><tr><th>Filtro</th><th>Descripción</th></tr></thead>
+        <tbody>
+            <tr><td><strong>Docente</strong></td><td>Ver archivos de un docente específico.</td></tr>
+            <tr><td><strong>Bimestre</strong></td><td>Filtrar por I, II, III o IV Bimestre.</td></tr>
+            <tr><td><strong>Año Lectivo</strong></td><td>Seleccionar el año escolar.</td></tr>
+            <tr><td><strong>Tipo de archivo</strong></td><td>PDF, Word, Excel, PowerPoint.</td></tr>
+            <tr><td><strong>Grado / Sección</strong></td><td>Ver archivos de un grado o sección específica.</td></tr>
+        </tbody>
+    </table>
+
+    <h3>👁️ Previsualizar un Archivo</h3>
+    <ol class="pasos">
+        <li>Ubique el archivo en la lista.</li>
+        <li>Haga clic en <strong>"Previsualizar"</strong>.</li>
+        <li>El documento se abre en el navegador con el Visor de Google Docs.</li>
+    </ol>
+
+    <h3>🗑️ Eliminar y Restaurar Archivos</h3>
+    <ol class="pasos">
+        <li>Haga clic en <strong>"Eliminar"</strong> (botón rojo) — el archivo va a la Papelera.</li>
+        <li>Para restaurar: vaya a <strong>Papelera</strong> y haga clic en <strong>"Restaurar"</strong>.</li>
+        <li>Para borrar definitivamente: en la Papelera, haga clic en <strong>"Eliminar definitivamente"</strong>.</li>
+    </ol>
+    <div class="alerta peligro">
+        <span class="alerta-icono">🔴</span>
+        <div>La <strong>eliminación definitiva</strong> es irreversible. El archivo no puede recuperarse después.</div>
+    </div>
+
+    <!-- 3.5 Reportes -->
+    <div class="subseccion" id="s3-5">
+        <div class="subseccion-titulo">3.5 &nbsp; Reportes de Cumplimiento</div>
+    </div>
+    <p>Muestra el estado de entrega de documentos de cada docente por bimestre y año.</p>
+    <ol class="pasos">
+        <li>Haga clic en <strong>Reportes</strong> en el menú lateral.</li>
+        <li>Seleccione el <strong>Año Lectivo</strong> y el <strong>Bimestre Escolar</strong>.</li>
+        <li>Haga clic en <strong>"⚙️ Generar Reporte"</strong>.</li>
+        <li>Se mostrará la tabla con todos los docentes: cursos asignados, completados, pendientes y porcentaje.</li>
+        <li>Haga clic en <strong>"👁️ Ver Detalle"</strong> para ver el estado de cada asignación individual.</li>
+    </ol>
+
+    <table class="tabla">
+        <thead><tr><th>Indicador</th><th>Significado</th></tr></thead>
+        <tbody>
+            <tr><td><span class="badge verde">Verde ≥ 90%</span></td><td>Cumplimiento excelente.</td></tr>
+            <tr><td><span class="badge ambar">Amarillo ≥ 50%</span></td><td>Cumplimiento en proceso, con pendientes.</td></tr>
+            <tr><td><span class="badge rojo">Rojo &lt; 50%</span></td><td>Cumplimiento crítico, mayoría de asignaciones pendientes.</td></tr>
+        </tbody>
+    </table>
+
+    <h3>📥 Exportar el Reporte</h3>
+    <ol class="pasos">
+        <li>Una vez generado el reporte, haga clic en el botón <strong>"Descargar"</strong> (parte superior derecha).</li>
+        <li>Seleccione el formato: <strong>📄 PDF</strong>, <strong>📊 Excel (CSV)</strong> o <strong>📝 Word (.doc)</strong>.</li>
+        <li>El archivo se descargará automáticamente en su equipo.</li>
+    </ol>
+
+    <!-- 3.6 Configuración -->
+    <div class="subseccion" id="s3-6">
+        <div class="subseccion-titulo">3.6 &nbsp; Configuración y Perfil</div>
+    </div>
+    <table class="tabla">
+        <thead><tr><th>Pestaña</th><th>Descripción</th></tr></thead>
+        <tbody>
+            <tr><td><strong>Mi Perfil</strong></td><td>Cambiar nombre, correo y datos del administrador.</td></tr>
+            <tr><td><strong>Cambiar Contraseña</strong></td><td>Actualizar la contraseña de acceso.</td></tr>
+            <tr><td><strong>Institución</strong></td><td>Nombre del colegio, logo y datos que aparecen en reportes.</td></tr>
+        </tbody>
+    </table>
+</div>
+
+<hr class="separador">
+
+<!-- ════════════════════════════════════════════════════
+     SECCIÓN 4 — DOCENTE
+════════════════════════════════════════════════════ -->
+<div class="seccion" id="s4">
+    <div class="seccion-cabecera">
+        <div class="seccion-num">4</div>
+        <div class="seccion-titulo">Panel del Docente</div>
+    </div>
+
+    <p>El docente gestiona sus archivos y evidencias académicas. Su menú incluye: <strong>Dashboard</strong>, <strong>Mis Archivos</strong> y <strong>Papelera</strong>.</p>
+
+    <!-- 4.1 Dashboard -->
+    <div class="subseccion" id="s4-1">
+        <div class="subseccion-titulo">4.1 &nbsp; Dashboard del Docente</div>
+    </div>
+    <p>Al ingresar, el docente ve su panel personal con:</p>
+    <table class="tabla">
+        <thead><tr><th>Elemento</th><th>Descripción</th></tr></thead>
+        <tbody>
+            <tr><td><strong>Total de archivos subidos</strong></td><td>Cantidad de documentos que ha entregado.</td></tr>
+            <tr><td><strong>Archivos por bimestre</strong></td><td>Distribución de sus entregas por período.</td></tr>
+            <tr><td><strong>Estado de asignaciones</strong></td><td>Cuántas asignaciones están completadas y cuántas pendientes.</td></tr>
+            <tr><td><strong>Últimos archivos</strong></td><td>Lista de los documentos subidos recientemente.</td></tr>
+        </tbody>
+    </table>
+
+    <!-- 4.2 Subir -->
+    <div class="subseccion" id="s4-2">
+        <div class="subseccion-titulo">4.2 &nbsp; Subir un Archivo / Sesión de Aprendizaje</div>
+    </div>
+    <p>Función principal del docente para entregar digitalmente sus sesiones de aprendizaje.</p>
+
+    <div class="demo-form">
+        <div class="campo">
+            <label>Asignación *</label>
+            <div class="valor">Matemática · Primaria 3° · Sección A</div>
+        </div>
+        <div class="campo">
+            <label>Bimestre *</label>
+            <div class="bimestres-grid">
+                <div class="bim-btn activo"><strong>I</strong><br><span style="font-size:9px">Bimestre</span></div>
+                <div class="bim-btn"><span style="font-size:12px;font-weight:700">II</span><br><span style="font-size:9px">Bimestre</span></div>
+                <div class="bim-btn"><span style="font-size:12px;font-weight:700">III</span><br><span style="font-size:9px">Bimestre</span></div>
+                <div class="bim-btn"><span style="font-size:12px;font-weight:700">IV</span><br><span style="font-size:9px">Bimestre</span></div>
+            </div>
+        </div>
+        <div class="campo">
+            <label>Archivo *</label>
+            <div class="drop-zone">
+                📁 Arrastra tu archivo aquí o <span>haz clic para seleccionar</span><br>
+                <span style="font-size:10.5px;color:#9ca3af;">PDF, Word, Excel, PowerPoint · Máx. 50 MB</span>
+            </div>
+        </div>
+        <div class="campo">
+            <label>Descripción (opcional)</label>
+            <div class="valor" style="color:#9ca3af; font-style:italic;">Breve descripción del contenido del archivo...</div>
+        </div>
+        <div class="btn-subir">⬆️ Subir Archivo</div>
+    </div>
+
+    <ol class="pasos">
+        <li>En el menú, haga clic en <strong>"Mis Archivos"</strong> → <strong>"+ Subir Archivo"</strong>.</li>
+        <li>Seleccione la <strong>Asignación</strong>: el curso, grado y sección del archivo.</li>
+        <li>Seleccione el <strong>Bimestre</strong> (I, II, III o IV).</li>
+        <li>Suba el archivo: <strong>arrastrándolo</strong> al cuadro punteado, o <strong>haciendo clic</strong> para buscarlo.</li>
+        <li>(Opcional) Escriba una <strong>Descripción</strong> breve del contenido.</li>
+        <li>Haga clic en <strong>"Subir Archivo"</strong>. Verá una barra de progreso.</li>
+        <li>Al terminar, el archivo aparecerá en su lista de archivos.</li>
+    </ol>
+
+    <div class="alerta warn">
+        <span class="alerta-icono">⚠️</span>
+        <div><strong>Formatos:</strong> PDF, Word (.doc/.docx), Excel (.xls/.xlsx), PowerPoint (.ppt/.pptx) &nbsp;·&nbsp; <strong>Tamaño máximo:</strong> 50 MB</div>
+    </div>
+    <div class="alerta info">
+        <span class="alerta-icono">ℹ️</span>
+        <div>Si no tiene asignaciones disponibles, contacte al administrador para que le asigne sus cursos.</div>
+    </div>
+
+    <!-- 4.3 Ver archivos -->
+    <div class="subseccion" id="s4-3">
+        <div class="subseccion-titulo">4.3 &nbsp; Ver Mis Archivos</div>
+    </div>
+    <p>En <strong>"Mis Archivos"</strong> verá todos sus documentos con opciones de búsqueda y filtrado por bimestre, tipo de archivo, y más.</p>
+    <table class="tabla">
+        <thead><tr><th>Acción disponible</th><th>Descripción</th></tr></thead>
+        <tbody>
+            <tr><td>👁️ <strong>Previsualizar</strong></td><td>Ver el archivo directamente en el navegador.</td></tr>
+            <tr><td>⬇️ <strong>Descargar</strong></td><td>Guardar el archivo en su computadora.</td></tr>
+            <tr><td>🗑️ <strong>Eliminar</strong></td><td>Mover el archivo a la papelera (recuperable).</td></tr>
+        </tbody>
+    </table>
+
+    <!-- 4.4 Previsualizar -->
+    <div class="subseccion" id="s4-4">
+        <div class="subseccion-titulo">4.4 &nbsp; Previsualizar Archivos</div>
+    </div>
+    <ol class="pasos">
+        <li>Haga clic en el botón <strong>"👁️ Previsualizar"</strong> del archivo deseado.</li>
+        <li>Se abrirá el documento en el <strong>Visor de Google Docs</strong> dentro del navegador.</li>
+        <li>Puede hacer zoom, navegar por páginas y cerrar cuando termine.</li>
+    </ol>
+    <div class="alerta info">
+        <span class="alerta-icono">ℹ️</span>
+        <div>La previsualización requiere conexión a internet. Archivos grandes pueden tardar unos segundos.</div>
+    </div>
+
+    <!-- 4.5 Papelera -->
+    <div class="subseccion" id="s4-5">
+        <div class="subseccion-titulo">4.5 &nbsp; Papelera de Archivos</div>
+    </div>
+    <p>Los archivos eliminados van a la Papelera y pueden recuperarse antes de borrarlos definitivamente.</p>
+    <ol class="pasos">
+        <li>En el menú, haga clic en <strong>"Papelera"</strong>.</li>
+        <li>Para <strong>recuperar</strong> un archivo: haga clic en <strong>"Restaurar"</strong>.</li>
+        <li>Para <strong>borrar definitivamente</strong>: haga clic en <strong>"Eliminar"</strong> dentro de la papelera.</li>
+    </ol>
+    <div class="alerta peligro">
+        <span class="alerta-icono">🔴</span>
+        <div>Los archivos eliminados desde la papelera <strong>no pueden recuperarse</strong>. Confirme bien antes de hacerlo.</div>
+    </div>
+</div>
+
+<hr class="separador">
+
+<!-- ════════════════════════════════════════════════════
+     SECCIÓN 5 — PREGUNTAS FRECUENTES
+════════════════════════════════════════════════════ -->
+<div class="seccion" id="s5">
+    <div class="seccion-cabecera">
+        <div class="seccion-num">5</div>
+        <div class="seccion-titulo">Preguntas Frecuentes</div>
+    </div>
+
+    <table class="tabla">
+        <thead><tr><th>Pregunta</th><th>Respuesta</th></tr></thead>
+        <tbody>
+            <tr>
+                <td><strong>¿Olvidé mi contraseña?</strong></td>
+                <td>Contacte al Administrador para que le restablezca la contraseña. No hay recuperación automática.</td>
+            </tr>
+            <tr>
+                <td><strong>¿Puedo subir varios archivos a la vez?</strong></td>
+                <td>No. El sistema permite subir un archivo por vez. Repita el proceso para cada documento.</td>
+            </tr>
+            <tr>
+                <td><strong>¿Subí el archivo en el bimestre equivocado?</strong></td>
+                <td>Elimínelo (va a la papelera) y vuélvalo a subir seleccionando el bimestre correcto.</td>
+            </tr>
+            <tr>
+                <td><strong>¿Se guardan archivos de años anteriores?</strong></td>
+                <td>Sí. Se conservan todos y pueden filtrarse por año al momento de consultar.</td>
+            </tr>
+            <tr>
+                <td><strong>¿Puedo cambiar mi contraseña?</strong></td>
+                <td>Solo el Administrador puede cambiar contraseñas desde el módulo de docentes.</td>
+            </tr>
+            <tr>
+                <td><strong>¿Funciona en celular?</strong></td>
+                <td>Sí, el diseño es adaptable a móviles, aunque se recomienda usar computadora.</td>
+            </tr>
+            <tr>
+                <td><strong>¿Tamaño máximo de archivo?</strong></td>
+                <td>50 MB por archivo. Archivos más grandes deben reducirse antes de subirse.</td>
+            </tr>
+            <tr>
+                <td><strong>¿Puedo ver archivos de otros docentes?</strong></td>
+                <td>No. Cada docente solo ve sus propios archivos. Solo el Administrador tiene visión global.</td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+
+<hr class="separador">
+
+<!-- ════════════════════════════════════════════════════
+     SECCIÓN 6 — GLOSARIO
+════════════════════════════════════════════════════ -->
+<div class="seccion" id="s6">
+    <div class="seccion-cabecera">
+        <div class="seccion-num">6</div>
+        <div class="seccion-titulo">Glosario de Términos</div>
+    </div>
+
+    <table class="tabla">
+        <thead><tr><th>Término</th><th>Definición</th></tr></thead>
+        <tbody>
+            <tr><td><strong>Año Lectivo</strong></td><td>Año escolar en curso (ej: 2026). Organiza todos los archivos por período anual.</td></tr>
+            <tr><td><strong>Asignación</strong></td><td>Combinación de curso + grado + sección que un docente dicta. Ej: "Matemática · 3° Primaria · Sec. A".</td></tr>
+            <tr><td><strong>Bimestre</strong></td><td>Período académico de ≈2 meses. El año se divide en cuatro bimestres (I, II, III, IV).</td></tr>
+            <tr><td><strong>Cumplimiento</strong></td><td>Porcentaje de asignaciones con al menos un archivo subido. 100% = todas las asignaciones entregadas.</td></tr>
+            <tr><td><strong>Dashboard</strong></td><td>Panel principal de inicio con resumen visual de la información más importante del sistema.</td></tr>
+            <tr><td><strong>Evidencia / Archivo</strong></td><td>Documento digital (PDF, Word, Excel, PPT) subido como sesión de aprendizaje.</td></tr>
+            <tr><td><strong>Papelera</strong></td><td>Área donde se guardan archivos eliminados antes de ser borrados definitivamente.</td></tr>
+            <tr><td><strong>Previsualización</strong></td><td>Vista del contenido de un archivo en el navegador, sin necesidad de descargarlo.</td></tr>
+            <tr><td><strong>Rol</strong></td><td>Tipo de usuario: Administrador o Docente. Cada rol tiene permisos distintos.</td></tr>
+            <tr><td><strong>Usuario</strong></td><td>Nombre de acceso al sistema. Único por persona, asignado por el Administrador.</td></tr>
+        </tbody>
+    </table>
+</div>
+
+<!-- ════ PIE DE PÁGINA ════ -->
+<div class="pie-pagina">
+    <strong>I.E.P. Esther Carson — Sistema de Gestión de Aprendizaje</strong><br>
+    Manual de Usuario v1.0 · 2026 · Documento de uso interno<br>
+    Para soporte técnico, comuníquese con el Administrador del sistema.
+</div>
+
+</div><!-- /contenido -->
+
+<script>
+    document.title = 'Manual_Usuario_IEP_Esther_Carson';
+</script>
+</body>
+</html>

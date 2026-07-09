@@ -25,24 +25,101 @@
 
 {{-- Inicializar tema antes de renderizar para evitar destellos --}}
 <script>
-    if (localStorage.getItem('theme') === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
-        document.documentElement.classList.add('dark');
-    } else {
-        document.documentElement.classList.remove('dark');
+    (function() {
+        const saved = localStorage.getItem('theme');
+        const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+        if (saved === 'dark' || (!saved && prefersDark)) {
+            document.documentElement.classList.add('dark');
+        } else {
+            document.documentElement.classList.remove('dark');
+        }
+    })();
+
+    // ── Toast de notificación de tema ────────────────────────────
+    function showThemeToast(isDark) {
+        // Eliminar toast anterior si existe
+        const old = document.getElementById('themeToast');
+        if (old) old.remove();
+
+        const toast = document.createElement('div');
+        toast.id = 'themeToast';
+        toast.style.cssText = [
+            'position:fixed',
+            'bottom:24px',
+            'right:24px',
+            'z-index:9999',
+            'display:flex',
+            'align-items:center',
+            'gap:10px',
+            'padding:12px 18px',
+            'border-radius:12px',
+            'font-family:Inter,sans-serif',
+            'font-size:13px',
+            'font-weight:600',
+            'box-shadow:0 8px 32px rgba(0,0,0,0.25)',
+            'backdrop-filter:blur(12px)',
+            'border:1px solid',
+            'transform:translateY(16px)',
+            'opacity:0',
+            'transition:all 0.35s cubic-bezier(0.34,1.56,0.64,1)',
+            isDark
+                ? 'background:rgba(15,23,42,0.92);color:#cbd5e1;border-color:rgba(100,116,139,0.3)'
+                : 'background:rgba(255,255,255,0.92);color:#374151;border-color:rgba(209,213,219,0.8)'
+        ].join(';');
+
+        toast.innerHTML = isDark
+            ? `<svg width="18" height="18" fill="none" stroke="currentColor" viewBox="0 0 24 24" style="color:#94a3b8;flex-shrink:0"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"/></svg><span>Modo oscuro activado</span>`
+            : `<svg width="18" height="18" fill="none" stroke="currentColor" viewBox="0 0 24 24" style="color:#f59e0b;flex-shrink:0"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"/></svg><span>Modo claro activado</span>`;
+
+        document.body.appendChild(toast);
+        requestAnimationFrame(() => {
+            toast.style.transform = 'translateY(0)';
+            toast.style.opacity = '1';
+        });
+        setTimeout(() => {
+            toast.style.transform = 'translateY(8px)';
+            toast.style.opacity = '0';
+            setTimeout(() => toast.remove(), 350);
+        }, 2200);
     }
 
-    // Lógica del botón toggle (espera al DOM)
+    // ── Lógica del botón toggle (espera al DOM) ──────────────────
     document.addEventListener('DOMContentLoaded', () => {
         const themeToggleBtn = document.getElementById('themeToggle');
-        
-        if(themeToggleBtn) {
+        const themeSwitch = document.getElementById('themeSwitchKnob');
+        const themeTrack = document.getElementById('themeSwitchTrack');
+
+        function applyThemeUI(isDark) {
+            // Actualizar switch visual si existe
+            if (themeSwitch && themeTrack) {
+                if (isDark) {
+                    themeTrack.style.background = 'linear-gradient(135deg, #1e293b, #334155)';
+                    themeSwitch.style.transform = 'translateX(22px)';
+                    themeSwitch.innerHTML = `<svg width="12" height="12" fill="none" stroke="#94a3b8" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"/></svg>`;
+                } else {
+                    themeTrack.style.background = 'linear-gradient(135deg, #bfdbfe, #93c5fd)';
+                    themeSwitch.style.transform = 'translateX(0px)';
+                    themeSwitch.innerHTML = `<svg width="12" height="12" fill="none" stroke="#f59e0b" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"/></svg>`;
+                }
+            }
+        }
+
+        // Aplicar UI según tema actual al cargar
+        applyThemeUI(document.documentElement.classList.contains('dark'));
+
+        if (themeToggleBtn) {
             themeToggleBtn.addEventListener('click', function() {
-                if (document.documentElement.classList.contains('dark')) {
+                const isDark = document.documentElement.classList.contains('dark');
+                if (isDark) {
                     document.documentElement.classList.remove('dark');
                     localStorage.setItem('theme', 'light');
+                    applyThemeUI(false);
+                    showThemeToast(false);
                 } else {
                     document.documentElement.classList.add('dark');
                     localStorage.setItem('theme', 'dark');
+                    applyThemeUI(true);
+                    showThemeToast(true);
                 }
             });
         }
@@ -187,7 +264,7 @@
     }
     .modal-overlay.show { display: flex !important; }
     .modal-box {
-        @apply bg-white dark:bg-slate-800 border border-gray-200 dark:border-slate-700 rounded-2xl p-7 max-w-md w-11/12 shadow-2xl;
+        @apply bg-gray-100 dark:bg-slate-800 border border-gray-300 dark:border-slate-700 rounded-2xl p-7 max-w-md w-11/12 shadow-2xl;
         animation: modalIn .2s cubic-bezier(0.34,1.56,0.64,1);
     }
 

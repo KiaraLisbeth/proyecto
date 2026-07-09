@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Informe – Secciones 3.3, 3.4 y 3.5</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Times+New+Roman&family=Arial:wght@400;700&display=swap');
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      background: #d0d0d0;
+      font-family: Arial, sans-serif;
+      font-size: 12pt;
+      color: #000;
+    }
+
+    /* Hoja A4 */
+    .page {
+      width: 210mm;
+      min-height: 297mm;
+      margin: 30px auto;
+      background: #fff;
+      padding: 25mm 30mm 25mm 35mm;
+      box-shadow: 0 4px 30px rgba(0,0,0,0.25);
+    }
+
+    /* Encabezado */
+    .doc-header {
+      text-align: center;
+      border-bottom: 2px solid #1a3a6b;
+      padding-bottom: 14px;
+      margin-bottom: 28px;
+    }
+    .doc-header .uni {
+      font-size: 10pt;
+      font-weight: bold;
+      color: #1a3a6b;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+    .doc-header .titulo-doc {
+      font-size: 13pt;
+      font-weight: bold;
+      color: #1a3a6b;
+      margin-top: 6px;
+    }
+    .doc-header .subtitulo {
+      font-size: 10pt;
+      color: #444;
+      margin-top: 4px;
+    }
+    .doc-header .meta {
+      font-size: 9pt;
+      color: #666;
+      margin-top: 8px;
+    }
+
+    /* Secciones */
+    .seccion {
+      margin-bottom: 26px;
+    }
+
+    .seccion-titulo {
+      font-size: 12pt;
+      font-weight: bold;
+      color: #1a3a6b;
+      margin-bottom: 10px;
+      border-left: 4px solid #1a3a6b;
+      padding-left: 10px;
+    }
+
+    /* Párrafos */
+    p {
+      text-align: justify;
+      line-height: 1.75;
+      margin-bottom: 10px;
+      font-size: 11.5pt;
+      color: #111;
+    }
+
+    /* Sprint highlights dentro del texto */
+    .sprint-tag {
+      font-weight: bold;
+      color: #1a3a6b;
+    }
+
+    /* Tabla de sprints */
+    .tabla-sprints {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 12px 0 16px;
+      font-size: 10.5pt;
+    }
+    .tabla-sprints thead tr {
+      background: #1a3a6b;
+      color: white;
+    }
+    .tabla-sprints th {
+      padding: 7px 10px;
+      text-align: center;
+      font-weight: bold;
+      border: 1px solid #1a3a6b;
+    }
+    .tabla-sprints td {
+      padding: 6px 10px;
+      border: 1px solid #ccc;
+      text-align: center;
+      color: #111;
+    }
+    .tabla-sprints tr:nth-child(even) td { background: #f0f4fa; }
+    .tabla-sprints tr:nth-child(odd)  td { background: #fff; }
+    .s-hecho { color: #166534; font-weight: bold; }
+    .s-curso { color: #854d0e; font-weight: bold; }
+
+    /* Listas de conclusiones y sugerencias */
+    .lista-formal {
+      margin: 8px 0 12px 18px;
+      line-height: 1.75;
+    }
+    .lista-formal li {
+      text-align: justify;
+      margin-bottom: 7px;
+      font-size: 11.5pt;
+      color: #111;
+    }
+    .lista-formal li::marker {
+      color: #1a3a6b;
+      font-weight: bold;
+    }
+
+    /* Nota al pie */
+    .nota-pie {
+      margin-top: 30px;
+      border-top: 1px solid #aaa;
+      padding-top: 10px;
+      font-size: 9pt;
+      color: #666;
+      text-align: center;
+    }
+
+    /* Imprimir / exportar PDF */
+    @media print {
+      body { background: white; }
+      .page {
+        width: 100%;
+        margin: 0;
+        padding: 20mm 25mm 20mm 30mm;
+        box-shadow: none;
+      }
+    }
+  </style>
+</head>
+<body>
+<div class="page">
+
+  <!-- ENCABEZADO -->
+  <div class="doc-header">
+    <div class="uni">Informe de Proyecto de Titulación</div>
+    <div class="titulo-doc">Sistema de Gestión Académica</div>
+    <div class="subtitulo">Desarrollo con Framework Laravel – Metodología Scrum</div>
+    <div class="meta">Período: Abril – Julio 2026 &nbsp;|&nbsp; Secciones: 3.3 · 3.4 · 3.5</div>
+  </div>
+
+  <!-- ══════════════════════════════════
+       3.3 ANÁLISIS DE RESULTADOS
+  ═══════════════════════════════════════ -->
+  <div class="seccion">
+    <div class="seccion-titulo">3.3. Análisis de Resultados</div>
+
+    <p>El desarrollo del Sistema de Gestión Académica permitió alcanzar de manera satisfactoria los objetivos planteados al inicio del proyecto, evidenciando resultados concretos y medibles en cada Sprint ejecutado bajo la metodología Scrum. A continuación se presenta el análisis crítico de los resultados obtenidos en relación con los objetivos específicos del trabajo.</p>
+
+    <p>Durante el <span class="sprint-tag">Sprint 1</span> (06/04/2026 – 01/05/2026), se implementaron exitosamente los módulos de autenticación con control de roles, gestión de docentes, administración de años lectivos y el dashboard administrativo. Se completaron 7 Historias de Usuario equivalentes a 28 Story Points. Estos módulos constituyeron la base funcional del sistema, garantizando el control de acceso diferenciado entre el rol Administrador y el rol Docente, y sentando la arquitectura sobre la cual se construirían los módulos posteriores.</p>
+
+    <p>En el <span class="sprint-tag">Sprint 2</span> (02/05/2026 – 27/05/2026) se desarrollaron los módulos de asignaciones docente-sección-materia, la carga de archivos académicos en múltiples formatos (PDF, DOCX, XLSX), la previsualización de documentos directamente en el navegador y la funcionalidad de descarga. Se entregaron 6 Historias de Usuario con 32 Story Points. Este sprint representó el núcleo operativo del sistema, al digitalizar el proceso de distribución de material académico que anteriormente se realizaba de forma física o mediante canales informales.</p>
+
+    <p>El <span class="sprint-tag">Sprint 3</span> (28/05/2026 – 22/06/2026) fue el más intenso del proyecto, con 10 Historias de Usuario y 38 Story Points. Se implementaron la auditoría global de acciones del sistema, el módulo de papeleras con eliminación lógica de registros, el sistema de reportes exportables en PDF y Excel, y la configuración general de la plataforma. Este sprint alcanzó el 100% de completitud, superando las estimaciones iniciales en complejidad técnica.</p>
+
+    <p>El <span class="sprint-tag">Sprint 4</span> (23/06/2026 – 05/07/2026), actualmente en ejecución, contempla las pruebas de aceptación del usuario (UAT), la optimización del rendimiento del sistema y el despliegue oficial en el entorno de producción.</p>
+
+    <table class="tabla-sprints">
+      <thead>
+        <tr>
+          <th>Sprint</th>
+          <th>Período</th>
+          <th>HU Entregadas</th>
+          <th>Story Points</th>
+          <th>SP Acumulados</th>
+          <th>% Completado</th>
+          <th>Estado</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>Sprint 1</strong></td>
+          <td>06/04 → 01/05/26</td>
+          <td>7 HU</td>
+          <td>28 SP</td>
+          <td>28 SP</td>
+          <td>33%</td>
+          <td class="s-hecho">Hecho</td>
+        </tr>
+        <tr>
+          <td><strong>Sprint 2</strong></td>
+          <td>02/05 → 27/05/26</td>
+          <td>6 HU</td>
+          <td>32 SP</td>
+          <td>60 SP</td>
+          <td>61%</td>
+          <td class="s-hecho">Hecho</td>
+        </tr>
+        <tr>
+          <td><strong>Sprint 3</strong></td>
+          <td>28/05 → 22/06/26</td>
+          <td>10 HU</td>
+          <td>38 SP</td>
+          <td>98 SP*</td>
+          <td>100%</td>
+          <td class="s-hecho">Hecho</td>
+        </tr>
+        <tr>
+          <td><strong>Sprint 4</strong></td>
+          <td>23/06 → 05/07/26</td>
+          <td>—</td>
+          <td>—</td>
+          <td>—</td>
+          <td>—</td>
+          <td class="s-curso">En curso</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <p>En términos globales, el proyecto acumuló <strong>98 Story Points distribuidos en 23 Historias de Usuario</strong>, alcanzando un avance del 75% al cierre del tercer sprint. Los resultados demuestran que la metodología ágil Scrum fue efectiva para gestionar el desarrollo incremental del sistema, permitiendo adaptarse a los cambios de requerimientos sin afectar significativamente los tiempos de entrega establecidos en el cronograma.</p>
+  </div>
+
+  <!-- ══════════════════════════════════
+       3.4 CONCLUSIONES
+  ═══════════════════════════════════════ -->
+  <div class="seccion">
+    <div class="seccion-titulo">3.4. Conclusiones</div>
+
+    <p>Tras el análisis crítico de los resultados obtenidos durante el desarrollo del Sistema de Gestión Académica, se emiten los siguientes juicios de apreciación por cada objetivo específico trabajado:</p>
+
+    <ol class="lista-formal">
+      <li>Se desarrolló exitosamente un <strong>Sistema de Gestión Académica</strong> utilizando el framework Laravel, cumpliendo con los requerimientos funcionales establecidos por la institución educativa. El sistema permite la administración digital de docentes, asignaciones académicas, archivos y reportes institucionales, sustituyendo procesos manuales por flujos automatizados y eficientes.</li>
+
+      <li>La aplicación de la <strong>metodología ágil Scrum</strong> facilitó la planificación y ejecución del proyecto mediante entregas incrementales y funcionales al final de cada Sprint. Esta estrategia permitió identificar y corregir fallos de manera oportuna, reduciendo significativamente el riesgo de errores críticos en la entrega final del producto.</li>
+
+      <li>La implementación de <strong>roles y permisos diferenciados</strong> (Administrador y Docente) garantizó la seguridad e integridad de la información del sistema, asegurando que cada actor acceda únicamente a las funcionalidades y datos que le corresponden, conforme a los principios del control de acceso basado en roles (RBAC).</li>
+
+      <li>El módulo de <strong>subida, previsualización y descarga de archivos académicos</strong> digitalizó un proceso que anteriormente se realizaba de forma física o mediante herramientas externas no controladas, mejorando la organización, trazabilidad y accesibilidad del material educativo dentro de la institución.</li>
+
+      <li>El módulo de <strong>auditoría global</strong> proporciona al administrador una trazabilidad completa de todas las acciones realizadas dentro del sistema, fortaleciendo la transparencia, el control interno y la rendición de cuentas en la gestión académica institucional.</li>
+
+      <li>El sistema de <strong>reportes exportables en PDF y Excel</strong> dota a la administración de información consolidada, oportuna y estructurada para la toma de decisiones institucionales, eliminando la necesidad de procesamiento manual de datos dispersos.</li>
+    </ol>
+  </div>
+
+  <!-- ══════════════════════════════════
+       3.5 SUGERENCIAS
+  ═══════════════════════════════════════ -->
+  <div class="seccion">
+    <div class="seccion-titulo">3.5. Sugerencias</div>
+
+    <p>A partir de los hallazgos y experiencias obtenidas durante el desarrollo del proyecto, se expresan a continuación los aspectos adicionales que pueden ser de utilidad para la institución, así como aspectos relevantes para futuros trabajos relacionados:</p>
+
+    <ol class="lista-formal">
+      <li>Se recomienda implementar un módulo de <strong>notificaciones en tiempo real</strong> mediante tecnologías como Laravel Echo y Pusher, que alerte automáticamente a los docentes cuando se les asigne una nueva sección o materia, y a los administradores cuando se detecte actividad inusual en el sistema, mejorando la comunicación interna sin necesidad de revisión manual constante.</li>
+
+      <li>Se sugiere desarrollar una <strong>aplicación móvil o versión PWA</strong> (Progressive Web App) del sistema, que permita a los docentes subir y consultar archivos académicos desde dispositivos móviles. Dado que el uso de smartphones es predominante en el entorno educativo actual, esta extensión ampliaría considerablemente la accesibilidad y usabilidad de la plataforma.</li>
+
+      <li>Es recomendable incorporar un módulo de <strong>comunicación interna institucional</strong> que permita al administrador publicar circulares, avisos y anuncios directamente en la plataforma. Esto centralizaría la comunicación académica, evitando la dispersión de información a través de correos externos o aplicaciones de mensajería no oficiales.</li>
+
+      <li>Se propone integrar un sistema de <strong>firma digital y sellado de documentos</strong> para los archivos subidos al sistema, garantizando la autenticidad, integridad y no repudio de los documentos académicos oficiales, conforme a la normativa vigente sobre documentos electrónicos.</li>
+
+      <li>Para futuras versiones del sistema, se sugiere desarrollar un módulo de <strong>evaluación y registro de calificaciones</strong> que complemente la funcionalidad actual, permitiendo al docente registrar notas por materia, sección y período académico directamente en la plataforma, con generación automática de boletines estudiantiles.</li>
+
+      <li>Previo al despliegue definitivo en producción, se recomienda realizar <strong>pruebas de carga y estrés</strong> mediante herramientas especializadas como Apache JMeter o Locust, con énfasis en los módulos de subida de archivos y generación de reportes, que son los más demandantes en recursos del servidor, con el fin de garantizar la estabilidad y disponibilidad del sistema bajo condiciones reales de uso concurrente.</li>
+    </ol>
+  </div>
+
+  <!-- NOTA AL PIE -->
+  <div class="nota-pie">
+    * Los 98 SP acumulados en el Sprint 3 incluyen puntos adicionales por la complejidad real de los módulos desarrollados.<br/>
+    Informe de Proyecto – Sistema de Gestión Académica &nbsp;|&nbsp; Laravel + Scrum &nbsp;|&nbsp; Abril – Julio 2026
+  </div>
+
+</div>
+</body>
+</html>

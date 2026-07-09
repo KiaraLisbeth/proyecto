@@ -1,0 +1,560 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Guión Video — Sistema de Gestión de Aprendizaje | I.E.P. Esther Carson</title>
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+    font-family: 'Segoe UI', Arial, sans-serif;
+    font-size: 12px;
+    color: #111827;
+    background: #fff;
+    padding: 24px 32px;
+}
+
+/* ── ENCABEZADO ─────────────────────────────────────── */
+.encabezado {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: #1e3a8a;
+    color: #fff;
+    padding: 14px 20px;
+    border-radius: 8px;
+    margin-bottom: 16px;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+}
+.encabezado h1 { font-size: 16px; font-weight: 900; }
+.encabezado p  { font-size: 10px; opacity: 0.75; margin-top: 2px; }
+.encabezado .meta { text-align: right; font-size: 10px; opacity: 0.8; }
+
+/* ── TABLA TIEMPOS ───────────────────────────────────── */
+.tabla-tiempos {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 20px;
+    font-size: 10.5px;
+}
+.tabla-tiempos thead tr {
+    background: #1e3a8a;
+    color: #fff;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+}
+.tabla-tiempos thead th {
+    padding: 8px 10px;
+    text-align: left;
+    font-size: 10px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.3px;
+}
+.tabla-tiempos tbody td {
+    padding: 7px 10px;
+    border: 1px solid #d1d5db;
+    vertical-align: middle;
+    color: #1f2937;
+}
+.tabla-tiempos tbody tr:nth-child(even) td { background: #f8faff; }
+.tabla-tiempos tbody tr.fila-problema td {
+    background: #fef2f2;
+    font-weight: 800;
+    color: #991b1b;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+}
+.seg-num {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 22px; height: 22px;
+    border-radius: 6px;
+    font-size: 11px;
+    font-weight: 900;
+    background: #dbeafe;
+    color: #1e3a8a;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+}
+.seg-num.problema {
+    background: #fee2e2;
+    color: #991b1b;
+}
+.tiempo-badge {
+    display: inline-block;
+    background: #f0fdf4;
+    border: 1px solid #86efac;
+    border-radius: 6px;
+    padding: 2px 8px;
+    font-size: 9.5px;
+    font-weight: 700;
+    color: #14532d;
+    white-space: nowrap;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+}
+.tiempo-badge.problema {
+    background: #fef2f2;
+    border-color: #fca5a5;
+    color: #991b1b;
+}
+
+/* ── SEGMENTO CARD ───────────────────────────────────── */
+.segmento {
+    border: 1px solid #e5e7eb;
+    border-radius: 10px;
+    margin-bottom: 16px;
+    overflow: hidden;
+    page-break-inside: avoid;
+}
+.seg-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 10px 16px;
+    background: #f1f5f9;
+    border-bottom: 1px solid #e5e7eb;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+}
+.seg-header.problema-header {
+    background: #fef2f2;
+    border-bottom-color: #fca5a5;
+}
+.seg-header h2 {
+    font-size: 12px;
+    font-weight: 900;
+    color: #1e3a8a;
+    flex: 1;
+}
+.seg-header.problema-header h2 { color: #991b1b; }
+
+.seg-body { padding: 14px 16px; }
+
+/* ── PANTALLA TAG ────────────────────────────────────── */
+.pantalla {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    background: #ede9fe;
+    border: 1px solid #c4b5fd;
+    border-radius: 6px;
+    padding: 4px 10px;
+    font-size: 9.5px;
+    font-weight: 700;
+    color: #5b21b6;
+    margin-bottom: 10px;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+}
+
+/* ── TEXTO DEL GUIÓN ─────────────────────────────────── */
+.guion-texto {
+    background: #f8faff;
+    border-left: 4px solid #3b82f6;
+    border-radius: 0 6px 6px 0;
+    padding: 10px 14px;
+    margin-bottom: 10px;
+    font-size: 11px;
+    line-height: 1.7;
+    color: #1f2937;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+}
+.guion-texto.problema-texto {
+    border-left-color: #ef4444;
+    background: #fff5f5;
+}
+
+/* ── ACCIÓN TAG ──────────────────────────────────────── */
+.accion {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    background: #fef3c7;
+    border: 1px solid #fcd34d;
+    border-radius: 6px;
+    padding: 4px 10px;
+    font-size: 9.5px;
+    font-weight: 700;
+    color: #78350f;
+    margin: 4px 0;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+}
+
+/* ── DESTACADO ───────────────────────────────────────── */
+strong { color: #1e3a8a; }
+.guion-texto.problema-texto strong { color: #991b1b; }
+
+/* ── CONSEJOS ────────────────────────────────────────── */
+.consejos {
+    background: #f0fdf4;
+    border: 1px solid #86efac;
+    border-radius: 10px;
+    padding: 14px 16px;
+    margin-top: 8px;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+}
+.consejos h3 {
+    font-size: 12px;
+    font-weight: 900;
+    color: #065f46;
+    margin-bottom: 10px;
+}
+.consejos ul {
+    list-style: none;
+    padding: 0;
+}
+.consejos ul li {
+    font-size: 10.5px;
+    color: #1f2937;
+    padding: 4px 0 4px 18px;
+    position: relative;
+    line-height: 1.5;
+    border-bottom: 1px dashed #d1fae5;
+}
+.consejos ul li:last-child { border-bottom: none; }
+.consejos ul li::before {
+    content: "✔";
+    position: absolute;
+    left: 0;
+    color: #059669;
+    font-size: 10px;
+    font-weight: 900;
+}
+
+/* ── BOTÓN PDF ───────────────────────────────────────── */
+.btn-pdf {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    z-index: 9999;
+    background: #1e3a8a;
+    color: #fff;
+    border: none;
+    border-radius: 10px;
+    padding: 11px 18px;
+    font-size: 12px;
+    font-weight: 800;
+    cursor: pointer;
+    box-shadow: 0 4px 20px rgba(30,58,138,0.4);
+    font-family: inherit;
+    display: flex;
+    align-items: center;
+    gap: 7px;
+}
+.btn-pdf:hover { transform: translateY(-2px); }
+
+/* ── PIE ─────────────────────────────────────────────── */
+.pie {
+    margin-top: 16px;
+    padding-top: 12px;
+    border-top: 2px solid #e5e7eb;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 9.5px;
+    color: #6b7280;
+}
+
+/* ── PRINT ───────────────────────────────────────────── */
+@media print {
+    body { padding: 8px 12px; }
+    .btn-pdf { display: none !important; }
+    body { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+    .segmento { page-break-inside: avoid; }
+}
+@page { size: A4 portrait; margin: 12mm 14mm; }
+</style>
+</head>
+<body>
+
+<!-- BOTÓN PDF -->
+<button class="btn-pdf" onclick="window.print()">⬇ Descargar PDF</button>
+
+<!-- ENCABEZADO -->
+<div class="encabezado">
+    <div>
+        <h1>🎬 Guión para Video de Demostración</h1>
+        <p>Sistema de Gestión de Aprendizaje · I.E.P. Esther Carson</p>
+    </div>
+    <div class="meta">
+        <div>Duración: 6 – 7 minutos</div>
+        <div>Segmentos: 9</div>
+        <div>Julio 2026</div>
+    </div>
+</div>
+
+<!-- TABLA RESUMEN DE TIEMPOS -->
+<table class="tabla-tiempos">
+    <thead>
+        <tr>
+            <th style="width:48px; text-align:center;">N°</th>
+            <th>Descripción del Segmento</th>
+            <th style="width:100px; text-align:center;">Tiempo</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr class="fila-problema">
+            <td style="text-align:center;"><span class="seg-num problema">1</span></td>
+            <td>🔴 El Problema que Originó el Proyecto</td>
+            <td style="text-align:center;"><span class="tiempo-badge problema">0:00 – 1:00</span></td>
+        </tr>
+        <tr>
+            <td style="text-align:center;"><span class="seg-num">2</span></td>
+            <td>Introducción al Sistema y Login</td>
+            <td style="text-align:center;"><span class="tiempo-badge">1:00 – 1:50</span></td>
+        </tr>
+        <tr>
+            <td style="text-align:center;"><span class="seg-num">3</span></td>
+            <td>Dashboard del Administrador (KPIs + Gráficos)</td>
+            <td style="text-align:center;"><span class="tiempo-badge">1:50 – 2:30</span></td>
+        </tr>
+        <tr>
+            <td style="text-align:center;"><span class="seg-num">4</span></td>
+            <td>Gestión de Docentes + API RENIEC</td>
+            <td style="text-align:center;"><span class="tiempo-badge">2:30 – 3:40</span></td>
+        </tr>
+        <tr>
+            <td style="text-align:center;"><span class="seg-num">5</span></td>
+            <td>Panel del Docente: Subida de Archivos</td>
+            <td style="text-align:center;"><span class="tiempo-badge">3:40 – 4:40</span></td>
+        </tr>
+        <tr>
+            <td style="text-align:center;"><span class="seg-num">6</span></td>
+            <td>Previsualización, Descarga y Papelera (Docente)</td>
+            <td style="text-align:center;"><span class="tiempo-badge">4:40 – 5:20</span></td>
+        </tr>
+        <tr>
+            <td style="text-align:center;"><span class="seg-num">7</span></td>
+            <td>Reportes de Cumplimiento + Exportar PDF/Word/Excel</td>
+            <td style="text-align:center;"><span class="tiempo-badge">5:20 – 6:20</span></td>
+        </tr>
+        <tr>
+            <td style="text-align:center;"><span class="seg-num">8</span></td>
+            <td>Papelera Global Admin + Configuración</td>
+            <td style="text-align:center;"><span class="tiempo-badge">6:20 – 6:50</span></td>
+        </tr>
+        <tr>
+            <td style="text-align:center;"><span class="seg-num">9</span></td>
+            <td>Cierre</td>
+            <td style="text-align:center;"><span class="tiempo-badge">6:50 – 7:30</span></td>
+        </tr>
+    </tbody>
+</table>
+
+<!-- ══ SEGMENTO 1 ══ -->
+<div class="segmento">
+    <div class="seg-header problema-header">
+        <span class="seg-num problema">1</span>
+        <h2>🔴 El Problema que Originó el Proyecto &nbsp;(0:00 – 1:00)</h2>
+        <span class="tiempo-badge problema">1 min</span>
+    </div>
+    <div class="seg-body">
+        <div class="pantalla">📸 Pantalla: Portada del proyecto o logo de la institución — NO abras el sistema todavía</div>
+        <div class="guion-texto problema-texto">
+            "Buenas [días/tardes], mi nombre es [tu nombre]. Antes de mostrar el sistema que desarrollé, quiero explicar <strong>el problema real que lo originó</strong>.<br><br>
+            En la Institución Educativa Privada <strong>Esther Carson</strong> se identificó una problemática en la gestión de las sesiones de aprendizaje. Los docentes almacenaban sus archivos en <strong>Google Drive</strong>, cada uno en carpetas individuales. Sin embargo, esta herramienta presentaba <strong>limitaciones de almacenamiento</strong>, lo que obligaba a eliminar sesiones antiguas para poder subir nuevos documentos, generando así una <strong>pérdida permanente del historial académico</strong> de la institución.<br><br>
+            Pero eso no era el único problema. En primer lugar, <strong>no existía una estructura uniforme</strong>: cada docente organizaba sus carpetas de manera diferente, lo que dificultaba encontrar documentos cuando el administrador los necesitaba. En segundo lugar, el administrador <strong>no tenía visibilidad del cumplimiento</strong>: debía ingresar carpeta por carpeta para saber qué docente había entregado sus sesiones y cuál no. En tercer lugar, <strong>no había clasificación por bimestre ni por año lectivo</strong>, por lo que era imposible filtrar documentos por período académico de forma automática. Y finalmente, <strong>no existían reportes</strong>: si la dirección necesitaba un informe de cumplimiento, tenía que elaborarlo manualmente.<br><br>
+            Frente a todas estas limitaciones, surgió la necesidad de desarrollar un <strong>sistema web propio</strong> que reemplazara el uso de Google Drive: una plataforma donde los docentes suban sus archivos de forma organizada —clasificados por bimestre, curso, grado y sección—, con almacenamiento sin restricciones, y donde el administrador pueda monitorear el cumplimiento en tiempo real y generar reportes con un solo clic.<br><br>
+            Ese sistema es el que voy a mostrar a continuación. Fue desarrollado con <strong>Laravel</strong>, aplicando la metodología ágil <strong>Scrum</strong> en <strong>3 Sprints</strong>, con un total de <strong>21 historias de usuario</strong> completadas."
+        </div>
+    </div>
+</div>
+
+<!-- ══ SEGMENTO 2 ══ -->
+<div class="segmento">
+    <div class="seg-header">
+        <span class="seg-num">2</span>
+        <h2>Introducción al Sistema y Login &nbsp;(1:00 – 1:50)</h2>
+        <span class="tiempo-badge">50 seg</span>
+    </div>
+    <div class="seg-body">
+        <div class="pantalla">📸 Pantalla: Formulario de inicio de sesión del sistema</div>
+        <div class="guion-texto">
+            "El sistema cuenta con <strong>dos roles de usuario</strong>: el <strong>Administrador</strong> y el <strong>Docente</strong>. Aquí vemos el formulario de inicio de sesión. El sistema utiliza encriptación <strong>bcrypt</strong> para las contraseñas y valida que el usuario esté activo antes de permitir el ingreso.<br><br>
+            Voy a iniciar sesión como <strong>Administrador</strong>."
+        </div>
+        <div class="accion">🖱️ Acción: Escribe las credenciales del admin y haz clic en "Ingresar"</div>
+        <div class="guion-texto">
+            "El sistema redirige automáticamente al panel correspondiente según el rol. Si iniciara sesión un docente, accedería a su propio panel con funciones diferentes. Este control por roles se implementó mediante <strong>middlewares de Laravel</strong>, garantizando que cada usuario solo vea lo que le corresponde."
+        </div>
+    </div>
+</div>
+
+<!-- ══ SEGMENTO 3 ══ -->
+<div class="segmento">
+    <div class="seg-header">
+        <span class="seg-num">3</span>
+        <h2>Dashboard del Administrador &nbsp;(1:50 – 2:30)</h2>
+        <span class="tiempo-badge">40 seg</span>
+    </div>
+    <div class="seg-body">
+        <div class="pantalla">📸 Pantalla: Dashboard con KPIs y gráficos</div>
+        <div class="guion-texto">
+            "Una vez dentro como administrador, lo primero que vemos es el <strong>Dashboard general</strong>. Este panel nos muestra de un vistazo el estado del sistema:<br><br>
+            — El <strong>total de docentes activos</strong> registrados,<br>
+            — El <strong>total de archivos subidos</strong> en el sistema,<br>
+            — El <strong>promedio de archivos por docente</strong>,<br>
+            — Los <strong>archivos subidos en el año actual</strong>.<br><br>
+            Además, contamos con gráficos generados con <strong>Chart.js</strong>: uno de barras que muestra la distribución de archivos por <strong>bimestre</strong>, un gráfico de dona con archivos por <strong>nivel educativo</strong>, y otro con los archivos por <strong>tipo de documento</strong>: PDF, Word, Excel y PowerPoint.<br><br>
+            También podemos ver el <strong>top 10 de docentes</strong> con más archivos subidos y los <strong>últimos 8 archivos</strong> registrados en el sistema."
+        </div>
+    </div>
+</div>
+
+<!-- ══ SEGMENTO 4 ══ -->
+<div class="segmento">
+    <div class="seg-header">
+        <span class="seg-num">4</span>
+        <h2>Gestión de Docentes + API RENIEC &nbsp;(2:30 – 3:40)</h2>
+        <span class="tiempo-badge">1 min 10 seg</span>
+    </div>
+    <div class="seg-body">
+        <div class="pantalla">📸 Pantalla: Listado de docentes</div>
+        <div class="guion-texto">
+            "Ahora vamos al módulo de <strong>Gestión de Docentes</strong>. Aquí el administrador puede ver todos los docentes registrados, con su número de asignaciones y archivos subidos. También hay un buscador en tiempo real.<br><br>
+            Voy a registrar un nuevo docente."
+        </div>
+        <div class="accion">🖱️ Acción: Haz clic en "Nuevo Docente"</div>
+        <div class="guion-texto">
+            "El formulario de registro tiene una característica especial: integración con la <strong>API de RENIEC</strong> a través de decolecta.com. Al ingresar el DNI del docente, el sistema consulta automáticamente el padrón nacional y autocompleta el <strong>nombre y apellidos</strong>, evitando errores de digitación."
+        </div>
+        <div class="accion">🖱️ Acción: Escribe un DNI y espera el autocompletado</div>
+        <div class="guion-texto">
+            "Como ven, el sistema llenó automáticamente los datos. Luego asignamos al docente sus <strong>cursos, grados y secciones</strong> que dictará. Esta es una relación de muchos a muchos: un docente puede tener múltiples asignaciones."
+        </div>
+        <div class="accion">🖱️ Acción: Guarda el docente</div>
+        <div class="guion-texto">
+            "El docente queda registrado. También podemos <strong>activar o desactivar</strong> un docente sin borrarlo del sistema, conservando todo su historial de archivos. Esto se implementó con la técnica de <strong>Soft Deletes</strong>."
+        </div>
+    </div>
+</div>
+
+<!-- ══ SEGMENTO 5 ══ -->
+<div class="segmento">
+    <div class="seg-header">
+        <span class="seg-num">5</span>
+        <h2>Panel del Docente: Subida de Archivos &nbsp;(3:40 – 4:40)</h2>
+        <span class="tiempo-badge">1 min</span>
+    </div>
+    <div class="seg-body">
+        <div class="pantalla">📸 Pantalla: Cerrar sesión del admin → ingresar como docente</div>
+        <div class="guion-texto">
+            "Ahora vamos a ver el sistema desde el punto de vista del <strong>Docente</strong>. Cierro la sesión del administrador y entro con una cuenta de docente."
+        </div>
+        <div class="accion">🖱️ Acción: Cierra sesión y entra como docente</div>
+        <div class="guion-texto">
+            "El docente tiene su propio panel con sus archivos. Para subir un nuevo archivo, el docente selecciona su <strong>asignación</strong> (curso, grado y sección), el <strong>bimestre</strong> correspondiente, y sube el archivo desde su dispositivo.<br><br>
+            El sistema acepta archivos en formato <strong>PDF, Word, Excel y PowerPoint</strong>, con un tamaño máximo de <strong>50 MB</strong> por archivo."
+        </div>
+        <div class="accion">🖱️ Acción: Sube un archivo de prueba</div>
+        <div class="guion-texto">
+            "El archivo queda registrado en el sistema, asociado al año lectivo activo. El docente puede ver todos sus archivos subidos, con la posibilidad de <strong>filtrarlos</strong> por bimestre, curso o rango de fechas."
+        </div>
+    </div>
+</div>
+
+<!-- ══ SEGMENTO 6 ══ -->
+<div class="segmento">
+    <div class="seg-header">
+        <span class="seg-num">6</span>
+        <h2>Previsualización, Descarga y Papelera &nbsp;(4:40 – 5:20)</h2>
+        <span class="tiempo-badge">40 seg</span>
+    </div>
+    <div class="seg-body">
+        <div class="pantalla">📸 Pantalla: Lista de archivos del docente</div>
+        <div class="guion-texto">
+            "Desde su listado de archivos, el docente tiene varias opciones:<br><br>
+            Primero, puede <strong>previsualizar</strong> el documento directamente en el navegador usando el <strong>Visor de Google Docs</strong>, sin necesidad de descargarlo. El sistema genera una URL temporal firmada, válida por <strong>10 minutos</strong>, para proteger el acceso.<br><br>
+            Segundo, puede <strong>descargar</strong> una copia local de su archivo cuando lo necesite.<br><br>
+            Y tercero, si el docente sube un archivo por error, puede enviarlo a la <strong>Papelera de Reciclaje</strong>, desde donde puede <strong>restaurarlo</strong> si se arrepiente, o <strong>eliminarlo definitivamente</strong> para liberar espacio."
+        </div>
+        <div class="accion">🖱️ Acción: Demuestra una de estas opciones (previsualizar o papelera)</div>
+    </div>
+</div>
+
+<!-- ══ SEGMENTO 7 ══ -->
+<div class="segmento">
+    <div class="seg-header">
+        <span class="seg-num">7</span>
+        <h2>Reportes de Cumplimiento &nbsp;(5:20 – 6:20)</h2>
+        <span class="tiempo-badge">1 min</span>
+    </div>
+    <div class="seg-body">
+        <div class="pantalla">📸 Pantalla: Módulo de Reportes del Administrador</div>
+        <div class="guion-texto">
+            "Volvemos al panel del <strong>Administrador</strong> para ver uno de los módulos más importantes: los <strong>Reportes de Cumplimiento</strong>.<br><br>
+            El administrador selecciona el <strong>año lectivo</strong> y el <strong>bimestre</strong> que desea evaluar, y el sistema genera un reporte completo que muestra, docente por docente, cuántas de sus asignaciones tienen archivos subidos y cuántas están pendientes.<br><br>
+            Se calcula automáticamente el <strong>porcentaje de cumplimiento</strong> de cada docente y un <strong>porcentaje global</strong> de la institución."
+        </div>
+        <div class="accion">🖱️ Acción: Genera el reporte seleccionando año y bimestre</div>
+        <div class="guion-texto">
+            "Al hacer clic en el detalle de un docente, se abre un <strong>modal</strong> que muestra exactamente qué cursos, grados y secciones tienen archivos y cuáles están sin completar, lo que permite identificar rápidamente quién está incumpliendo con sus entregas.<br><br>
+            Este reporte se puede exportar en tres formatos: <strong>PDF</strong>, <strong>Word</strong> y <strong>Excel</strong>, para ser utilizado en informes institucionales."
+        </div>
+        <div class="accion">🖱️ Acción: Muestra brevemente la exportación a PDF o Excel</div>
+    </div>
+</div>
+
+<!-- ══ SEGMENTO 8 ══ -->
+<div class="segmento">
+    <div class="seg-header">
+        <span class="seg-num">8</span>
+        <h2>Papelera Global y Configuración &nbsp;(6:20 – 6:50)</h2>
+        <span class="tiempo-badge">30 seg</span>
+    </div>
+    <div class="seg-body">
+        <div class="pantalla">📸 Pantalla: Papelera Global del Administrador</div>
+        <div class="guion-texto">
+            "El administrador también tiene acceso a una <strong>Papelera Global</strong>, donde puede ver todos los archivos eliminados por cualquier docente, con la opción de <strong>restaurarlos</strong> o <strong>eliminarlos definitivamente</strong>. Esto le da control total sobre los archivos de la institución.<br><br>
+            Finalmente, en el módulo de <strong>Configuración</strong>, el administrador puede actualizar los <strong>datos institucionales</strong> como el nombre y logo de la institución, que aparecen en todos los reportes generados. También puede actualizar su <strong>perfil</strong> y <strong>cambiar su contraseña</strong> de forma segura."
+        </div>
+    </div>
+</div>
+
+<!-- ══ SEGMENTO 9 ══ -->
+<div class="segmento">
+    <div class="seg-header">
+        <span class="seg-num">9</span>
+        <h2>Cierre &nbsp;(6:50 – 7:30)</h2>
+        <span class="tiempo-badge">40 seg</span>
+    </div>
+    <div class="seg-body">
+        <div class="pantalla">📸 Pantalla: Dashboard del admin o logo del proyecto</div>
+        <div class="guion-texto">
+            "Para concluir, el <strong>Sistema de Gestión de Aprendizaje</strong> de la I.E.P. Esther Carson fue desarrollado con <strong>Laravel 10</strong>, <strong>MySQL</strong> como base de datos, y <strong>Blade</strong> para las vistas.<br><br>
+            La metodología <strong>Scrum</strong> nos permitió entregar el sistema de forma incremental: en el <strong>Sprint 1</strong> implementamos la autenticación y la gestión académica básica; en el <strong>Sprint 2</strong>, la subida y gestión de archivos del docente; y en el <strong>Sprint 3</strong>, la auditoría, reportes y configuración del sistema.<br><br>
+            El sistema cumple con todas las <strong>21 historias de usuario</strong> planificadas, todas con estado <strong>Hecho</strong>. Gracias por su atención."
+        </div>
+    </div>
+</div>
+
+<!-- CONSEJOS -->
+<div class="consejos">
+    <h3>💡 Consejos para Grabar</h3>
+    <ul>
+        <li><strong>Prepara datos de prueba</strong> antes de grabar: ten docentes cargados, archivos subidos en al menos un bimestre para que los reportes muestren información real.</li>
+        <li><strong>Usa OBS Studio</strong> o la grabación de pantalla de Windows (Win + G) para grabar a 1080p.</li>
+        <li><strong>Silencia el celular</strong> y cierra aplicaciones que generen notificaciones emergentes.</li>
+        <li><strong>Habla despacio y con claridad.</strong> No tienes que repetir el guión palabra por palabra; adáptalo a tu forma de hablar.</li>
+        <li>Si cometes un error, <strong>pausa, respira y continúa</strong> desde ese punto — puedes editarlo después.</li>
+        <li>Abre el sistema con <strong>zoom del navegador al 100%</strong> para que todo sea legible en el video.</li>
+    </ul>
+</div>
+
+<!-- PIE -->
+<div class="pie">
+    <div><strong>I.E.P. Esther Carson</strong> — Sistema de Gestión de Aprendizaje · Guión de Demostración</div>
+    <div>9 segmentos · Duración: 6 – 7 minutos</div>
+    <div>Julio 2026</div>
+</div>
+
+</body>
+</html>

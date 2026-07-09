@@ -17,9 +17,6 @@
 <form method="POST" action="{{ route('admin.docentes.update', $docente) }}" id="formDocente">
 @csrf @method('PUT')
 
-{{-- ══════════════════════════════════════════════════════════ --}}
-{{-- GRID: Datos Personales + Asignaciones                      --}}
-{{-- ══════════════════════════════════════════════════════════ --}}
 <div class="grid grid-cols-1 xl:grid-cols-[420px_1fr] gap-5 items-start">
 
     {{-- ── Datos Personales ────────────────────────────────── --}}
@@ -131,7 +128,7 @@
             {{-- Selector de Grado --}}
             <div class="mb-5">
                 <label class="form-label" for="selectGradoAgregar">
-                    Agregar cursos de un Grado
+                    Selecciona un Grado para agregar sus cursos
                 </label>
                 <select id="selectGradoAgregar" class="input w-full">
                     <option value="">— Elige un grado —</option>
@@ -144,14 +141,28 @@
                     @endforeach
                 </select>
                 <p class="text-xs text-slate-400 mt-1.5">
-                    Al seleccionar un grado se añaden automáticamente todos sus cursos.
-                    Al guardar, las asignaciones actuales serán <strong>reemplazadas</strong> por las de abajo.
+                    En Inicial y Primaria se añaden automáticamente todos los cursos del grado.
+                    En Secundaria podrás elegir los cursos específicos a asignar.
                 </p>
+            </div>
+
+            {{-- Selector de cursos específicos (solo Secundaria) --}}
+            <div id="cursosSecundariaBox" class="mb-5 hidden">
+                <label class="form-label">Selecciona los cursos a asignar</label>
+                <div id="cursosCheckboxList"
+                     class="grid grid-cols-2 gap-2 mb-3 max-h-48 overflow-y-auto p-3
+                            border border-slate-200 dark:border-slate-700/50 rounded-lg"></div>
+                <button type="button" id="btnAgregarSeleccionados" class="btn btn-primary btn-sm">
+                    <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
+                    </svg>
+                    Agregar cursos seleccionados
+                </button>
             </div>
 
             {{-- Tabla de asignaciones --}}
             <div class="overflow-x-auto rounded-lg border border-slate-200 dark:border-slate-700/50">
-                <table class="table">
+                <table class="table" id="tablaAsignaciones">
                     <thead>
                         <tr>
                             <th>Grado</th>
@@ -198,8 +209,26 @@
 
 </div>{{-- /grid --}}
 
-
 </form>
+
+{{-- ── Modal: curso duplicado ──────────────────────────────────── --}}
+<div class="modal-overlay" id="cursoDuplicadoModal">
+    <div class="modal-box">
+        <div class="flex items-center gap-3 mb-4">
+            <div class="w-10 h-10 rounded-full bg-amber-500/10 flex items-center justify-center flex-shrink-0">
+                <svg class="w-5 h-5 text-amber-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                          d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/>
+                </svg>
+            </div>
+            <h3 class="text-base font-bold text-gray-800 dark:text-slate-100">Curso ya asignado</h3>
+        </div>
+        <p class="text-sm text-gray-600 dark:text-slate-400 mb-6 leading-relaxed" id="cursoDuplicadoMsg"></p>
+        <div class="flex justify-end">
+            <button type="button" class="btn btn-primary btn-sm" onclick="cerrarAvisoDuplicado()">Entendido</button>
+        </div>
+    </div>
+</div>
 
 @endsection
 
@@ -223,8 +252,6 @@ document.getElementById('username').addEventListener('input', function () {
     this.setSelectionRange(pos, pos);
 });
 
-// DNI, nombre y apellido son de solo lectura — no hay lógica de verificación de DNI en edición.
-
 // ─── Tabla de asignaciones ───────────────────────────────────────────────────
 const CURSOS = {!! json_encode($cursos->map(fn($c) => ['id' => $c->id, 'nombre' => $c->nombre])) !!};
 const GRADOS = {!! json_encode($grados->map(fn($g) => [
@@ -234,72 +261,55 @@ const GRADOS = {!! json_encode($grados->map(fn($g) => [
     'grado'  => $g->nombre
 ])) !!};
 const SECCION_UNICA_ID = {{ $seccionUnica->id }};
-let idx = {{ count($asignacionesParaMostrar ?? []) }};
+let idx = {{ old('asignaciones') ? count(old('asignaciones')) : count($asignacionesParaMostrar ?? []) }};
 
-// Filtra cursos válidos para el nivel/grado
+// Filtra los cursos válidos para el nivel/grado
 function cursosParaNivel(nivel, grado) {
-    const n = (s) => s.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
-    const nv = n(nivel), gd = n(grado);
+    const norm = (s) => s.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+    const nv = norm(nivel), gd = norm(grado);
 
     let list = [];
     if (nv === 'inicial') {
-        // Cursos específicos para Inicial (3, 4 y 5 años)
         const cursosInicial = [
-            'comunicacion',
-            'matematica',
-            'personal social',
-            'ciencia y tecnologia',
-            'arte y cultura',
-            'educacion fisica',
-            'educacion cristiana'
+            'comunicacion', 'matematica', 'personal social',
+            'ciencia y tecnologia', 'arte y cultura',
+            'educacion fisica', 'educacion cristiana'
         ];
-        list = CURSOS.filter(c => {
-            const cn = n(c.nombre);
-            return cursosInicial.includes(cn);
-        });
+        list = CURSOS.filter(c => cursosInicial.includes(norm(c.nombre)));
     } else if (nv === 'primaria') {
-        // Cursos para Primaria (1ro a 6to)
         list = CURSOS.filter(c => {
-            const cn = n(c.nombre);
-            // Excluir variantes antiguas que ahora usan otros nombres
+            const cn = norm(c.nombre);
             if (cn === 'ciencias naturales' || cn === 'educacion religiosa') return false;
             if (cn.includes('historia') || cn.includes('geografia') || cn.includes('economia')) return false;
-            if (cn.includes('ingles')) {
-                // Inglés solo de 4to a 6to de Primaria
-                return !['1ro','2do','3ro'].some(x => gd.includes(x));
-            }
+            if (cn.includes('ingles')) return !['1ro','2do','3ro'].some(x => gd.includes(x));
             return true;
         });
     } else {
         // Secundaria
         list = CURSOS.filter(c => {
-            const cn = n(c.nombre);
+            const cn = norm(c.nombre);
             if (cn.includes('personal social')) return false;
             if (cn === 'ciencia y tecnologia' || cn === 'educacion cristiana') return false;
             return true;
         });
     }
 
-    // Eliminar duplicados agrupando por nombre normalizado (ej: "Matemática" y "Matematica")
-    // Dando preferencia a la versión que tiene tilde/correcta
+    // Eliminar duplicados dando preferencia a versiones con tilde
     const mapa = {};
     list.forEach(c => {
-        const cn = n(c.nombre);
+        const cn = norm(c.nombre);
         if (!mapa[cn]) {
             mapa[cn] = c;
         } else {
             const tieneTilde = /[áéíóúÁÉÍÓÚñÑ]/.test(c.nombre);
             const anteriorTieneTilde = /[áéíóúÁÉÍÓÚñÑ]/.test(mapa[cn].nombre);
-            if (tieneTilde && !anteriorTieneTilde) {
-                mapa[cn] = c;
-            }
+            if (tieneTilde && !anteriorTieneTilde) mapa[cn] = c;
         }
     });
-
     return Object.values(mapa);
 }
 
-// Crea una fila grado+curso
+// Crea una fila para un grado+curso ya definidos
 function crearFila(gradoId, gradoNombre, cursoNombre) {
     const tr = document.createElement('tr');
     tr.className = 'fila-asig';
@@ -325,47 +335,125 @@ function crearFila(gradoId, gradoNombre, cursoNombre) {
 
 // Verifica si ya existe una asignación para el mismo grado y curso en la tabla
 function existeAsignacion(gradoId, cursoNombre) {
+    const norm = (s) => s.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
     const filas = document.querySelectorAll('.fila-asig');
     for (let fila of filas) {
         const gInput = fila.querySelector('input[name*="[grado_id]"]');
         const cInput = fila.querySelector('input[name*="[curso_nombre]"]');
-        if (gInput && cInput && gInput.value == gradoId && cInput.value.toLowerCase() === cursoNombre.toLowerCase()) {
+        if (gInput && cInput && gInput.value == gradoId && norm(cInput.value) === norm(cursoNombre)) {
             return true;
         }
     }
     return false;
 }
 
-// Agrega automáticamente todos los cursos del grado seleccionado
-function agregarCursosDeGrado() {
-    const sel     = document.getElementById('selectGradoAgregar');
-    const gradoId = sel.value;
-    const opt     = sel.options[sel.selectedIndex];
-    if (!gradoId) return;
+// Agrega cursos del grado seleccionado SIN borrar los existentes
+function agregarCursosAutomatico(gradoId, nombre, cursos) {
+    const empty = document.getElementById('emptyRow');
+    cursos.forEach(c => {
+        // Solo agregar si no existe ya en la tabla
+        if (!existeAsignacion(gradoId, c.nombre)) {
+            empty.insertAdjacentElement('beforebegin', crearFila(gradoId, nombre, c.nombre));
+        }
+    });
+    checkEmpty();
+}
+
+// ─── Selector de cursos específicos para Secundaria ──────────────────────────
+const cursosSecundariaBox = document.getElementById('cursosSecundariaBox');
+const cursosCheckboxList  = document.getElementById('cursosCheckboxList');
+let secundariaActual = null;
+let lastNivelSeleccionado = null;
+
+function mostrarSelectorCursos(nivel, grado, gradoId, gradoNombre) {
+    const cursos = cursosParaNivel(nivel, grado);
+    secundariaActual = { gradoId, gradoNombre };
+
+    cursosCheckboxList.innerHTML = cursos.map(c => `
+        <label class="flex items-center gap-2 text-xs text-slate-600 dark:text-slate-400">
+            <input type="checkbox" class="chk-curso-sec" value="${c.nombre}">
+            ${c.nombre}
+        </label>
+    `).join('');
+
+    cursosSecundariaBox.classList.remove('hidden');
+}
+
+document.getElementById('btnAgregarSeleccionados').addEventListener('click', () => {
+    if (!secundariaActual) return;
+    const { gradoId, gradoNombre } = secundariaActual;
+    const empty = document.getElementById('emptyRow');
+    const duplicados = [];
+
+    document.querySelectorAll('.chk-curso-sec:checked').forEach(chk => {
+        if (!existeAsignacion(gradoId, chk.value)) {
+            empty.insertAdjacentElement('beforebegin', crearFila(gradoId, gradoNombre, chk.value));
+        } else {
+            duplicados.push(chk.value);
+        }
+    });
+
+    checkEmpty();
+    cursosSecundariaBox.classList.add('hidden');
+    document.getElementById('selectGradoAgregar').value = '';
+
+    if (duplicados.length) {
+        const plural = duplicados.length > 1;
+        mostrarAvisoDuplicado(
+            `No se ${plural ? 'pueden agregar los cursos' : 'puede agregar el curso'} "${duplicados.join('", "')}" porque ya ${plural ? 'están asignados' : 'está asignado'} para ${gradoNombre}.`
+        );
+    }
+});
+
+// ─── Modal de aviso: curso duplicado ─────────────────────────────────────────
+const cursoDuplicadoModal = document.getElementById('cursoDuplicadoModal');
+const cursoDuplicadoMsg   = document.getElementById('cursoDuplicadoMsg');
+
+function mostrarAvisoDuplicado(mensaje) {
+    cursoDuplicadoMsg.textContent = mensaje;
+    cursoDuplicadoModal.classList.add('show');
+}
+
+function cerrarAvisoDuplicado() {
+    cursoDuplicadoModal.classList.remove('show');
+}
+
+cursoDuplicadoModal.addEventListener('click', function (e) {
+    if (e.target === cursoDuplicadoModal) cerrarAvisoDuplicado();
+});
+
+// Al elegir un grado: Secundaria muestra checkboxes, los demás niveles autocompletan
+document.getElementById('selectGradoAgregar').addEventListener('change', function () {
+    const sel      = this;
+    const gradoId  = sel.value;
+    const opt      = sel.options[sel.selectedIndex];
+
+    if (!gradoId) {
+        cursosSecundariaBox.classList.add('hidden');
+        return;
+    }
 
     const nivel  = opt.dataset.nivel;
     const grado  = opt.dataset.grado;
     const nombre = opt.text;
-    const cursos = cursosParaNivel(nivel, grado);
+    const nv     = nivel.toLowerCase();
 
-    if (!cursos.length) {
-        alert('No hay cursos registrados para este nivel.');
-        return;
+    if (nv === 'secundaria') {
+        // No borrar cursos existentes — solo mostrar checkboxes para agregar más
+        mostrarSelectorCursos(nivel, grado, gradoId, nombre);
+    } else {
+        cursosSecundariaBox.classList.add('hidden');
+        const cursos = cursosParaNivel(nivel, grado);
+        if (!cursos.length) {
+            alert('No hay cursos registrados para este nivel.');
+            return;
+        }
+        agregarCursosAutomatico(gradoId, nombre, cursos);
+        sel.value = '';
     }
 
-    // Limpiar toda la tabla para reemplazar los cursos anteriores
-    document.querySelectorAll('.fila-asig').forEach(tr => tr.remove());
-
-    const empty = document.getElementById('emptyRow');
-    cursos.forEach(c => {
-        empty.insertAdjacentElement('beforebegin', crearFila(gradoId, nombre, c.nombre));
-    });
-
-    checkEmpty();
-    sel.value = '';
-}
-
-document.getElementById('selectGradoAgregar').addEventListener('change', agregarCursosDeGrado);
+    lastNivelSeleccionado = nv;
+});
 
 function removeFila(tr) {
     tr.style.opacity = '0';
@@ -377,7 +465,11 @@ function checkEmpty() {
     document.getElementById('emptyRow').classList.toggle('hidden', document.querySelectorAll('.fila-asig').length > 0);
 }
 
-document.querySelectorAll('.btn-del').forEach(b => b.addEventListener('click', () => removeFila(b.closest('tr'))));
+// Botones eliminar de filas ya existentes
+document.querySelectorAll('.btn-del').forEach(btn => {
+    btn.addEventListener('click', () => removeFila(btn.closest('tr')));
+});
+
 checkEmpty();
 
 const style = document.createElement('style');
@@ -385,5 +477,3 @@ style.textContent = '@keyframes fadeIn { from { opacity:0; transform:translateY(
 document.head.appendChild(style);
 </script>
 @endsection
-
-

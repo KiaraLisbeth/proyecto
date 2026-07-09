@@ -167,15 +167,26 @@
                         </span>
                         @endif
 
-                        {{-- Botón Theme Toggle --}}
-                        <button id="themeToggle" class="p-2 mr-2 text-gray-500 dark:text-slate-400 hover:bg-gray-100 dark:hover:bg-slate-800 rounded-lg transition-colors focus:outline-none" title="Cambiar tema">
-                            {{-- Icono Luna (Claro) --}}
-                            <svg id="themeIconMoon" class="w-5 h-5 hidden dark:block" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" />
+                        {{-- Toggle Tema Claro / Oscuro --}}
+                        <button id="themeToggle"
+                                title="Cambiar tema"
+                                class="flex items-center gap-2 px-2 py-1.5 rounded-xl hover:bg-gray-100 dark:hover:bg-slate-800 transition-all duration-200 focus:outline-none group"
+                                aria-label="Cambiar entre modo claro y oscuro">
+                            {{-- Icono Sol --}}
+                            <svg class="w-4 h-4 text-amber-400 dark:text-slate-500 transition-colors duration-300 group-hover:text-amber-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"/>
                             </svg>
-                            {{-- Icono Sol (Oscuro) --}}
-                            <svg id="themeIconSun" class="w-5 h-5 block dark:hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" />
+                            {{-- Track del switch --}}
+                            <div id="themeSwitchTrack"
+                                 style="width:44px;height:24px;border-radius:99px;padding:2px;display:flex;align-items:center;background:linear-gradient(135deg,#bfdbfe,#93c5fd);transition:background 0.4s ease;position:relative;">
+                                <div id="themeSwitchKnob"
+                                     style="width:20px;height:20px;border-radius:50%;background:white;box-shadow:0 2px 8px rgba(0,0,0,0.25);display:flex;align-items:center;justify-content:center;transition:transform 0.35s cubic-bezier(0.34,1.56,0.64,1);flex-shrink:0;">
+                                    <svg width="12" height="12" fill="none" stroke="#f59e0b" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"/></svg>
+                                </div>
+                            </div>
+                            {{-- Icono Luna --}}
+                            <svg class="w-4 h-4 text-slate-300 dark:text-sky-400 transition-colors duration-300 group-hover:dark:text-sky-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"/>
                             </svg>
                         </button>
 
@@ -247,9 +258,9 @@
                               d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/>
                     </svg>
                 </div>
-                <h3 class="text-base font-bold text-slate-100">Confirmar acción</h3>
+                <h3 class="text-base font-bold text-gray-800 dark:text-slate-100">Confirmar acción</h3>
             </div>
-            <p class="text-sm text-slate-400 mb-6 leading-relaxed" id="deleteModalText">
+            <p class="text-sm text-gray-600 dark:text-slate-400 mb-6 leading-relaxed break-all" id="deleteModalText">
                 ¿Estás seguro? Esta acción no se puede deshacer.
             </p>
             <div class="flex gap-3 justify-end">

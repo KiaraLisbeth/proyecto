@@ -1,0 +1,438 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Modelo de Datos – Sistema de Gestión Académica</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+    * { margin:0; padding:0; box-sizing:border-box; }
+
+    body {
+      font-family: 'Inter', Arial, sans-serif;
+      background: #cbd5e1;
+      color: #0f172a;
+      padding: 30px;
+    }
+
+    .page {
+      width: 297mm;
+      min-height: 210mm;
+      margin: 0 auto;
+      background: #fff;
+      padding: 18mm 16mm;
+      box-shadow: 0 6px 40px rgba(0,0,0,.25);
+    }
+
+    /* HEADER */
+    .doc-header {
+      text-align:center;
+      border-bottom: 3px solid #1e3a8a;
+      padding-bottom: 12px;
+      margin-bottom: 20px;
+    }
+    .doc-header h1 { font-size:15pt; color:#1e3a8a; font-weight:700; }
+    .doc-header p  { font-size:9.5pt; color:#475569; margin-top:4px; }
+    .doc-header .badges { margin-top:8px; display:flex; gap:8px; justify-content:center; flex-wrap:wrap; }
+    .badge {
+      padding:2px 10px; border-radius:20px; font-size:8.5pt; font-weight:600;
+    }
+    .badge-s1 { background:#dbeafe; color:#1e40af; }
+    .badge-s2 { background:#ede9fe; color:#5b21b6; }
+    .badge-s3 { background:#d1fae5; color:#065f46; }
+    .badge-s4 { background:#fef3c7; color:#92400e; }
+
+    /* GRID DE TABLAS */
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 14px;
+      margin-bottom: 20px;
+    }
+
+    /* Tarjeta de tabla */
+    .tbl-card {
+      border: 1.5px solid #cbd5e1;
+      border-radius: 8px;
+      overflow: hidden;
+      font-size: 8.5pt;
+      box-shadow: 0 2px 8px rgba(0,0,0,.06);
+    }
+
+    .tbl-header {
+      padding: 7px 10px;
+      font-weight: 700;
+      font-size: 9.5pt;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .tbl-header .sprint-lbl {
+      font-size: 7.5pt;
+      font-weight: 600;
+      padding: 1px 7px;
+      border-radius: 10px;
+    }
+
+    /* Colores por sprint */
+    .h-s1 { background:#1e40af; color:white; }
+    .h-s1 .sprint-lbl { background:rgba(255,255,255,.25); color:white; }
+
+    .h-s2 { background:#5b21b6; color:white; }
+    .h-s2 .sprint-lbl { background:rgba(255,255,255,.25); color:white; }
+
+    .h-s3 { background:#065f46; color:white; }
+    .h-s3 .sprint-lbl { background:rgba(255,255,255,.25); color:white; }
+
+    .h-base { background:#374151; color:white; }
+    .h-base .sprint-lbl { background:rgba(255,255,255,.2); color:white; }
+
+    .tbl-body { padding:0; }
+    .field-row {
+      display: flex;
+      justify-content: space-between;
+      padding: 4px 10px;
+      border-bottom: 1px solid #f1f5f9;
+      align-items: center;
+      gap: 6px;
+    }
+    .field-row:last-child { border-bottom: none; }
+    .field-row:hover { background: #f8faff; }
+
+    .field-name { font-weight:500; color:#1e293b; display:flex; align-items:center; gap:5px; }
+    .field-type { font-size:7.5pt; color:#64748b; font-style:italic; white-space:nowrap; }
+
+    /* Iconos de campo */
+    .icon-pk  { color:#f59e0b; font-size:9pt; }
+    .icon-fk  { color:#3b82f6; font-size:9pt; }
+    .icon-uk  { color:#8b5cf6; font-size:9pt; }
+    .icon-nn  { color:#94a3b8; font-size:9pt; }
+
+    /* LEYENDA DE CAMPOS */
+    .leyenda-campos {
+      display:flex; gap:16px; margin-bottom:14px;
+      font-size:8.5pt; color:#475569; flex-wrap:wrap;
+    }
+    .leyenda-campos span { display:flex; align-items:center; gap:4px; }
+
+    /* RELACIONES */
+    .relaciones {
+      margin-top: 16px;
+      border-top: 2px solid #e2e8f0;
+      padding-top: 14px;
+    }
+    .relaciones h2 { font-size:11pt; color:#1e3a8a; font-weight:700; margin-bottom:10px; }
+    .rel-table {
+      width:100%; border-collapse:collapse; font-size:8.5pt;
+    }
+    .rel-table th {
+      background:#1e3a8a; color:white; padding:6px 10px; text-align:left;
+      font-weight:600; letter-spacing:.4px;
+    }
+    .rel-table td {
+      padding:5px 10px; border:1px solid #e2e8f0; vertical-align:middle;
+    }
+    .rel-table tr:nth-child(even) td { background:#f8faff; }
+    .rel-type { font-weight:600; color:#1e40af; }
+
+    /* Nota al pie */
+    .footer {
+      margin-top:16px; border-top:1px solid #cbd5e1; padding-top:10px;
+      font-size:8pt; color:#94a3b8; text-align:center;
+    }
+
+    @media print {
+      body { background:white; padding:0; }
+      .page { width:100%; margin:0; box-shadow:none; padding:12mm; }
+    }
+  </style>
+</head>
+<body>
+<div class="page">
+
+  <!-- ENCABEZADO -->
+  <div class="doc-header">
+    <h1>Modelo de Datos – Sistema de Gestión Académica</h1>
+    <p>Diagrama Entidad–Relación basado en las migraciones reales del proyecto Laravel</p>
+    <div class="badges">
+      <span class="badge badge-s1">Sprint 1 – Base del sistema</span>
+      <span class="badge badge-s2">Sprint 2 – Archivos y asignaciones</span>
+      <span class="badge badge-s3">Sprint 3 – Auditoría y reportes</span>
+      <span class="badge badge-s4">Sprint 4 – UAT y despliegue</span>
+    </div>
+  </div>
+
+  <!-- LEYENDA DE ICONOS -->
+  <div class="leyenda-campos">
+    <span><b class="icon-pk">🔑</b> Clave Primaria (PK)</span>
+    <span><b class="icon-fk">🔗</b> Clave Foránea (FK)</span>
+    <span><b class="icon-uk">◆</b> Único (UK)</span>
+    <span><b>·</b> Campo opcional (nullable)</span>
+  </div>
+
+  <!-- GRID DE TABLAS -->
+  <div class="grid">
+
+    <!-- ═══ USERS ═══ -->
+    <div class="tbl-card">
+      <div class="tbl-header h-s1">
+        <span>users</span>
+        <span class="sprint-lbl">Sprint 1</span>
+      </div>
+      <div class="tbl-body">
+        <div class="field-row"><span class="field-name"><span class="icon-pk">🔑</span> id</span><span class="field-type">BIGINT UNSIGNED</span></div>
+        <div class="field-row"><span class="field-name">nombre</span><span class="field-type">VARCHAR(255)</span></div>
+        <div class="field-row"><span class="field-name">apellido</span><span class="field-type">VARCHAR(255)</span></div>
+        <div class="field-row"><span class="field-name"><span class="icon-uk">◆</span> dni</span><span class="field-type">VARCHAR(8) null</span></div>
+        <div class="field-row"><span class="field-name"><span class="icon-uk">◆</span> email</span><span class="field-type">VARCHAR(255)</span></div>
+        <div class="field-row"><span class="field-name">password</span><span class="field-type">VARCHAR(255)</span></div>
+        <div class="field-row"><span class="field-name">username</span><span class="field-type">VARCHAR(255) null</span></div>
+        <div class="field-row"><span class="field-name">rol</span><span class="field-type">ENUM(admin, docente)</span></div>
+        <div class="field-row"><span class="field-name">activo</span><span class="field-type">BOOLEAN default true</span></div>
+        <div class="field-row"><span class="field-name">email_verified_at</span><span class="field-type">TIMESTAMP null</span></div>
+        <div class="field-row"><span class="field-name">remember_token</span><span class="field-type">VARCHAR(100) null</span></div>
+        <div class="field-row"><span class="field-name">created_at / updated_at</span><span class="field-type">TIMESTAMP</span></div>
+      </div>
+    </div>
+
+    <!-- ═══ ANIO_LECTIVOS ═══ -->
+    <div class="tbl-card">
+      <div class="tbl-header h-s1">
+        <span>anio_lectivos</span>
+        <span class="sprint-lbl">Sprint 1</span>
+      </div>
+      <div class="tbl-body">
+        <div class="field-row"><span class="field-name"><span class="icon-pk">🔑</span> id</span><span class="field-type">BIGINT UNSIGNED</span></div>
+        <div class="field-row"><span class="field-name"><span class="icon-uk">◆</span> anio</span><span class="field-type">SMALLINT UNSIGNED</span></div>
+        <div class="field-row"><span class="field-name">activo</span><span class="field-type">BOOLEAN default false</span></div>
+        <div class="field-row"><span class="field-name">fecha_inicio</span><span class="field-type">DATE null</span></div>
+        <div class="field-row"><span class="field-name">created_at / updated_at</span><span class="field-type">TIMESTAMP</span></div>
+      </div>
+    </div>
+
+    <!-- ═══ NIVELES ═══ -->
+    <div class="tbl-card">
+      <div class="tbl-header h-base">
+        <span>niveles</span>
+        <span class="sprint-lbl">Base</span>
+      </div>
+      <div class="tbl-body">
+        <div class="field-row"><span class="field-name"><span class="icon-pk">🔑</span> id</span><span class="field-type">BIGINT UNSIGNED</span></div>
+        <div class="field-row"><span class="field-name"><span class="icon-uk">◆</span> nombre</span><span class="field-type">VARCHAR(255)</span></div>
+        <div class="field-row"><span class="field-name">created_at / updated_at</span><span class="field-type">TIMESTAMP</span></div>
+        <div class="field-row" style="background:#fafafa;font-size:7.5pt;color:#94a3b8;font-style:italic;">
+          <span>Ej: Inicial · Primaria · Secundaria</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- ═══ GRADOS ═══ -->
+    <div class="tbl-card">
+      <div class="tbl-header h-base">
+        <span>grados</span>
+        <span class="sprint-lbl">Base</span>
+      </div>
+      <div class="tbl-body">
+        <div class="field-row"><span class="field-name"><span class="icon-pk">🔑</span> id</span><span class="field-type">BIGINT UNSIGNED</span></div>
+        <div class="field-row"><span class="field-name">nombre</span><span class="field-type">VARCHAR(255)</span></div>
+        <div class="field-row"><span class="field-name"><span class="icon-fk">🔗</span> nivel_id</span><span class="field-type">FK → niveles.id</span></div>
+        <div class="field-row"><span class="field-name">created_at / updated_at</span><span class="field-type">TIMESTAMP</span></div>
+        <div class="field-row" style="background:#fafafa;font-size:7.5pt;color:#94a3b8;font-style:italic;">
+          <span>Ej: 1ro · 2do · 3ro · … · 6to</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- ═══ SECCIONES ═══ -->
+    <div class="tbl-card">
+      <div class="tbl-header h-base">
+        <span>secciones</span>
+        <span class="sprint-lbl">Base</span>
+      </div>
+      <div class="tbl-body">
+        <div class="field-row"><span class="field-name"><span class="icon-pk">🔑</span> id</span><span class="field-type">BIGINT UNSIGNED</span></div>
+        <div class="field-row"><span class="field-name"><span class="icon-uk">◆</span> nombre</span><span class="field-type">VARCHAR(255)</span></div>
+        <div class="field-row"><span class="field-name">created_at / updated_at</span><span class="field-type">TIMESTAMP</span></div>
+        <div class="field-row" style="background:#fafafa;font-size:7.5pt;color:#94a3b8;font-style:italic;">
+          <span>Ej: A · B · C · D</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- ═══ CURSOS ═══ -->
+    <div class="tbl-card">
+      <div class="tbl-header h-base">
+        <span>cursos</span>
+        <span class="sprint-lbl">Base</span>
+      </div>
+      <div class="tbl-body">
+        <div class="field-row"><span class="field-name"><span class="icon-pk">🔑</span> id</span><span class="field-type">BIGINT UNSIGNED</span></div>
+        <div class="field-row"><span class="field-name"><span class="icon-uk">◆</span> nombre</span><span class="field-type">VARCHAR(255)</span></div>
+        <div class="field-row"><span class="field-name">created_at / updated_at</span><span class="field-type">TIMESTAMP</span></div>
+        <div class="field-row" style="background:#fafafa;font-size:7.5pt;color:#94a3b8;font-style:italic;">
+          <span>Ej: Matemática · Comunicación · CCSS</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- ═══ DOCENTE_ASIGNACIONES ═══ -->
+    <div class="tbl-card">
+      <div class="tbl-header h-s2">
+        <span>docente_asignaciones</span>
+        <span class="sprint-lbl">Sprint 2</span>
+      </div>
+      <div class="tbl-body">
+        <div class="field-row"><span class="field-name"><span class="icon-pk">🔑</span> id</span><span class="field-type">BIGINT UNSIGNED</span></div>
+        <div class="field-row"><span class="field-name"><span class="icon-fk">🔗</span> user_id</span><span class="field-type">FK → users.id</span></div>
+        <div class="field-row"><span class="field-name"><span class="icon-fk">🔗</span> curso_id</span><span class="field-type">FK → cursos.id</span></div>
+        <div class="field-row"><span class="field-name"><span class="icon-fk">🔗</span> grado_id</span><span class="field-type">FK → grados.id</span></div>
+        <div class="field-row"><span class="field-name"><span class="icon-fk">🔗</span> seccion_id</span><span class="field-type">FK → secciones.id</span></div>
+        <div class="field-row"><span class="field-name">created_at / updated_at</span><span class="field-type">TIMESTAMP</span></div>
+        <div class="field-row" style="background:#ede9fe;font-size:7.5pt;color:#5b21b6;font-style:italic;">
+          <span>UK: (user_id, curso_id, grado_id, seccion_id)</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- ═══ ARCHIVOS ═══ -->
+    <div class="tbl-card">
+      <div class="tbl-header h-s2">
+        <span>archivos</span>
+        <span class="sprint-lbl">Sprint 2</span>
+      </div>
+      <div class="tbl-body">
+        <div class="field-row"><span class="field-name"><span class="icon-pk">🔑</span> id</span><span class="field-type">BIGINT UNSIGNED</span></div>
+        <div class="field-row"><span class="field-name"><span class="icon-fk">🔗</span> user_id</span><span class="field-type">FK → users.id</span></div>
+        <div class="field-row"><span class="field-name">nombre_original</span><span class="field-type">VARCHAR(255)</span></div>
+        <div class="field-row"><span class="field-name">nombre_archivo</span><span class="field-type">VARCHAR(255)</span></div>
+        <div class="field-row"><span class="field-name">ruta</span><span class="field-type">VARCHAR(255)</span></div>
+        <div class="field-row"><span class="field-name">tipo_archivo</span><span class="field-type">VARCHAR(255)</span></div>
+        <div class="field-row"><span class="field-name">tamanio</span><span class="field-type">BIGINT UNSIGNED (bytes)</span></div>
+        <div class="field-row"><span class="field-name"><span class="icon-fk">🔗</span> curso_id</span><span class="field-type">FK → cursos.id</span></div>
+        <div class="field-row"><span class="field-name"><span class="icon-fk">🔗</span> grado_id</span><span class="field-type">FK → grados.id</span></div>
+        <div class="field-row"><span class="field-name"><span class="icon-fk">🔗</span> seccion_id</span><span class="field-type">FK → secciones.id</span></div>
+        <div class="field-row"><span class="field-name">bimestre</span><span class="field-type">TINYINT (1–4)</span></div>
+        <div class="field-row"><span class="field-name">anio</span><span class="field-type">SMALLINT UNSIGNED</span></div>
+        <div class="field-row"><span class="field-name">descripcion</span><span class="field-type">TEXT null</span></div>
+        <div class="field-row"><span class="field-name">deleted_at</span><span class="field-type">TIMESTAMP null (SoftDelete)</span></div>
+        <div class="field-row"><span class="field-name">created_at / updated_at</span><span class="field-type">TIMESTAMP</span></div>
+      </div>
+    </div>
+
+    <!-- ═══ SESSIONS ═══ -->
+    <div class="tbl-card">
+      <div class="tbl-header h-s3">
+        <span>sessions</span>
+        <span class="sprint-lbl">Sprint 3</span>
+      </div>
+      <div class="tbl-body">
+        <div class="field-row"><span class="field-name"><span class="icon-pk">🔑</span> id</span><span class="field-type">VARCHAR (PK)</span></div>
+        <div class="field-row"><span class="field-name"><span class="icon-fk">🔗</span> user_id</span><span class="field-type">FK → users.id null</span></div>
+        <div class="field-row"><span class="field-name">ip_address</span><span class="field-type">VARCHAR(45) null</span></div>
+        <div class="field-row"><span class="field-name">user_agent</span><span class="field-type">TEXT null</span></div>
+        <div class="field-row"><span class="field-name">payload</span><span class="field-type">LONGTEXT</span></div>
+        <div class="field-row"><span class="field-name">last_activity</span><span class="field-type">INT (UNIX timestamp)</span></div>
+        <div class="field-row" style="background:#d1fae5;font-size:7.5pt;color:#065f46;font-style:italic;">
+          <span>Auditoría de sesiones activas</span>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- /grid -->
+
+  <!-- TABLA DE RELACIONES -->
+  <div class="relaciones">
+    <h2>Relaciones entre Tablas</h2>
+    <table class="rel-table">
+      <thead>
+        <tr>
+          <th>Tabla Origen</th>
+          <th>Tipo de Relación</th>
+          <th>Tabla Destino</th>
+          <th>Campo FK</th>
+          <th>Descripción</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>grados</strong></td>
+          <td><span class="rel-type">N : 1</span></td>
+          <td><strong>niveles</strong></td>
+          <td>nivel_id</td>
+          <td>Un grado pertenece a un nivel educativo</td>
+        </tr>
+        <tr>
+          <td><strong>docente_asignaciones</strong></td>
+          <td><span class="rel-type">N : 1</span></td>
+          <td><strong>users</strong></td>
+          <td>user_id</td>
+          <td>Una asignación pertenece a un docente</td>
+        </tr>
+        <tr>
+          <td><strong>docente_asignaciones</strong></td>
+          <td><span class="rel-type">N : 1</span></td>
+          <td><strong>cursos</strong></td>
+          <td>curso_id</td>
+          <td>Una asignación corresponde a un curso</td>
+        </tr>
+        <tr>
+          <td><strong>docente_asignaciones</strong></td>
+          <td><span class="rel-type">N : 1</span></td>
+          <td><strong>grados</strong></td>
+          <td>grado_id</td>
+          <td>Una asignación corresponde a un grado</td>
+        </tr>
+        <tr>
+          <td><strong>docente_asignaciones</strong></td>
+          <td><span class="rel-type">N : 1</span></td>
+          <td><strong>secciones</strong></td>
+          <td>seccion_id</td>
+          <td>Una asignación corresponde a una sección</td>
+        </tr>
+        <tr>
+          <td><strong>archivos</strong></td>
+          <td><span class="rel-type">N : 1</span></td>
+          <td><strong>users</strong></td>
+          <td>user_id</td>
+          <td>Un archivo es subido por un docente</td>
+        </tr>
+        <tr>
+          <td><strong>archivos</strong></td>
+          <td><span class="rel-type">N : 1</span></td>
+          <td><strong>cursos</strong></td>
+          <td>curso_id</td>
+          <td>Un archivo pertenece a un curso</td>
+        </tr>
+        <tr>
+          <td><strong>archivos</strong></td>
+          <td><span class="rel-type">N : 1</span></td>
+          <td><strong>grados</strong></td>
+          <td>grado_id</td>
+          <td>Un archivo pertenece a un grado</td>
+        </tr>
+        <tr>
+          <td><strong>archivos</strong></td>
+          <td><span class="rel-type">N : 1</span></td>
+          <td><strong>secciones</strong></td>
+          <td>seccion_id</td>
+          <td>Un archivo pertenece a una sección</td>
+        </tr>
+        <tr>
+          <td><strong>sessions</strong></td>
+          <td><span class="rel-type">N : 1</span></td>
+          <td><strong>users</strong></td>
+          <td>user_id</td>
+          <td>Una sesión pertenece a un usuario (auditoría)</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="footer">
+    8 tablas · 10 relaciones · Soft Delete en archivos · Unique constraint en docente_asignaciones &nbsp;|&nbsp;
+    Sistema de Gestión Académica · Laravel · Junio 2026
+  </div>
+
+</div>
+</body>
+</html>
